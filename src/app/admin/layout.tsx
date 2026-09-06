@@ -4,7 +4,7 @@ import { AuthProvider, useAuth } from '@/lib/auth/auth-context';
 import { useRouter, usePathname } from 'next/navigation';
 import { useEffect } from 'react';
 import Link from 'next/link';
-import { LayoutDashboard, Users, FileX, Settings, FileSpreadsheet, LogOut, Menu } from 'lucide-react';
+import { LayoutDashboard, Users, FileX, Settings, FileSpreadsheet, LogOut, Menu, MapPin } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 
 function AdminSidebar() {
@@ -17,6 +17,7 @@ function AdminSidebar() {
     { name: 'Đã trúng tuyển', path: '/admin/recruited', icon: <Users size={20} /> },
     { name: 'Hết hạn', path: '/admin/expired', icon: <FileX size={20} /> },
     { name: 'Báo cáo', path: '/admin/reports', icon: <FileSpreadsheet size={20} /> },
+    { name: 'Khu vực tuyển dụng', path: '/admin/locations', icon: <MapPin size={20} /> },
     { name: 'Cài đặt', path: '/admin/settings', icon: <Settings size={20} /> },
   ];
 
