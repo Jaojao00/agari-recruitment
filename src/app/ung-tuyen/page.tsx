@@ -8,6 +8,7 @@ import Link from "next/link";
 import {
   applicationSchema,
   ApplicationFormValues,
+  normalizeApplicationPayload,
 } from "@/lib/validation/application";
 
 import { Button } from "@/components/ui/button";
@@ -109,10 +110,11 @@ export default function UngTuyenPage() {
     setIsSubmitting(true);
     setError(null);
     try {
+      const payload = normalizeApplicationPayload(data);
       const response = await fetch("/api/applications", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(data),
+        body: JSON.stringify(payload),
       });
 
       const result = await readJsonResponse<{

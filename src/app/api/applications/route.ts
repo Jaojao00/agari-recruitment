@@ -1,14 +1,18 @@
 import { NextResponse } from "next/server";
 import type { Transaction } from "firebase-admin/firestore";
-import { applicationSchema } from "@/lib/validation/application";
+import {
+  applicationSchema,
+  normalizeApplicationPayload,
+} from "@/lib/validation/application";
 
 export async function POST(request: Request) {
   try {
     const { adminDb } = await import("@/lib/firebase/admin");
     const body = await request.json();
+    const normalizedBody = normalizeApplicationPayload(body);
 
     // 1. Backend validate
-    const validatedData = applicationSchema.parse(body);
+    const validatedData = applicationSchema.parse(normalizedBody);
 
     // 2. Check duplicate CCCD or Phone
     const applicationsRef = adminDb.collection("applications");
@@ -123,6 +127,39 @@ export async function POST(request: Request) {
         {
           error:
             "Máy chủ chưa được cấu hình Firebase Admin. Vui lòng liên hệ quản trị viên.",
+        },
+        { status: 500 },
+      );
+    }
+
+    const firebaseErrorCode =
+      typeof error === "object" && error !== null && "code" in error
+        ? String(error.code)
+        : "UNKNOWN";
+    const firebaseErrorMessage =
+      error instanceof Error ? error.message.toLowerCase() : "";
+
+    if (
+      firebaseErrorCode === "7" ||
+      firebaseErrorMessage.includes("permission denied")
+    ) {
+      return NextResponse.json(
+        {
+          error:
+            "Firebase không cấp quyền ghi dữ liệu. Kiểm tra service account và quyền Firestore trên Vercel.",
+        },
+        { status: 500 },
+      );
+    }
+
+    if (
+      firebaseErrorCode === "16" ||
+      firebaseErrorMessage.includes("invalid credential") ||
+      firebaseErrorMessage.includes("credential")
+    ) {
+      return NextResponse.json(
+        {
+          error: "Thông tin xác thực Firebase Admin trên máy chủ không hợp lệ.",
         },
         { status: 500 },
       );

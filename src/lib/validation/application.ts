@@ -1,17 +1,78 @@
-import * as z from 'zod';
+import * as z from "zod";
 
 export const applicationSchema = z.object({
-  fullName: z.string().min(2, { message: 'Họ và tên phải có ít nhất 2 ký tự' }),
-  dateOfBirth: z.string().regex(/^\d{4}-\d{2}-\d{2}$/, { message: 'Vui lòng chọn ngày sinh hợp lệ' }),
-  cccd: z.string().regex(/^\d{12}$/, { message: 'CCCD phải bao gồm đúng 12 chữ số' }),
-  phone: z.string().regex(/(84|0[3|5|7|8|9])+([0-9]{8})\b/, { message: 'Số điện thoại không hợp lệ' }),
-  gender: z.enum(['Nam', 'Nữ'] as [string, ...string[]], { message: 'Vui lòng chọn giới tính' }),
-  preferredLocation: z.string().min(1, { message: 'Vui lòng chọn khu vực muốn ứng tuyển' }),
-  education: z.enum(['9/12', '10/12', '11/12', '12/12', 'Khác'] as [string, ...string[]], { message: 'Vui lòng chọn trình độ học vấn' }),
-  preferredShift: z.enum(['Ca 1: 06:00 - 15:00', 'Ca 2: 13:00 - 22:00', 'Ca 3: 22:00 - 06:00'] as [string, ...string[]], { message: 'Vui lòng chọn ca làm việc' }),
-  availableStartDate: z.string().regex(/^\d{4}-\d{2}-\d{2}$/, { message: 'Vui lòng chọn ngày có thể nhận việc hợp lệ' }),
-  note: z.string().optional(),
+  fullName: z
+    .string()
+    .trim()
+    .min(2, { message: "Họ và tên phải có ít nhất 2 ký tự" }),
+  dateOfBirth: z
+    .string()
+    .trim()
+    .regex(/^\d{4}-\d{2}-\d{2}$/, {
+      message: "Vui lòng chọn ngày sinh hợp lệ",
+    }),
+  cccd: z
+    .string()
+    .trim()
+    .regex(/^\d{12}$/, { message: "CCCD phải bao gồm đúng 12 chữ số" }),
+  phone: z
+    .string()
+    .trim()
+    .regex(/(84|0[3|5|7|8|9])+([0-9]{8})\b/, {
+      message: "Số điện thoại không hợp lệ",
+    }),
+  gender: z.enum(["Nam", "Nữ"] as [string, ...string[]], {
+    message: "Vui lòng chọn giới tính",
+  }),
+  preferredLocation: z
+    .string()
+    .trim()
+    .min(1, { message: "Vui lòng chọn khu vực muốn ứng tuyển" }),
+  education: z.enum(
+    ["9/12", "10/12", "11/12", "12/12", "Khác"] as [string, ...string[]],
+    { message: "Vui lòng chọn trình độ học vấn" },
+  ),
+  preferredShift: z.enum(
+    ["Ca 1: 06:00 - 15:00", "Ca 2: 13:00 - 22:00", "Ca 3: 22:00 - 06:00"] as [
+      string,
+      ...string[],
+    ],
+    { message: "Vui lòng chọn ca làm việc" },
+  ),
+  availableStartDate: z
+    .string()
+    .trim()
+    .regex(/^\d{4}-\d{2}-\d{2}$/, {
+      message: "Vui lòng chọn ngày có thể nhận việc hợp lệ",
+    }),
+  note: z.string().trim().optional(),
 });
 
-export type ApplicationFormValues = z.infer<typeof applicationSchema>;
+export function normalizeApplicationPayload(raw: unknown) {
+  const source =
+    typeof raw === "object" && raw !== null
+      ? (raw as Record<string, unknown>)
+      : {};
 
+  const stringValue = (value: unknown) => {
+    if (typeof value === "string") {
+      return value.trim();
+    }
+    return value === undefined || value === null ? "" : String(value).trim();
+  };
+
+  return {
+    fullName: stringValue(source.fullName),
+    dateOfBirth: stringValue(source.dateOfBirth),
+    cccd: stringValue(source.cccd).replace(/\s+/g, ""),
+    phone: stringValue(source.phone).replace(/\s+/g, ""),
+    gender: stringValue(source.gender),
+    preferredLocation: stringValue(source.preferredLocation ?? source.location),
+    education: stringValue(source.education),
+    preferredShift: stringValue(source.preferredShift),
+    availableStartDate: stringValue(source.availableStartDate),
+    note: stringValue(source.note),
+  };
+}
+
+export type ApplicationFormValues = z.infer<typeof applicationSchema>;
