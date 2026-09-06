@@ -35,8 +35,10 @@ export async function PATCH(request: Request, { params }: any) {
     if (adminNote !== undefined) updateData.adminNote = adminNote;
 
     // Parse dates if provided
-    if (hiredAt) updateData.hiredAt = new Date(hiredAt);
-    if (expiredAt) updateData.expiredAt = new Date(expiredAt);
+    if (hiredAt === null || hiredAt === "") updateData.hiredAt = "";
+    else if (hiredAt) updateData.hiredAt = new Date(hiredAt);
+    if (expiredAt === null || expiredAt === "") updateData.expiredAt = "";
+    else if (expiredAt) updateData.expiredAt = new Date(expiredAt);
 
     await updateApplicationInSheet(Number(params.id), updateData);
 

@@ -122,7 +122,9 @@ export async function getApplicationsFromSheet(): Promise<SheetApplication[]> {
 
   return dataRows
     .map((row, index) => rowToApplication(row, index + firstDataRowNumber))
-    .filter((application) => application.applicationId);
+    .filter((application) =>
+      /^AG-\d{4}-\d{6}$/i.test(application.applicationId),
+    );
 }
 
 export async function addApplicationToSheet(application: Record<string, any>) {

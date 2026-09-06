@@ -20,9 +20,9 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import { Badge } from "@/components/ui/badge";
-import { Application } from "@/lib/firebase/models";
+import { Application, ApplicationStatus } from "@/lib/firebase/models";
 import { useDebounce } from "@/lib/utils"; // I'll need to create this hook
-import { Loader2, Search, Eye } from "lucide-react";
+import { Eye, EyeOff, Loader2, Search } from "lucide-react";
 
 export default function ApplicationsPage() {
   const [data, setData] = useState<Application[]>([]);
@@ -33,6 +33,8 @@ export default function ApplicationsPage() {
   const [page, setPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
   const [total, setTotal] = useState(0);
+  const [revealedCccd, setRevealedCccd] = useState<Record<string, boolean>>({});
+  const [updatingStatus, setUpdatingStatus] = useState<string | null>(null);
 
   useEffect(() => {
     fetchApplications();
@@ -63,7 +65,7 @@ export default function ApplicationsPage() {
 
   const getStatusBadge = (status: string) => {
     const map: Record<string, { label: string; color: string }> = {
-      NEW: { label: "Mới đăng ký", color: "bg-blue-100 text-blue-800" },
+      NEW: { label: "Đang xử lý", color: "bg-blue-100 text-blue-800" },
       CONTACTED: {
         label: "Đã liên hệ",
         color: "bg-yellow-100 text-yellow-800",
@@ -101,13 +103,32 @@ export default function ApplicationsPage() {
     return `********${cccd.slice(-4)}`;
   };
 
-  const formatDate = (dateObj: any) => {
-    if (!dateObj) return "-";
-    // Handle Firestore timestamp
-    if (dateObj._seconds) {
-      return new Date(dateObj._seconds * 1000).toLocaleDateString("vi-VN");
+  const updateStatus = async (
+    application: Application,
+    status: ApplicationStatus,
+  ) => {
+    setUpdatingStatus(application.id || null);
+    try {
+      const response = await fetch(
+        `/api/admin/applications/${application.id}`,
+        {
+          method: "PATCH",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ status }),
+        },
+      );
+      if (!response.ok) throw new Error("Không thể cập nhật trạng thái");
+      setData((current) =>
+        current.map((item) =>
+          item.id === application.id ? { ...item, status } : item,
+        ),
+      );
+    } catch (error) {
+      console.error(error);
+      await fetchApplications();
+    } finally {
+      setUpdatingStatus(null);
     }
-    return new Date(dateObj).toLocaleDateString("vi-VN");
   };
 
   return (
@@ -148,7 +169,7 @@ export default function ApplicationsPage() {
             </SelectTrigger>
             <SelectContent>
               <SelectItem value="ALL">Tất cả trạng thái</SelectItem>
-              <SelectItem value="NEW">Mới đăng ký</SelectItem>
+              <SelectItem value="NEW">Đang xử lý</SelectItem>
               <SelectItem value="CONTACTED">Đã liên hệ</SelectItem>
               <SelectItem value="INTERVIEW_SCHEDULED">
                 Lịch phỏng vấn
@@ -170,26 +191,26 @@ export default function ApplicationsPage() {
           <TableHeader>
             <TableRow>
               <TableHead>Mã hồ sơ</TableHead>
-              <TableHead>Họ tên</TableHead>
-              <TableHead>CCCD</TableHead>
+              <TableHead>Họ và tên</TableHead>
+              <TableHead>Ngày sinh</TableHead>
+              <TableHead>Số CCCD</TableHead>
               <TableHead>Số điện thoại</TableHead>
-              <TableHead>Ca làm</TableHead>
+              <TableHead>Giới tính</TableHead>
               <TableHead>Trạng thái</TableHead>
-              <TableHead>Ngày ứng tuyển</TableHead>
               <TableHead className="text-right">Thao tác</TableHead>
             </TableRow>
           </TableHeader>
           <TableBody>
             {loading ? (
               <TableRow>
-                <TableCell colSpan={8} className="text-center h-32">
+                <TableCell colSpan={9} className="text-center h-32">
                   <Loader2 className="h-6 w-6 animate-spin mx-auto text-gray-400" />
                 </TableCell>
               </TableRow>
             ) : data.length === 0 ? (
               <TableRow>
                 <TableCell
-                  colSpan={8}
+                  colSpan={9}
                   className="text-center h-32 text-gray-500"
                 >
                   Không tìm thấy ứng viên phù hợp.
@@ -204,20 +225,67 @@ export default function ApplicationsPage() {
                   <TableCell className="font-semibold">
                     {app.fullName}
                   </TableCell>
-                  <TableCell className="text-gray-500">
-                    {maskCCCD(app.cccd)}
+                  <TableCell>{app.dateOfBirth || "-"}</TableCell>
+                  <TableCell>
+                    <button
+                      type="button"
+                      title={
+                        revealedCccd[app.id || ""]
+                          ? "Ẩn số CCCD"
+                          : "Hiện số CCCD"
+                      }
+                      onClick={() =>
+                        setRevealedCccd((current) => ({
+                          ...current,
+                          [app.id || ""]: !current[app.id || ""],
+                        }))
+                      }
+                      className="inline-flex items-center gap-2 text-gray-600 hover:text-red-700"
+                    >
+                      <span className="font-mono">
+                        {revealedCccd[app.id || ""]
+                          ? app.cccd
+                          : maskCCCD(app.cccd)}
+                      </span>
+                      {revealedCccd[app.id || ""] ? (
+                        <EyeOff size={15} />
+                      ) : (
+                        <Eye size={15} />
+                      )}
+                    </button>
                   </TableCell>
                   <TableCell>{app.phone}</TableCell>
+                  <TableCell>{app.gender || "-"}</TableCell>
                   <TableCell>
-                    {app.preferredShift.includes("Ca 1")
-                      ? "Ca 1"
-                      : app.preferredShift.includes("Ca 2")
-                        ? "Ca 2"
-                        : "Ca 3"}
-                  </TableCell>
-                  <TableCell>{getStatusBadge(app.status)}</TableCell>
-                  <TableCell className="text-gray-500">
-                    {formatDate(app.createdAt)}
+                    <Select
+                      value={app.status}
+                      onValueChange={(value) => {
+                        if (value) {
+                          updateStatus(app, value as ApplicationStatus);
+                        }
+                      }}
+                      disabled={updatingStatus === app.id}
+                    >
+                      <SelectTrigger className="min-w-[150px]">
+                        <SelectValue>{getStatusBadge(app.status)}</SelectValue>
+                      </SelectTrigger>
+                      <SelectContent>
+                        <SelectItem value="NEW">Đang xử lý</SelectItem>
+                        <SelectItem value="CONTACTED">Đã liên hệ</SelectItem>
+                        <SelectItem value="FAILED">Chưa phù hợp</SelectItem>
+                        <SelectItem value="INTERVIEW_SCHEDULED">
+                          Lịch phỏng vấn
+                        </SelectItem>
+                        <SelectItem value="INTERVIEWED">
+                          Đã phỏng vấn
+                        </SelectItem>
+                        <SelectItem value="PASSED">Đạt</SelectItem>
+                        <SelectItem value="HIRED">Đã trúng tuyển</SelectItem>
+                        <SelectItem value="WORKING">Đã nhận việc</SelectItem>
+                        <SelectItem value="EXPIRED">Hết hạn</SelectItem>
+                        <SelectItem value="CANCELLED">Đã hủy</SelectItem>
+                      </SelectContent>
+                    </Select>
                   </TableCell>
                   <TableCell className="text-right">
                     <Link href={`/admin/applications/${app.id}`}>
