@@ -176,49 +176,57 @@ export default function HomePage() {
               Yêu cầu công việc
             </h2>
             <div className="bg-white rounded-xl p-8 shadow-sm border border-gray-100">
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                <div className="flex items-center gap-2">
-                  <div className="w-2 h-2 bg-red-500 rounded-full"></div>
-                  <span className="text-gray-700">Nam/Nữ từ 18 - 35 tuổi.</span>
-                </div>
-                <div className="flex items-center gap-2">
-                  <div className="w-2 h-2 bg-red-500 rounded-full"></div>
-                  <span className="text-gray-700">Sức khỏe tốt.</span>
-                </div>
-                <div className="flex items-center gap-2">
-                  <div className="w-2 h-2 bg-red-500 rounded-full"></div>
-                  <span className="text-gray-700">Chăm chỉ, thật thà.</span>
-                </div>
-                <div className="flex items-center gap-2">
-                  <div className="w-2 h-2 bg-red-500 rounded-full"></div>
-                  <span className="text-gray-700">Trình độ học vấn: 9/12.</span>
-                </div>
-                <div className="flex items-center gap-2">
-                  <div className="w-2 h-2 bg-red-500 rounded-full"></div>
-                  <span className="text-gray-700">Có CCCD.</span>
-                </div>
-                <div className="flex items-center gap-2">
-                  <div className="w-2 h-2 bg-red-500 rounded-full"></div>
-                  <span className="text-gray-700">Có VNeID mức 2.</span>
-                </div>
-                <div className="flex items-start gap-2 sm:col-span-2">
-                  <div className="w-2 h-2 bg-red-500 rounded-full mt-2"></div>
-                  <span className="text-gray-700">Có khả năng làm việc xoay ca & có thể tăng ca khi cần.</span>
-                </div>
+              <div className="space-y-3">
+                {[
+                  'Nam từ 18 đến 35 tuổi.',
+                  'Trình độ Học vấn 9/12.',
+                  'Có thể Xoay Ca được và sẵn sàng tăng ca khi cần.',
+                  'Biết sử dụng điện thoại/Laptop/PDA để quét mã, xử lý đơn hàng.',
+                  'Xoay ca được theo lịch công ty sắp xếp.',
+                ].map((item, i) => (
+                  <div key={i} className="flex items-start gap-3">
+                    <div className="w-2 h-2 bg-red-500 rounded-full mt-2 shrink-0"></div>
+                    <span className="text-gray-700">{item}</span>
+                  </div>
+                ))}
               </div>
               
               <div className="mt-6 pt-6 border-t border-gray-100">
-                <h4 className="font-semibold text-gray-900 mb-3">Các ca làm việc (Xoay ca):</h4>
+                <h4 className="font-semibold text-gray-900 mb-3">🕐 Thời gian làm việc – Xoay ca mỗi tuần:</h4>
                 <div className="flex flex-wrap gap-2">
-                  <Badge variant="outline" className="text-sm py-1">Ca 1: 06:00 - 15:00</Badge>
-                  <Badge variant="outline" className="text-sm py-1">Ca 2: 15:00 - 22:00</Badge>
-                  <Badge variant="outline" className="text-sm py-1">Ca 3: 18:00 - 22:00</Badge>
+                  <Badge variant="outline" className="text-sm py-1">Ca 1: 06:00 – 15:00</Badge>
+                  <Badge variant="outline" className="text-sm py-1">Ca 2: 13:00 – 22:00</Badge>
+                  <Badge variant="outline" className="text-sm py-1">Ca 3: 22:00 – 06:00</Badge>
                 </div>
-                <p className="text-sm text-gray-500 mt-2 italic">* Không có ca 22:00 - 06:00.</p>
+                <p className="text-sm text-gray-500 mt-2 italic">* Xoay ca mỗi tuần theo lịch công ty sắp xếp.</p>
               </div>
             </div>
           </section>
         </div>
+
+        {/* MÔ TẢ CÔNG VIỆC SECTION */}
+        <section className="mb-16">
+          <div className="text-center mb-10">
+            <h2 className="text-3xl font-bold text-gray-900 uppercase">🧰 Mô tả công việc</h2>
+            <div className="w-24 h-1 bg-red-600 mx-auto mt-4"></div>
+          </div>
+          <div className="bg-white rounded-xl p-8 shadow-sm border border-gray-100">
+            <ul className="space-y-4">
+              {[
+                'Phân loại, sắp xếp hàng hóa trong kho.',
+                'Tiếp nhận, kiểm tra, đóng gói đơn hàng.',
+                'Kéo hàng, đổ bao, xử lý hàng hóa.',
+                'Lên xuống hàng.',
+                'Được đào tạo vào máy ASM để xử lý hàng hóa, scan hàng theo công việc được phân công.',
+              ].map((item, i) => (
+                <li key={i} className="flex items-start gap-3">
+                  <CheckCircle2 className="text-red-500 shrink-0 mt-0.5" size={20} />
+                  <span className="text-gray-700 font-medium">{item}</span>
+                </li>
+              ))}
+            </ul>
+          </div>
+        </section>
 
         {/* ĐỊA ĐIỂM SECTION */}
         <section className="bg-white rounded-2xl overflow-hidden shadow-sm border border-gray-100 mb-16 flex flex-col md:flex-row">
@@ -254,10 +262,57 @@ export default function HomePage() {
         </Link>
       </div>
 
-      <footer className="bg-gray-900 text-gray-400 py-12 pb-24 md:pb-12 text-center text-sm">
+      <footer className="bg-gray-900 text-gray-400 py-12 pb-24 md:pb-12 text-sm">
         <div className="container mx-auto px-4">
-          <div className="font-bold text-xl text-white mb-4">AGARI</div>
-          <p>© {new Date().getFullYear()} AGARI. Tất cả quyền được bảo lưu.</p>
+          <div className="grid md:grid-cols-3 gap-8 mb-8 text-left">
+            {/* Col 1: Brand */}
+            <div>
+              <div className="font-bold text-2xl text-white mb-3">AGARI</div>
+              <p className="text-gray-400 text-sm leading-relaxed">
+                Hệ thống tuyển dụng nhân viên kho chuyên nghiệp.<br/>
+                KCN Bình Minh, Vĩnh Long.
+              </p>
+            </div>
+            {/* Col 2: Contact */}
+            <div>
+              <h4 className="font-bold text-white mb-4 uppercase text-sm tracking-wide">Liên hệ ứng tuyển</h4>
+              <div className="space-y-3">
+                <a href="https://www.facebook.com/profile.php?id=61582154261026" target="_blank" rel="noopener noreferrer"
+                  className="flex items-center gap-2 text-gray-400 hover:text-blue-400 transition">
+                  <svg className="w-5 h-5 fill-current" viewBox="0 0 24 24"><path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/></svg>
+                  <span className="text-sm">Facebook AGARI</span>
+                </a>
+                <a href="https://zalo.me/0586482344" target="_blank" rel="noopener noreferrer"
+                  className="flex items-center gap-2 text-gray-400 hover:text-blue-300 transition">
+                  <svg className="w-5 h-5 fill-current" viewBox="0 0 24 24"><path d="M12 0C5.373 0 0 5.373 0 12s5.373 12 12 12 12-5.373 12-12S18.627 0 12 0zm.252 4.5c1.07 0 2.1.203 3.06.578a7.47 7.47 0 0 1 2.49 1.628 7.48 7.48 0 0 1 1.63 2.49c.374.96.578 1.99.578 3.06 0 1.07-.204 2.1-.578 3.06a7.48 7.48 0 0 1-1.63 2.49 7.47 7.47 0 0 1-2.49 1.628c-.96.375-1.99.578-3.06.578a7.56 7.56 0 0 1-3.298-.75l-3.432.906.92-3.36a7.47 7.47 0 0 1-.822-3.552c0-4.14 3.36-7.5 7.5-7.5l.132-.056z"/></svg>
+                  <span className="text-sm">Zalo: 0586 482 344</span>
+                </a>
+                <a href="https://www.tiktok.com/@teamleader.project" target="_blank" rel="noopener noreferrer"
+                  className="flex items-center gap-2 text-gray-400 hover:text-pink-400 transition">
+                  <svg className="w-5 h-5 fill-current" viewBox="0 0 24 24"><path d="M12.525.02c1.31-.02 2.61-.01 3.91-.02.08 1.53.63 3.09 1.75 4.17 1.12 1.11 2.7 1.62 4.24 1.79v4.03c-1.44-.05-2.89-.35-4.2-.97-.57-.26-1.1-.59-1.62-.93-.01 2.92.01 5.84-.02 8.75-.08 1.4-.54 2.79-1.35 3.94-1.31 1.92-3.58 3.17-5.91 3.21-1.43.08-2.86-.31-4.08-1.03-2.02-1.19-3.44-3.37-3.65-5.71-.02-.5-.03-1-.01-1.49.18-1.9 1.12-3.72 2.58-4.96 1.66-1.44 3.98-2.13 6.15-1.72.02 1.48-.04 2.96-.04 4.44-.99-.32-2.15-.23-3.02.37-.63.41-1.11 1.04-1.36 1.75-.21.51-.15 1.07-.14 1.61.24 1.64 1.82 3.02 3.5 2.87 1.12-.01 2.19-.66 2.77-1.61.19-.33.4-.67.41-1.06.1-1.79.06-3.57.07-5.36.01-4.03-.01-8.05.02-12.07z"/></svg>
+                  <span className="text-sm">TikTok AGARI</span>
+                </a>
+                <a href="mailto:em.nguyen@agari.com.vn"
+                  className="flex items-center gap-2 text-gray-400 hover:text-green-400 transition">
+                  <svg className="w-5 h-5 fill-current" viewBox="0 0 24 24"><path d="M0 3v18h24V3H0zm21.518 2L12 13.713 2.482 5h19.036zM2 19V7.183l10 8.104 10-8.104V19H2z"/></svg>
+                  <span className="text-sm">em.nguyen@agari.com.vn</span>
+                </a>
+              </div>
+            </div>
+            {/* Col 3: Quick links */}
+            <div>
+              <h4 className="font-bold text-white mb-4 uppercase text-sm tracking-wide">Nhanh tay ứng tuyển</h4>
+              <p className="text-gray-400 text-sm mb-4">Điền form ứng tuyển online, chúng tôi sẽ liên hệ bạn sớm nhất!</p>
+              <Link href="/ung-tuyen">
+                <Button className="bg-red-700 hover:bg-red-600 text-white font-bold w-full">
+                  ỨNG TUYỂN NGAY →
+                </Button>
+              </Link>
+            </div>
+          </div>
+          <div className="border-t border-gray-800 pt-6 text-center">
+            <p>© {new Date().getFullYear()} AGARI. Tất cả quyền được bảo lưu.</p>
+          </div>
         </div>
       </footer>
     </div>

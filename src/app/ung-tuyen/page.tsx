@@ -244,9 +244,9 @@ export default function UngTuyenPage() {
                             </SelectTrigger>
                           </FormControl>
                           <SelectContent>
-                            <SelectItem value="Ca 1: 06:00 - 15:00">Ca 1: 06:00 - 15:00</SelectItem>
-                            <SelectItem value="Ca 2: 15:00 - 22:00">Ca 2: 15:00 - 22:00</SelectItem>
-                            <SelectItem value="Ca 3: 18:00 - 22:00">Ca 3: 18:00 - 22:00</SelectItem>
+                            <SelectItem value="Ca 1: 06:00 - 15:00">Ca 1: 06:00 – 15:00</SelectItem>
+                            <SelectItem value="Ca 2: 13:00 - 22:00">Ca 2: 13:00 – 22:00</SelectItem>
+                            <SelectItem value="Ca 3: 22:00 - 06:00">Ca 3: 22:00 – 06:00</SelectItem>
                           </SelectContent>
                         </Select>
                         <FormMessage />
