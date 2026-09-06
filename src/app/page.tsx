@@ -242,12 +242,26 @@ export default function HomePage() {
               Tỉnh Vĩnh Long.
             </p>
           </div>
-          <div className="bg-gray-200 md:w-1/2 h-64 md:h-auto relative flex items-center justify-center">
-            {/* Placeholder for map - could embed an iframe here later */}
-            <div className="text-gray-400 flex flex-col items-center gap-2">
-              <MapPin size={48} />
-              <span className="font-medium">Bản đồ</span>
-            </div>
+          <div className="md:w-1/2 h-72 md:h-auto relative min-h-[300px]">
+            <iframe
+              src="https://maps.google.com/maps?q=L%C3%B4+01+kho+A01+KCN+B%C3%ACnh+Minh+V%C4%A9nh+Long&output=embed&z=15"
+              width="100%"
+              height="100%"
+              style={{ border: 0, minHeight: '300px' }}
+              allowFullScreen
+              loading="lazy"
+              referrerPolicy="no-referrer-when-downgrade"
+              className="absolute inset-0 w-full h-full"
+            />
+            <a
+              href="https://maps.app.goo.gl/xsjgyDtWg45hPfzD7"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="absolute bottom-3 right-3 bg-white text-gray-800 text-xs font-semibold px-3 py-2 rounded-full shadow-md hover:bg-gray-100 transition flex items-center gap-1 z-10"
+            >
+              <MapPin size={12} className="text-red-600" />
+              Mở Google Maps
+            </a>
           </div>
         </section>
 
