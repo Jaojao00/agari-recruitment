@@ -49,6 +49,14 @@ const defaultLocations: Location[] = [
   },
 ];
 
+function normalizeLocationName(name: string) {
+  return name
+    .normalize("NFD")
+    .replace(/[\u0300-\u036f]/g, "")
+    .trim()
+    .toLowerCase();
+}
+
 async function readJsonResponse<T>(response: Response): Promise<T> {
   const body = await response.text();
 
@@ -83,7 +91,7 @@ export default function UngTuyenPage() {
           ...defaultLocations,
           ...fetchedLocations,
         ].filter((location) => {
-          const normalizedName = location.name.trim().toLowerCase();
+          const normalizedName = normalizeLocationName(location.name);
           if (!normalizedName || knownNames.has(normalizedName)) return false;
           knownNames.add(normalizedName);
           return true;
@@ -299,8 +307,9 @@ export default function UngTuyenPage() {
                           onValueChange={field.onChange}
                           disabled={locationsLoading}
                         >
-                          <SelectTrigger className="h-12">
+                          <SelectTrigger className="h-auto min-h-12 w-full whitespace-normal">
                             <SelectValue
+                              className="whitespace-normal break-words line-clamp-none"
                               placeholder={
                                 locationsLoading
                                   ? "Đang tải danh sách khu vực..."
@@ -308,13 +317,16 @@ export default function UngTuyenPage() {
                               }
                             />
                           </SelectTrigger>
-                          <SelectContent>
+                          <SelectContent className="max-w-[calc(100vw-2rem)]">
                             {locations.map((location) => (
                               <SelectItem
                                 key={location.id}
                                 value={location.name}
+                                className="whitespace-normal py-2"
                               >
-                                <span>{location.name}</span>
+                                <span className="whitespace-normal break-words">
+                                  {location.name}
+                                </span>
                               </SelectItem>
                             ))}
                           </SelectContent>
@@ -358,25 +370,37 @@ export default function UngTuyenPage() {
                     control={form.control}
                     name="preferredShift"
                     render={({ field }) => (
-                      <FormItem>
+                      <FormItem className="md:col-span-2">
                         <FormLabel>Dành cho ứng viên mới *</FormLabel>
                         <Select
                           onValueChange={field.onChange}
                           defaultValue={field.value}
                         >
                           <FormControl>
-                            <SelectTrigger className="h-12">
-                              <SelectValue placeholder="kinh nghiệm làm việc liên quan đến vị trí ứng tuyển" />
+                            <SelectTrigger className="h-auto min-h-12 w-full whitespace-normal">
+                              <SelectValue
+                                className="whitespace-normal break-words line-clamp-none"
+                                placeholder="Chọn kinh nghiệm làm việc liên quan đến vị trí ứng tuyển"
+                              />
                             </SelectTrigger>
                           </FormControl>
-                          <SelectContent>
-                            <SelectItem value="Ca 1: 06:00 - 15:00">
+                          <SelectContent className="max-w-[calc(100vw-2rem)]">
+                            <SelectItem
+                              value="Tôi Đã Từng làm việc dưới 1 tháng"
+                              className="whitespace-normal py-2"
+                            >
                               Tôi Đã Từng làm việc dưới 1 tháng
                             </SelectItem>
-                            <SelectItem value="Ca 2: 13:00 - 22:00">
+                            <SelectItem
+                              value="Tôi Đã Từng làm việc từ 1 tháng trở lên"
+                              className="whitespace-normal py-2"
+                            >
                               Tôi Đã Từng làm việc từ 1 tháng trở lên
                             </SelectItem>
-                            <SelectItem value="Ca 3: 22:00 - 06:00">
+                            <SelectItem
+                              value="Tôi chưa từng làm việc liên quan đến vị trí ứng tuyển"
+                              className="whitespace-normal py-2"
+                            >
                               Tôi chưa từng làm việc liên quan đến vị trí ứng
                               tuyển
                             </SelectItem>
