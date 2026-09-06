@@ -4,7 +4,6 @@ import { adminDb } from '@/lib/firebase/admin';
 // GET - Admin: fetch all locations
 export async function GET() {
   try {
-    // Use simple get() without orderBy to avoid index issues on empty collection
     const snapshot = await adminDb.collection('locations').get();
 
     const locations = snapshot.docs
@@ -13,8 +12,9 @@ export async function GET() {
 
     return NextResponse.json({ locations });
   } catch (error: any) {
-    console.error('Admin GET locations error:', error);
-    return NextResponse.json({ locations: [], error: error.message }, { status: 200 });
+    console.error('Admin GET locations error:', error?.message || error);
+    // Return empty list instead of 500 so UI doesn't crash
+    return NextResponse.json({ locations: [] });
   }
 }
 
@@ -28,7 +28,6 @@ export async function POST(request: Request) {
       return NextResponse.json({ error: 'Ten va dia chi la bat buoc.' }, { status: 400 });
     }
 
-    // Get current count for ordering
     const snapshot = await adminDb.collection('locations').get();
     const maxOrder = snapshot.docs.reduce((max: number, doc: any) => {
       return Math.max(max, doc.data().order || 0);
@@ -46,7 +45,7 @@ export async function POST(request: Request) {
 
     return NextResponse.json({ success: true, id: docRef.id }, { status: 201 });
   } catch (error: any) {
-    console.error('Admin POST locations error:', error);
-    return NextResponse.json({ error: error.message || 'Loi server' }, { status: 500 });
+    console.error('Admin POST locations error:', error?.message || error);
+    return NextResponse.json({ error: error?.message || 'Loi server' }, { status: 500 });
   }
 }
