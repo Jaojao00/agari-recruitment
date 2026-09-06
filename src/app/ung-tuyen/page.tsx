@@ -1,8 +1,7 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
- // Wait, I use react-hook-form
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import * as z from 'zod';
@@ -28,13 +27,30 @@ import {
   SelectValue,
 } from '@/components/ui/select';
 import { Textarea } from '@/components/ui/textarea';
-import { ArrowLeft, Loader2 } from 'lucide-react';
-// Note: Shadcn form needs these to be installed correctly.
+import { ArrowLeft, Loader2, MapPin } from 'lucide-react';
+
+interface Location {
+  id: string;
+  name: string;
+  address: string;
+}
 
 export default function UngTuyenPage() {
   const router = useRouter();
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [locations, setLocations] = useState<Location[]>([]);
+  const [locationsLoading, setLocationsLoading] = useState(true);
+
+  useEffect(() => {
+    fetch('/api/locations')
+      .then(r => r.json())
+      .then(d => {
+        setLocations(d.locations || []);
+        setLocationsLoading(false);
+      })
+      .catch(() => setLocationsLoading(false));
+  }, []);
 
   const form = useForm<ApplicationFormValues>({
     resolver: zodResolver(applicationSchema),
@@ -42,7 +58,7 @@ export default function UngTuyenPage() {
       fullName: '',
       cccd: '',
       phone: '',
-      permanentAddress: '',
+      preferredLocation: '',
       note: '',
     },
   });
@@ -189,16 +205,55 @@ export default function UngTuyenPage() {
 
                 <FormField
                   control={form.control}
-                  name="permanentAddress"
+                  name="preferredLocation"
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel>Địa chỉ thường trú *</FormLabel>
+                      <FormLabel className="flex items-center gap-1">
+                        <MapPin size={14} className="text-red-600" />
+                        Khu vực muốn ứng tuyển *
+                      </FormLabel>
                       <FormControl>
-                        <Textarea 
-                          placeholder="Vui lòng ghi địa chỉ thường trú theo Căn cước công dân của bạn" 
-                          {...field} 
-                          className="min-h-[100px] resize-y"
-                        />
+                        <div className="grid grid-cols-1 gap-3 mt-1">
+                          {locationsLoading ? (
+                            <div className="flex items-center gap-2 text-gray-400 py-4">
+                              <Loader2 size={16} className="animate-spin" />
+                              <span className="text-sm">Đang tải danh sách khu vực...</span>
+                            </div>
+                          ) : locations.length === 0 ? (
+                            <p className="text-sm text-gray-400 py-2">Chưa có khu vực nào. Vui lòng liên hệ admin.</p>
+                          ) : (
+                            locations.map((loc) => {
+                              const isSelected = field.value === loc.name;
+                              return (
+                                <div
+                                  key={loc.id}
+                                  onClick={() => field.onChange(loc.name)}
+                                  className={`cursor-pointer rounded-xl border-2 p-4 transition-all select-none ${
+                                    isSelected
+                                      ? 'border-red-600 bg-red-50 shadow-sm'
+                                      : 'border-gray-200 bg-white hover:border-red-300 hover:bg-red-50/30'
+                                  }`}
+                                >
+                                  <div className="flex items-start gap-3">
+                                    <div className={`w-5 h-5 rounded-full border-2 flex items-center justify-center shrink-0 mt-0.5 transition-all ${
+                                      isSelected ? 'border-red-600 bg-red-600' : 'border-gray-300'
+                                    }`}>
+                                      {isSelected && (
+                                        <div className="w-2 h-2 rounded-full bg-white" />
+                                      )}
+                                    </div>
+                                    <div>
+                                      <p className={`font-bold text-sm ${isSelected ? 'text-red-700' : 'text-gray-800'}`}>
+                                        {loc.name}
+                                      </p>
+                                      <p className="text-xs text-gray-500 mt-0.5">{loc.address}</p>
+                                    </div>
+                                  </div>
+                                </div>
+                              );
+                            })
+                          )}
+                        </div>
                       </FormControl>
                       <FormMessage />
                     </FormItem>
