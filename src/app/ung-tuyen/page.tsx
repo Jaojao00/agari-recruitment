@@ -365,7 +365,7 @@ export default function UngTuyenPage() {
                     name="preferredShift"
                     render={({ field }) => (
                       <FormItem>
-                        <FormLabel>Ca làm việc mong muốn *</FormLabel>
+                        <FormLabel>Ca làm việc ( Xoay Ca) *</FormLabel>
                         <Select
                           onValueChange={field.onChange}
                           defaultValue={field.value}
