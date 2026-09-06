@@ -78,6 +78,27 @@ function applicationToRow(application: Record<string, any>) {
   ];
 }
 
+async function getAppendRange() {
+  const response = await getSheetsClient().spreadsheets.values.get({
+    spreadsheetId: getSpreadsheetId(),
+    range: `'${getSheetName()}'!A1:A`,
+  });
+  const rows = response.data.values || [];
+  const firstApplicationRow = rows.findIndex((row) =>
+    /^AG-\d{4}-\d{6}$/i.test(String(row[0] ?? "").trim()),
+  );
+
+  if (firstApplicationRow >= 0) {
+    return `'${getSheetName()}'!A${firstApplicationRow + 1}:R`;
+  }
+
+  const firstHeaderRow = rows.findIndex((row) =>
+    /mã hồ sơ|application\s*id/i.test(String(row[0] ?? "").trim()),
+  );
+  const firstDataRow = firstHeaderRow >= 0 ? firstHeaderRow + 2 : 1;
+  return `'${getSheetName()}'!A${firstDataRow}:R`;
+}
+
 function rowToApplication(row: string[], rowNumber: number): SheetApplication {
   return {
     id: String(rowNumber),
@@ -130,7 +151,7 @@ export async function getApplicationsFromSheet(): Promise<SheetApplication[]> {
 export async function addApplicationToSheet(application: Record<string, any>) {
   const response = await getSheetsClient().spreadsheets.values.append({
     spreadsheetId: getSpreadsheetId(),
-    range: `'${getSheetName()}'!A1:R`,
+    range: await getAppendRange(),
     valueInputOption: "USER_ENTERED",
     requestBody: { values: [applicationToRow(application)] },
   });
