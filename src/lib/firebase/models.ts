@@ -23,11 +23,11 @@ export interface Application {
   preferredLocation?: string;
   permanentAddress: string;
 
-  education: "9/12" | "10/12" | "11/12" | "12/12" | "Khác";
+  education: "9/12" | "12/12" | "Đã Tốt Nghiệp" | "Khác";
   preferredShift:
-    | "Ca 1: 06:00 - 15:00"
-    | "Ca 2: 15:00 - 22:00"
-    | "Ca 3: 18:00 - 22:00";
+    | "Tôi Đã Từng làm việc dưới 1 tháng"
+    | "Tôi Đã Từng làm việc từ 1 tháng trở lên"
+    | "Tôi chưa từng làm việc liên quan đến vị trí ứng tuyển";
   availableStartDate: string; // YYYY-MM-DD
   note?: string;
 

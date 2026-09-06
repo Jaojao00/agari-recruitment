@@ -29,15 +29,16 @@ export const applicationSchema = z.object({
     .trim()
     .min(1, { message: "Vui lòng chọn khu vực muốn ứng tuyển" }),
   education: z.enum(
-    ["9/12", "10/12", "11/12", "12/12", "Khác"] as [string, ...string[]],
+    ["9/12", "12/12", "Đã Tốt Nghiệp", "Khác"] as [string, ...string[]],
     { message: "Vui lòng chọn trình độ học vấn" },
   ),
   preferredShift: z.enum(
-    ["Ca 1: 06:00 - 15:00", "Ca 2: 13:00 - 22:00", "Ca 3: 22:00 - 06:00"] as [
-      string,
-      ...string[],
-    ],
-    { message: "Vui lòng chọn ca làm việc" },
+    [
+      "Tôi Đã Từng làm việc dưới 1 tháng",
+      "Tôi Đã Từng làm việc từ 1 tháng trở lên",
+      "Tôi chưa từng làm việc liên quan đến vị trí ứng tuyển",
+    ] as [string, ...string[]],
+    { message: "Vui lòng chọn kinh nghiệm làm việc" },
   ),
   availableStartDate: z
     .string()
