@@ -45,6 +45,12 @@ function getSpreadsheetId() {
   return spreadsheetId;
 }
 
+function getSheetName() {
+  return (process.env.GOOGLE_SHEETS_TAB ?? "Trang tính1")
+    .trim()
+    .replace(/^"|"$/g, "");
+}
+
 function formatSheetDate(value: unknown) {
   return value instanceof Date ? value.toISOString() : String(value ?? "");
 }
@@ -101,7 +107,7 @@ function rowToApplication(row: string[], rowNumber: number): SheetApplication {
 export async function getApplicationsFromSheet(): Promise<SheetApplication[]> {
   const response = await getSheetsClient().spreadsheets.values.get({
     spreadsheetId: getSpreadsheetId(),
-    range: "Applications!A1:R",
+    range: `'${getSheetName()}'!A1:R`,
   });
   const rows = response.data.values || [];
   return rows
@@ -113,7 +119,7 @@ export async function getApplicationsFromSheet(): Promise<SheetApplication[]> {
 export async function addApplicationToSheet(application: Record<string, any>) {
   const response = await getSheetsClient().spreadsheets.values.append({
     spreadsheetId: getSpreadsheetId(),
-    range: "Applications!A1:R",
+    range: `'${getSheetName()}'!A1:R`,
     valueInputOption: "USER_ENTERED",
     requestBody: { values: [applicationToRow(application)] },
   });
@@ -128,7 +134,7 @@ export async function updateApplicationInSheet(
 ) {
   await getSheetsClient().spreadsheets.values.update({
     spreadsheetId: getSpreadsheetId(),
-    range: `Applications!A${rowNumber}:R${rowNumber}`,
+    range: `'${getSheetName()}'!A${rowNumber}:R${rowNumber}`,
     valueInputOption: "USER_ENTERED",
     requestBody: { values: [applicationToRow(application)] },
   });
