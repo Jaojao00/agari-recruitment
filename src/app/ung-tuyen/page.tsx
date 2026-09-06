@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -35,19 +35,17 @@ import { ArrowLeft, Loader2, MapPin } from "lucide-react";
 interface Location {
   id: string;
   name: string;
-  address: string;
+  address?: string;
 }
 
 const defaultLocations: Location[] = [
   {
     id: "default-sw-soc-binh-minh",
-    name: "SW SOC - KCN BÌNH MINH VĨNH LONG",
-    address: "KCN Bình Minh, Vĩnh Long",
+    name: "SW SOC - KCN BÌNH MINH VINH LONG",
   },
   {
     id: "default-flm-binh-tan",
-    name: "FLM - BÌNH TÂN, TP HCM",
-    address: "Bình Tân, TP HCM",
+    name: "FLM - BÌNH TAN, TP HCM",
   },
 ];
 
@@ -79,20 +77,23 @@ export default function UngTuyenPage() {
       .then((response) =>
         readJsonResponse<{ locations?: Location[] }>(response),
       )
-      .then((d) => {
-        const fetchedLocations: Location[] = d.locations || [];
-        const fetchedNames = new Set(
-          fetchedLocations.map((location) => location.name),
-        );
-        setLocations([
+      .then(({ locations: fetchedLocations = [] }) => {
+        const knownNames = new Set<string>();
+        const mergedLocations = [
+          ...defaultLocations,
           ...fetchedLocations,
-          ...defaultLocations.filter(
-            (location) => !fetchedNames.has(location.name),
-          ),
-        ]);
-        setLocationsLoading(false);
+        ].filter((location) => {
+          const normalizedName = location.name.trim().toLowerCase();
+          if (!normalizedName || knownNames.has(normalizedName)) return false;
+          knownNames.add(normalizedName);
+          return true;
+        });
+        setLocations(mergedLocations);
       })
-      .catch(() => setLocationsLoading(false));
+      .catch(() => {
+        setLocations(defaultLocations);
+      })
+      .finally(() => setLocationsLoading(false));
   }, []);
 
   const form = useForm<ApplicationFormValues>({
@@ -293,61 +294,31 @@ export default function UngTuyenPage() {
                         Khu vực muốn ứng tuyển *
                       </FormLabel>
                       <FormControl>
-                        <div className="grid grid-cols-1 gap-3 mt-1">
-                          {locationsLoading ? (
-                            <div className="flex items-center gap-2 text-gray-400 py-4">
-                              <Loader2 size={16} className="animate-spin" />
-                              <span className="text-sm">
-                                Đang tải danh sách khu vực...
-                              </span>
-                            </div>
-                          ) : locations.length === 0 ? (
-                            <p className="text-sm text-gray-400 py-2">
-                              Chưa có khu vực nào. Vui lòng liên hệ admin.
-                            </p>
-                          ) : (
-                            locations.map((loc) => {
-                              const isSelected = field.value === loc.name;
-                              return (
-                                <div
-                                  key={loc.id}
-                                  onClick={() => field.onChange(loc.name)}
-                                  className={`cursor-pointer rounded-xl border-2 p-4 transition-all select-none ${
-                                    isSelected
-                                      ? "border-red-600 bg-red-50 shadow-sm"
-                                      : "border-gray-200 bg-white hover:border-red-300 hover:bg-red-50/30"
-                                  }`}
-                                >
-                                  <div className="flex items-start gap-3">
-                                    <div
-                                      className={`w-5 h-5 rounded-full border-2 flex items-center justify-center shrink-0 mt-0.5 transition-all ${
-                                        isSelected
-                                          ? "border-red-600 bg-red-600"
-                                          : "border-gray-300"
-                                      }`}
-                                    >
-                                      {isSelected && (
-                                        <div className="w-2 h-2 rounded-full bg-white" />
-                                      )}
-                                    </div>
-                                    <div>
-                                      <p
-                                        className={`font-bold text-sm ${isSelected ? "text-red-700" : "text-gray-800"}`}
-                                      >
-                                        {loc.name}
-                                      </p>
-                                      {loc.address && (
-                                        <p className="text-xs text-gray-500 mt-0.5">
-                                          {loc.address}
-                                        </p>
-                                      )}
-                                    </div>
-                                  </div>
-                                </div>
-                              );
-                            })
-                          )}
-                        </div>
+                        <Select
+                          value={field.value}
+                          onValueChange={field.onChange}
+                          disabled={locationsLoading}
+                        >
+                          <SelectTrigger className="h-12">
+                            <SelectValue
+                              placeholder={
+                                locationsLoading
+                                  ? "Đang tải danh sách khu vực..."
+                                  : "Chọn khu vực muốn ứng tuyển"
+                              }
+                            />
+                          </SelectTrigger>
+                          <SelectContent>
+                            {locations.map((location) => (
+                              <SelectItem
+                                key={location.id}
+                                value={location.name}
+                              >
+                                <span>{location.name}</span>
+                              </SelectItem>
+                            ))}
+                          </SelectContent>
+                        </Select>
                       </FormControl>
                       <FormMessage />
                     </FormItem>
