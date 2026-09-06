@@ -355,9 +355,10 @@ export default function UngTuyenPage() {
                           </FormControl>
                           <SelectContent>
                             <SelectItem value="9/12">9/12</SelectItem>
-                            <SelectItem value="10/12">10/12</SelectItem>
-                            <SelectItem value="11/12">11/12</SelectItem>
                             <SelectItem value="12/12">12/12</SelectItem>
+                            <SelectItem value="Đã Tốt Nghiệp">
+                              Đã Tốt Nghiệp
+                            </SelectItem>
                             <SelectItem value="Khác">Khác</SelectItem>
                           </SelectContent>
                         </Select>
