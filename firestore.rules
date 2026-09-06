@@ -1,0 +1,30 @@
+rules_version = '2';
+
+service cloud.firestore {
+  match /databases/{database}/documents {
+    // Chỉ admin sdk (Server Actions) mới có full quyền đọc/ghi.
+    // Frontend (client) không có quyền đọc/ghi dữ liệu trực tiếp để bảo mật.
+    
+    match /applications/{applicationId} {
+      allow read, write: if false; // Bị block hoàn toàn từ client
+    }
+    
+    match /application_logs/{logId} {
+      allow read, write: if false;
+    }
+    
+    match /admins/{adminId} {
+      allow read, write: if false;
+    }
+    
+    match /settings/{settingId} {
+      // Cho phép client đọc settings (như đang tuyển hay tạm ngưng) nếu cần,
+      // nhưng tốt nhất có thể gọi API backend. Tạm thời block.
+      allow read, write: if false; 
+    }
+    
+    match /sync_queue/{queueId} {
+      allow read, write: if false;
+    }
+  }
+}
