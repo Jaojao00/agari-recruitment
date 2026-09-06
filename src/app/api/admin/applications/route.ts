@@ -1,5 +1,16 @@
 import { NextResponse } from "next/server";
 
+type ApplicationRecord = {
+  id: string;
+  status?: string;
+  createdAt?: { _seconds?: number; seconds?: number };
+  fullName?: string;
+  applicationId?: string;
+  cccd?: string;
+  phone?: string;
+  [key: string]: unknown;
+};
+
 export async function GET(request: Request) {
   try {
     const { adminDb } = await import("@/lib/firebase/admin");
@@ -9,28 +20,34 @@ export async function GET(request: Request) {
     const page = parseInt(searchParams.get("page") || "1");
     const limit = 20;
 
-    let query: any = adminDb
-      .collection("applications")
-      .orderBy("createdAt", "desc");
+    // Read without orderBy/where so this endpoint does not depend on a Firestore index.
+    let snapshot = await adminDb.collection("applications").get();
+    let results: ApplicationRecord[] = snapshot.docs.map(
+      (doc) => ({ id: doc.id, ...doc.data() }) as ApplicationRecord,
+    );
 
-    if (status) {
-      query = query.where("status", "==", status);
+    // Older records in this project were stored under registrations.
+    if (results.length === 0) {
+      snapshot = await adminDb.collection("registrations").get();
+      results = snapshot.docs.map(
+        (doc) => ({ id: doc.id, ...doc.data() }) as ApplicationRecord,
+      );
     }
 
-    // Firestore search is limited. If search is provided, we might have to fetch and filter in memory if we don't use Algolia.
-    // For a simple implementation, if there is a search term, we might fetch a larger set or use a specific field.
-    // Given the prompt: "Search/filter phải thực hiện ở backend/database", we will fetch and filter here.
+    if (status && status !== "ALL") {
+      results = results.filter((app) => app.status === status);
+    }
 
-    const snapshot = await query.get();
-    let results = snapshot.docs.map((doc: any) => ({
-      id: doc.id,
-      ...doc.data(),
-    }));
+    results.sort((a, b) => {
+      const first = a.createdAt?._seconds || a.createdAt?.seconds || 0;
+      const second = b.createdAt?._seconds || b.createdAt?.seconds || 0;
+      return second - first;
+    });
 
     if (search) {
       const lowerSearch = search.toLowerCase();
       results = results.filter(
-        (app: any) =>
+        (app) =>
           (app.fullName && app.fullName.toLowerCase().includes(lowerSearch)) ||
           (app.applicationId &&
             app.applicationId.toLowerCase().includes(lowerSearch)) ||
