@@ -110,9 +110,18 @@ export async function getApplicationsFromSheet(): Promise<SheetApplication[]> {
     range: `'${getSheetName()}'!A1:R`,
   });
   const rows = response.data.values || [];
-  return rows
-    .slice(1)
-    .map((row, index) => rowToApplication(row, index + 2))
+  const firstCell = String(rows[0]?.[0] ?? "")
+    .trim()
+    .toLowerCase();
+  const hasHeader =
+    firstCell === "mã hồ sơ" ||
+    firstCell === "applicationid" ||
+    firstCell === "application id";
+  const dataRows = hasHeader ? rows.slice(1) : rows;
+  const firstDataRowNumber = hasHeader ? 2 : 1;
+
+  return dataRows
+    .map((row, index) => rowToApplication(row, index + firstDataRowNumber))
     .filter((application) => application.applicationId);
 }
 

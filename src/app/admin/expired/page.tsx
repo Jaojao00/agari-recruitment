@@ -15,6 +15,16 @@ import Link from "next/link";
 export default function ExpiredPage() {
   const [data, setData] = useState<Application[]>([]);
 
+  const formatDate = (value: any) => {
+    if (!value) return "-";
+    const date = value._seconds
+      ? new Date(value._seconds * 1000)
+      : new Date(value);
+    return Number.isNaN(date.getTime())
+      ? "-"
+      : date.toLocaleDateString("vi-VN");
+  };
+
   useEffect(() => {
     fetch("/api/admin/applications?status=EXPIRED")
       .then((res) => (res.ok ? res.json() : { data: [] }))
@@ -53,13 +63,7 @@ export default function ExpiredPage() {
                 </TableCell>
                 <TableCell>{app.fullName}</TableCell>
                 <TableCell>Hết hạn</TableCell>
-                <TableCell>
-                  {app.expiredAt
-                    ? new Date(
-                        app.expiredAt._seconds * 1000,
-                      ).toLocaleDateString("vi-VN")
-                    : "-"}
-                </TableCell>
+                <TableCell>{formatDate(app.expiredAt)}</TableCell>
                 <TableCell>
                   <Link href={`/admin/applications/${app.id}`}>
                     <Button variant="outline" size="sm">

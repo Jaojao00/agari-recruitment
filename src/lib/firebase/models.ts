@@ -1,16 +1,16 @@
 export type ApplicationStatus =
-  | 'NEW'
-  | 'CONTACTED'
-  | 'INTERVIEW_SCHEDULED'
-  | 'INTERVIEWED'
-  | 'PASSED'
-  | 'FAILED'
-  | 'HIRED'
-  | 'WORKING'
-  | 'EXPIRED'
-  | 'CANCELLED';
+  | "NEW"
+  | "CONTACTED"
+  | "INTERVIEW_SCHEDULED"
+  | "INTERVIEWED"
+  | "PASSED"
+  | "FAILED"
+  | "HIRED"
+  | "WORKING"
+  | "EXPIRED"
+  | "CANCELLED";
 
-export type SyncStatus = 'PENDING' | 'SUCCESS' | 'FAILED';
+export type SyncStatus = "PENDING" | "SUCCESS" | "FAILED";
 
 export interface Application {
   id?: string;
@@ -19,11 +19,15 @@ export interface Application {
   dateOfBirth: string; // YYYY-MM-DD
   cccd: string;
   phone: string;
-  gender: 'Nam' | 'Nữ';
+  gender: "Nam" | "Nữ";
+  preferredLocation?: string;
   permanentAddress: string;
 
-  education: '9/12' | '10/12' | '11/12' | '12/12' | 'Khác';
-  preferredShift: 'Ca 1: 06:00 - 15:00' | 'Ca 2: 15:00 - 22:00' | 'Ca 3: 18:00 - 22:00';
+  education: "9/12" | "10/12" | "11/12" | "12/12" | "Khác";
+  preferredShift:
+    | "Ca 1: 06:00 - 15:00"
+    | "Ca 2: 15:00 - 22:00"
+    | "Ca 3: 18:00 - 22:00";
   availableStartDate: string; // YYYY-MM-DD
   note?: string;
 

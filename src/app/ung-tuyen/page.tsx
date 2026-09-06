@@ -388,25 +388,26 @@ export default function UngTuyenPage() {
                     name="preferredShift"
                     render={({ field }) => (
                       <FormItem>
-                        <FormLabel>Ca làm việc ( Xoay Ca) *</FormLabel>
+                        <FormLabel>Dành cho ứng viên mới *</FormLabel>
                         <Select
                           onValueChange={field.onChange}
                           defaultValue={field.value}
                         >
                           <FormControl>
                             <SelectTrigger className="h-12">
-                              <SelectValue placeholder="Các Ca Sẽ Xoay" />
+                              <SelectValue placeholder="kinh nghiệm làm việc liên quan đến vị trí ứng tuyển" />
                             </SelectTrigger>
                           </FormControl>
                           <SelectContent>
                             <SelectItem value="Ca 1: 06:00 - 15:00">
-                              Ca 1: 06:00 – 15:00
+                              Tôi Đã Từng làm việc dưới 1 tháng
                             </SelectItem>
                             <SelectItem value="Ca 2: 13:00 - 22:00">
-                              Ca 2: 13:00 – 22:00
+                              Tôi Đã Từng làm việc từ 1 tháng trở lên
                             </SelectItem>
                             <SelectItem value="Ca 3: 22:00 - 06:00">
-                              Ca 3: 22:00 – 06:00
+                              Tôi chưa từng làm việc liên quan đến vị trí ứng
+                              tuyển
                             </SelectItem>
                           </SelectContent>
                         </Select>
@@ -421,7 +422,7 @@ export default function UngTuyenPage() {
                   name="availableStartDate"
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel>Ngày có thể nhận việc *</FormLabel>
+                      <FormLabel>Ngày có thể nhận lịch phỏng vấn *</FormLabel>
                       <FormControl>
                         <Input type="date" {...field} className="h-12" />
                       </FormControl>

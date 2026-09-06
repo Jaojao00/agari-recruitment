@@ -15,6 +15,16 @@ import Link from "next/link";
 export default function RecruitedPage() {
   const [data, setData] = useState<Application[]>([]);
 
+  const formatDate = (value: any) => {
+    if (!value) return "-";
+    const date = value._seconds
+      ? new Date(value._seconds * 1000)
+      : new Date(value);
+    return Number.isNaN(date.getTime())
+      ? "-"
+      : date.toLocaleDateString("vi-VN");
+  };
+
   useEffect(() => {
     fetch("/api/admin/applications?status=HIRED")
       .then((res) => (res.ok ? res.json() : { data: [] }))
@@ -48,13 +58,7 @@ export default function RecruitedPage() {
                 </TableCell>
                 <TableCell>{app.fullName}</TableCell>
                 <TableCell>{app.preferredShift}</TableCell>
-                <TableCell>
-                  {app.hiredAt
-                    ? new Date(app.hiredAt._seconds * 1000).toLocaleDateString(
-                        "vi-VN",
-                      )
-                    : "-"}
-                </TableCell>
+                <TableCell>{formatDate(app.hiredAt)}</TableCell>
                 <TableCell>
                   <Link href={`/admin/applications/${app.id}`}>
                     <Button variant="outline" size="sm">
