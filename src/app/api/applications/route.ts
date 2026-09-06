@@ -115,6 +115,19 @@ export async function POST(request: Request) {
       );
     }
 
+    if (
+      error instanceof Error &&
+      error.message.includes("Firebase Admin environment variables")
+    ) {
+      return NextResponse.json(
+        {
+          error:
+            "Máy chủ chưa được cấu hình Firebase Admin. Vui lòng liên hệ quản trị viên.",
+        },
+        { status: 500 },
+      );
+    }
+
     return NextResponse.json(
       { error: "Có lỗi xảy ra trong hệ thống. Vui lòng thử lại." },
       { status: 500 },

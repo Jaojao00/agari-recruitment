@@ -7,25 +7,25 @@ let adminApp: App;
 if (getApps().length) {
   adminApp = getApps()[0];
 } else {
-  try {
-    const privateKey = process.env.FIREBASE_PRIVATE_KEY
-      ? process.env.FIREBASE_PRIVATE_KEY.replace(/\\n/g, "\n")
-      : undefined;
+  const projectId = process.env.NEXT_PUBLIC_FIREBASE_PROJECT_ID?.trim();
+  const clientEmail = process.env.FIREBASE_CLIENT_EMAIL?.trim();
+  const privateKey = process.env.FIREBASE_PRIVATE_KEY?.trim()
+    .replace(/^"|"$/g, "")
+    .replace(/\\n/g, "\n");
 
-    adminApp = initializeApp({
-      credential: cert({
-        projectId: process.env.NEXT_PUBLIC_FIREBASE_PROJECT_ID,
-        clientEmail: process.env.FIREBASE_CLIENT_EMAIL,
-        privateKey: privateKey,
-      }),
-    });
-  } catch (error) {
-    console.error("Firebase admin initialization error", error);
-    // Keep route modules loadable so they can return a useful fallback response.
-    adminApp = initializeApp({
-      projectId: process.env.NEXT_PUBLIC_FIREBASE_PROJECT_ID,
-    });
+  if (!projectId || !clientEmail || !privateKey) {
+    throw new Error(
+      "Missing Firebase Admin environment variables: NEXT_PUBLIC_FIREBASE_PROJECT_ID, FIREBASE_CLIENT_EMAIL, FIREBASE_PRIVATE_KEY",
+    );
   }
+
+  adminApp = initializeApp({
+    credential: cert({
+      projectId,
+      clientEmail,
+      privateKey,
+    }),
+  });
 }
 
 export const adminDb = getFirestore(adminApp);
