@@ -1,47 +1,22 @@
 import { NextResponse } from "next/server";
-
-type ApplicationRecord = {
-  id: string;
-  status?: string;
-  createdAt?: { _seconds?: number; seconds?: number };
-  fullName?: string;
-  applicationId?: string;
-  cccd?: string;
-  phone?: string;
-  [key: string]: unknown;
-};
+import { getApplicationsFromSheet } from "@/lib/google-sheets";
 
 export async function GET(request: Request) {
   try {
-    const { adminDb } = await import("@/lib/firebase/admin");
     const { searchParams } = new URL(request.url);
     const search = searchParams.get("search") || "";
     const status = searchParams.get("status") || "";
     const page = parseInt(searchParams.get("page") || "1");
     const limit = 20;
 
-    // Read without orderBy/where so this endpoint does not depend on a Firestore index.
-    let snapshot = await adminDb.collection("applications").get();
-    let results: ApplicationRecord[] = snapshot.docs.map(
-      (doc) => ({ id: doc.id, ...doc.data() }) as ApplicationRecord,
-    );
-
-    // Older records in this project were stored under registrations.
-    if (results.length === 0) {
-      snapshot = await adminDb.collection("registrations").get();
-      results = snapshot.docs.map(
-        (doc) => ({ id: doc.id, ...doc.data() }) as ApplicationRecord,
-      );
-    }
+    let results = await getApplicationsFromSheet();
 
     if (status && status !== "ALL") {
       results = results.filter((app) => app.status === status);
     }
 
     results.sort((a, b) => {
-      const first = a.createdAt?._seconds || a.createdAt?.seconds || 0;
-      const second = b.createdAt?._seconds || b.createdAt?.seconds || 0;
-      return second - first;
+      return String(b.createdAt || "").localeCompare(String(a.createdAt || ""));
     });
 
     if (search) {

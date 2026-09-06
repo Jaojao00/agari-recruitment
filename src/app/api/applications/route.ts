@@ -1,75 +1,36 @@
 import { NextResponse } from "next/server";
-import type { Transaction } from "firebase-admin/firestore";
 import {
   applicationSchema,
   normalizeApplicationPayload,
 } from "@/lib/validation/application";
+import {
+  addApplicationToSheet,
+  getApplicationsFromSheet,
+} from "@/lib/google-sheets";
 
 export async function POST(request: Request) {
   try {
-    const { adminDb } = await import("@/lib/firebase/admin");
     const body = await request.json();
     const normalizedBody = normalizeApplicationPayload(body);
 
     // 1. Backend validate
     const validatedData = applicationSchema.parse(normalizedBody);
 
-    // 2. Check duplicate CCCD or Phone
-    const applicationsRef = adminDb.collection("applications");
-
-    // Checking CCCD
-    const cccdQuery = await applicationsRef
-      .where("cccd", "==", validatedData.cccd)
-      .get();
-    if (!cccdQuery.empty) {
-      const existingApp = cccdQuery.docs[0].data();
-      return NextResponse.json(
-        {
-          error: `Hồ sơ của bạn đã tồn tại với mã ${existingApp.applicationId}.`,
-        },
-        { status: 400 },
-      );
-    }
-
-    // Checking Phone
-    const phoneQuery = await applicationsRef
-      .where("phone", "==", validatedData.phone)
-      .get();
-    if (!phoneQuery.empty) {
-      const existingApp = phoneQuery.docs[0].data();
-      return NextResponse.json(
-        {
-          error: `Số điện thoại của bạn đã được đăng ký với mã ${existingApp.applicationId}.`,
-        },
-        { status: 400 },
-      );
-    }
-
-    // 3. Generate applicationId
-    // Read a counter document
-    const counterRef = adminDb.collection("settings").doc("counters");
-
-    const newAppId = await adminDb.runTransaction(
-      async (transaction: Transaction) => {
-        const counterDoc = await transaction.get(counterRef);
-        let currentCount = 0;
-        if (counterDoc.exists) {
-          currentCount = counterDoc.data()?.applicationCount || 0;
-        }
-
-        const newCount = currentCount + 1;
-        transaction.set(
-          counterRef,
-          { applicationCount: newCount },
-          { merge: true },
-        );
-
-        const year = new Date().getFullYear();
-        return `AG-${year}-${String(newCount).padStart(6, "0")}`;
-      },
+    const existingApplications = await getApplicationsFromSheet();
+    const duplicate = existingApplications.find(
+      (application) =>
+        application.cccd === validatedData.cccd ||
+        application.phone === validatedData.phone,
     );
-
-    // 4. Save to Firestore
+    if (duplicate) {
+      return NextResponse.json(
+        {
+          error: `Hồ sơ của bạn đã tồn tại với mã ${duplicate.applicationId}.`,
+        },
+        { status: 400 },
+      );
+    }
+    const newAppId = `AG-${new Date().getFullYear()}-${String(existingApplications.length + 1).padStart(6, "0")}`;
     const now = new Date();
 
     const applicationData = {
@@ -79,31 +40,8 @@ export async function POST(request: Request) {
       appliedAt: now,
       createdAt: now,
       updatedAt: now,
-      googleSheetSyncStatus: "PENDING",
     };
-
-    const docRef = applicationsRef.doc();
-    await docRef.set(applicationData);
-
-    // 5. Create Sync Queue record
-    const syncQueueRef = adminDb.collection("sync_queue").doc();
-    await syncQueueRef.set({
-      applicationId: docRef.id, // Firestore document ID
-      applicationCode: newAppId,
-      type: "CREATE_GOOGLE_SHEET_ROW",
-      status: "PENDING",
-      attempts: 0,
-      createdAt: now,
-    });
-
-    // 6. Trigger sync asynchronously (fire and forget)
-    const baseUrl =
-      process.env.NEXT_PUBLIC_BASE_URL ||
-      request.headers.get("origin") ||
-      "http://localhost:3000";
-    fetch(`${baseUrl}/api/sync/process`, { method: "POST" }).catch((e) =>
-      console.error("Background sync failed to start:", e),
-    );
+    await addApplicationToSheet(applicationData);
 
     return NextResponse.json(
       { success: true, applicationId: newAppId },
@@ -116,52 +54,6 @@ export async function POST(request: Request) {
       return NextResponse.json(
         { error: "Dữ liệu không hợp lệ." },
         { status: 400 },
-      );
-    }
-
-    if (
-      error instanceof Error &&
-      error.message.includes("Firebase Admin environment variables")
-    ) {
-      return NextResponse.json(
-        {
-          error:
-            "Máy chủ chưa được cấu hình Firebase Admin. Vui lòng liên hệ quản trị viên.",
-        },
-        { status: 500 },
-      );
-    }
-
-    const firebaseErrorCode =
-      typeof error === "object" && error !== null && "code" in error
-        ? String(error.code)
-        : "UNKNOWN";
-    const firebaseErrorMessage =
-      error instanceof Error ? error.message.toLowerCase() : "";
-
-    if (
-      firebaseErrorCode === "7" ||
-      firebaseErrorMessage.includes("permission denied")
-    ) {
-      return NextResponse.json(
-        {
-          error:
-            "Firebase không cấp quyền ghi dữ liệu. Kiểm tra service account và quyền Firestore trên Vercel.",
-        },
-        { status: 500 },
-      );
-    }
-
-    if (
-      firebaseErrorCode === "16" ||
-      firebaseErrorMessage.includes("invalid credential") ||
-      firebaseErrorMessage.includes("credential")
-    ) {
-      return NextResponse.json(
-        {
-          error: "Thông tin xác thực Firebase Admin trên máy chủ không hợp lệ.",
-        },
-        { status: 500 },
       );
     }
 

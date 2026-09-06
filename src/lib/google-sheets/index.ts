@@ -1,5 +1,4 @@
 import { google } from "googleapis";
-import { Application } from "@/lib/firebase/models";
 
 const SCOPES = ["https://www.googleapis.com/auth/spreadsheets"];
 
@@ -17,11 +16,6 @@ function getPrivateKey() {
 }
 
 function getGoogleAuth() {
-  const spreadsheetId = (process.env.GOOGLE_SHEETS_ID ?? "")
-    .trim()
-    .replace(/^GOOGLE_SHEETS_ID=/i, "")
-    .replace(/^"|"$/g, "");
-
   return new google.auth.GoogleAuth({
     credentials: {
       client_email: process.env.GOOGLE_SERVICE_ACCOUNT_EMAIL?.trim(),
@@ -31,127 +25,111 @@ function getGoogleAuth() {
   });
 }
 
-export async function addRowToSheet(
-  application: Application,
-): Promise<number | null> {
-  if (!process.env.GOOGLE_SHEETS_ID) return null;
+type SheetApplication = Record<string, any> & {
+  id: string;
+  applicationId: string;
+  status: string;
+};
 
-  const auth = getGoogleAuth();
-  const sheets = google.sheets({ version: "v4", auth });
-  const spreadsheetId = process.env.GOOGLE_SHEETS_ID;
-  const range = "Applications!A:Q"; // Adjust based on your sheet name
-
-  // Row format based on requirements
-  const row = [
-    application.applicationId,
-    application.fullName,
-    application.dateOfBirth,
-    application.cccd,
-    application.phone,
-    application.gender,
-    application.permanentAddress,
-    application.education,
-    application.preferredShift,
-    application.availableStartDate,
-    application.appliedAt
-      ? new Date(application.appliedAt._seconds * 1000).toLocaleString("vi-VN")
-      : "",
-    application.status,
-    application.hiredAt
-      ? new Date(application.hiredAt._seconds * 1000).toLocaleDateString(
-          "vi-VN",
-        )
-      : "",
-    application.expiredAt
-      ? new Date(application.expiredAt._seconds * 1000).toLocaleDateString(
-          "vi-VN",
-        )
-      : "",
-    application.note || "",
-    new Date().toLocaleString("vi-VN"),
-    "SUCCESS", // Sync Status
-  ];
-
-  try {
-    const response = await sheets.spreadsheets.values.append({
-      spreadsheetId,
-      range,
-      valueInputOption: "USER_ENTERED",
-      requestBody: {
-        values: [row],
-      },
-    });
-
-    // Attempt to extract row number
-    const updatedRange = response.data.updates?.updatedRange; // e.g., 'Applications!A10:Q10'
-    let rowNumber = null;
-    if (updatedRange) {
-      const match = updatedRange.match(/[A-Z]+(\d+)/);
-      if (match && match[1]) {
-        rowNumber = parseInt(match[1], 10);
-      }
-    }
-
-    return rowNumber;
-  } catch (error) {
-    console.error("Google Sheets append error:", error);
-    throw error;
-  }
+function getSheetsClient() {
+  return google.sheets({ version: "v4", auth: getGoogleAuth() });
 }
 
-// Function to update an existing row - required for idempotency/retry and admin updates
-export async function updateRowInSheet(
-  application: Application,
-  rowNumber: number,
-) {
-  if (!process.env.GOOGLE_SHEETS_ID || !rowNumber) return;
+function getSpreadsheetId() {
+  const spreadsheetId = (process.env.GOOGLE_SHEETS_ID ?? "")
+    .trim()
+    .replace(/^GOOGLE_SHEETS_ID=/i, "")
+    .replace(/^"|"$/g, "");
+  if (!spreadsheetId)
+    throw new Error("Missing GOOGLE_SHEETS_ID environment variable");
+  return spreadsheetId;
+}
 
-  const auth = getGoogleAuth();
-  const sheets = google.sheets({ version: "v4", auth });
-  const spreadsheetId = process.env.GOOGLE_SHEETS_ID;
-  const range = `Applications!A${rowNumber}:Q${rowNumber}`;
+function formatSheetDate(value: unknown) {
+  return value instanceof Date ? value.toISOString() : String(value ?? "");
+}
 
-  const row = [
+function applicationToRow(application: Record<string, any>) {
+  return [
     application.applicationId,
     application.fullName,
     application.dateOfBirth,
     application.cccd,
     application.phone,
     application.gender,
-    application.permanentAddress,
+    application.preferredLocation,
     application.education,
     application.preferredShift,
     application.availableStartDate,
-    application.appliedAt
-      ? new Date(application.appliedAt._seconds * 1000).toLocaleString("vi-VN")
-      : "",
-    application.status,
-    application.hiredAt
-      ? new Date(application.hiredAt._seconds * 1000).toLocaleDateString(
-          "vi-VN",
-        )
-      : "",
-    application.expiredAt
-      ? new Date(application.expiredAt._seconds * 1000).toLocaleDateString(
-          "vi-VN",
-        )
-      : "",
+    formatSheetDate(application.appliedAt || new Date()),
+    application.status || "NEW",
+    formatSheetDate(application.hiredAt),
+    formatSheetDate(application.expiredAt),
     application.note || "",
-    new Date().toLocaleString("vi-VN"),
+    application.adminNote || "",
+    formatSheetDate(application.updatedAt || new Date()),
     "SUCCESS",
   ];
+}
 
-  try {
-    await sheets.spreadsheets.values.update({
-      spreadsheetId,
-      range,
-      valueInputOption: "USER_ENTERED",
-      requestBody: {
-        values: [row],
-      },
-    });
-  } catch (error) {
-    console.error("Google Sheets update error:", error);
-    throw error;
-  }
+function rowToApplication(row: string[], rowNumber: number): SheetApplication {
+  return {
+    id: String(rowNumber),
+    applicationId: row[0] || `SHEET-${rowNumber}`,
+    fullName: row[1] || "",
+    dateOfBirth: row[2] || "",
+    cccd: row[3] || "",
+    phone: row[4] || "",
+    gender: row[5] || "",
+    preferredLocation: row[6] || "",
+    education: row[7] || "",
+    preferredShift: row[8] || "",
+    availableStartDate: row[9] || "",
+    appliedAt: row[10] || "",
+    createdAt: row[10] || "",
+    status: row[11] || "NEW",
+    hiredAt: row[12] || "",
+    expiredAt: row[13] || "",
+    note: row[14] || "",
+    adminNote: row[15] || "",
+    updatedAt: row[16] || "",
+    googleSheetRow: rowNumber,
+    googleSheetSyncStatus: row[17] || "SUCCESS",
+  };
+}
+
+export async function getApplicationsFromSheet(): Promise<SheetApplication[]> {
+  const response = await getSheetsClient().spreadsheets.values.get({
+    spreadsheetId: getSpreadsheetId(),
+    range: "Applications!A1:R",
+  });
+  const rows = response.data.values || [];
+  return rows
+    .slice(1)
+    .map((row, index) => rowToApplication(row, index + 2))
+    .filter((application) => application.applicationId);
+}
+
+export async function addApplicationToSheet(application: Record<string, any>) {
+  const response = await getSheetsClient().spreadsheets.values.append({
+    spreadsheetId: getSpreadsheetId(),
+    range: "Applications!A1:R",
+    valueInputOption: "USER_ENTERED",
+    requestBody: { values: [applicationToRow(application)] },
+  });
+  const updatedRange = response.data.updates?.updatedRange || "";
+  const match = updatedRange.match(/[A-Z]+(\d+)/);
+  return match ? Number(match[1]) : null;
+}
+
+export async function updateApplicationInSheet(
+  rowNumber: number,
+  application: Record<string, any>,
+) {
+  await getSheetsClient().spreadsheets.values.update({
+    spreadsheetId: getSpreadsheetId(),
+    range: `Applications!A${rowNumber}:R${rowNumber}`,
+    valueInputOption: "USER_ENTERED",
+    requestBody: { values: [applicationToRow(application)] },
+  });
 }

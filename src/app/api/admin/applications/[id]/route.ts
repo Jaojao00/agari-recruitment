@@ -1,13 +1,19 @@
-import { NextResponse } from 'next/server';
-import { adminDb } from '@/lib/firebase/admin';
+import { NextResponse } from "next/server";
+import {
+  getApplicationsFromSheet,
+  updateApplicationInSheet,
+} from "@/lib/google-sheets";
 
 export async function GET(request: Request, { params }: any) {
   try {
-    const doc = await adminDb.collection('applications').doc(params.id).get();
-    if (!doc.exists) return NextResponse.json({ error: 'Not found' }, { status: 404 });
-    return NextResponse.json({ id: doc.id, ...doc.data() });
+    const application = (await getApplicationsFromSheet()).find(
+      (item) => item.id === String(params.id),
+    );
+    if (!application)
+      return NextResponse.json({ error: "Not found" }, { status: 404 });
+    return NextResponse.json(application);
   } catch (error) {
-    return NextResponse.json({ error: 'Server error' }, { status: 500 });
+    return NextResponse.json({ error: "Server error" }, { status: 500 });
   }
 }
 
@@ -15,53 +21,28 @@ export async function PATCH(request: Request, { params }: any) {
   try {
     const body = await request.json();
     const { status, hiredAt, expiredAt, adminNote, adminId, adminName } = body;
-    
-    const docRef = adminDb.collection('applications').doc(params.id);
-    const doc = await docRef.get();
-    if (!doc.exists) return NextResponse.json({ error: 'Not found' }, { status: 404 });
 
-    const oldData = doc.data();
-    const updateData: any = { updatedAt: new Date() };
-    
+    const applications = await getApplicationsFromSheet();
+    const application = applications.find(
+      (item) => item.id === String(params.id),
+    );
+    if (!application)
+      return NextResponse.json({ error: "Not found" }, { status: 404 });
+
+    const updateData: any = { ...application, updatedAt: new Date() };
+
     if (status) updateData.status = status;
     if (adminNote !== undefined) updateData.adminNote = adminNote;
-    
+
     // Parse dates if provided
     if (hiredAt) updateData.hiredAt = new Date(hiredAt);
     if (expiredAt) updateData.expiredAt = new Date(expiredAt);
 
-    await docRef.update(updateData);
-
-    // Audit log
-    if (status && oldData?.status !== status) {
-      await adminDb.collection('application_logs').add({
-        applicationId: params.id,
-        action: 'STATUS_CHANGE',
-        oldStatus: oldData?.status,
-        newStatus: status,
-        adminId: adminId || 'unknown',
-        adminName: adminName || 'Admin',
-        createdAt: new Date(),
-      });
-    }
-
-    // Push to sync queue if it was successfully synced before or if we need to sync updates
-    if (oldData?.googleSheetSyncStatus === 'SUCCESS') {
-      await adminDb.collection('sync_queue').add({
-        applicationId: params.id,
-        type: 'UPDATE_GOOGLE_SHEET_ROW',
-        status: 'PENDING',
-        attempts: 0,
-        createdAt: new Date(),
-      });
-      // Optionally trigger sync immediately
-      const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || request.headers.get('origin') || 'http://localhost:3000';
-      fetch(`${baseUrl}/api/sync/process`, { method: 'POST' }).catch(e => console.error(e));
-    }
+    await updateApplicationInSheet(Number(params.id), updateData);
 
     return NextResponse.json({ success: true });
   } catch (error) {
-    console.error('Update app error:', error);
-    return NextResponse.json({ error: 'Server error' }, { status: 500 });
+    console.error("Update app error:", error);
+    return NextResponse.json({ error: "Server error" }, { status: 500 });
   }
 }
