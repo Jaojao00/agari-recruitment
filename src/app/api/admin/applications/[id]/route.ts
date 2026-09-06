@@ -4,10 +4,18 @@ import {
   updateApplicationInSheet,
 } from "@/lib/google-sheets";
 
-export async function GET(request: Request, { params }: any) {
+type ApplicationRouteContext = {
+  params: Promise<{ id: string }>;
+};
+
+export async function GET(
+  request: Request,
+  { params }: ApplicationRouteContext,
+) {
   try {
+    const { id } = await params;
     const application = (await getApplicationsFromSheet()).find(
-      (item) => item.id === String(params.id),
+      (item) => item.id === id,
     );
     if (!application)
       return NextResponse.json({ error: "Not found" }, { status: 404 });
@@ -17,15 +25,17 @@ export async function GET(request: Request, { params }: any) {
   }
 }
 
-export async function PATCH(request: Request, { params }: any) {
+export async function PATCH(
+  request: Request,
+  { params }: ApplicationRouteContext,
+) {
   try {
+    const { id } = await params;
     const body = await request.json();
-    const { status, hiredAt, expiredAt, adminNote, adminId, adminName } = body;
+    const { status, hiredAt, expiredAt, adminNote } = body;
 
     const applications = await getApplicationsFromSheet();
-    const application = applications.find(
-      (item) => item.id === String(params.id),
-    );
+    const application = applications.find((item) => item.id === id);
     if (!application)
       return NextResponse.json({ error: "Not found" }, { status: 404 });
 
@@ -40,7 +50,7 @@ export async function PATCH(request: Request, { params }: any) {
     if (expiredAt === null || expiredAt === "") updateData.expiredAt = "";
     else if (expiredAt) updateData.expiredAt = new Date(expiredAt);
 
-    await updateApplicationInSheet(Number(params.id), updateData);
+    await updateApplicationInSheet(Number(id), updateData);
 
     return NextResponse.json({ success: true });
   } catch (error) {

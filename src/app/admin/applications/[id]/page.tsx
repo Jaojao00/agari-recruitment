@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { useParams, useRouter } from "next/navigation";
+import { useParams } from "next/navigation";
 import { Application } from "@/lib/firebase/models";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -15,13 +15,18 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { ArrowLeft, Save, Loader2, RefreshCw } from "lucide-react";
+import {
+  ArrowLeft,
+  CheckCircle2,
+  Save,
+  Loader2,
+  UserRound,
+} from "lucide-react";
 import Link from "next/link";
 import { useAuth } from "@/lib/auth/auth-context";
 
 export default function ApplicationDetailPage() {
   const { id } = useParams();
-  const router = useRouter();
   const { user } = useAuth();
 
   const [data, setData] = useState<Application | null>(null);
@@ -40,6 +45,16 @@ export default function ApplicationDetailPage() {
       ? new Date(value._seconds * 1000)
       : new Date(value);
     return Number.isNaN(date.getTime()) ? "" : date.toISOString().split("T")[0];
+  };
+
+  const formatDisplayDate = (value: any) => {
+    if (!value) return "-";
+    const date = value._seconds
+      ? new Date(value._seconds * 1000)
+      : new Date(value);
+    return Number.isNaN(date.getTime())
+      ? String(value)
+      : date.toLocaleDateString("vi-VN");
   };
 
   useEffect(() => {
@@ -112,16 +127,41 @@ export default function ApplicationDetailPage() {
             <ArrowLeft size={16} />
           </Button>
         </Link>
-        <h1 className="text-2xl font-bold">
-          Chi tiết hồ sơ:{" "}
-          <span className="text-red-700">{data.applicationId}</span>
-        </h1>
+        <div>
+          <p className="text-sm text-gray-500">Hồ sơ ứng tuyển</p>
+          <h1 className="text-2xl font-bold">Chi tiết hồ sơ ứng viên</h1>
+          <p className="text-sm font-semibold text-red-700">
+            {data.applicationId}
+          </p>
+        </div>
       </div>
+
+      <Card className="overflow-hidden">
+        <CardContent className="flex flex-col gap-4 p-5 sm:flex-row sm:items-center sm:justify-between">
+          <div className="flex items-center gap-4">
+            <div className="flex h-16 w-16 items-center justify-center rounded-full bg-red-50 text-red-700">
+              <UserRound size={32} />
+            </div>
+            <div>
+              <h2 className="text-xl font-bold text-gray-900">
+                {data.fullName}
+              </h2>
+              <p className="text-sm text-gray-500">{data.phone}</p>
+              <span className="mt-2 inline-flex items-center gap-1 rounded-full bg-green-100 px-3 py-1 text-xs font-semibold text-green-700">
+                <CheckCircle2 size={14} /> Hồ sơ đã tiếp nhận
+              </span>
+            </div>
+          </div>
+          <Button className="bg-red-700 text-white hover:bg-red-800">
+            Liên hệ ứng viên
+          </Button>
+        </CardContent>
+      </Card>
 
       <div className="grid md:grid-cols-2 gap-6">
         <Card>
-          <CardHeader>
-            <CardTitle>Thông tin ứng viên</CardTitle>
+          <CardHeader className="border-b bg-gray-50">
+            <CardTitle>Thông tin cá nhân</CardTitle>
           </CardHeader>
           <CardContent className="space-y-4">
             <div className="grid grid-cols-3 gap-2 py-2 border-b">
@@ -145,7 +185,7 @@ export default function ApplicationDetailPage() {
               <span className="col-span-2">{data.gender}</span>
             </div>
             <div className="grid grid-cols-3 gap-2 py-2 border-b">
-              <span className="text-gray-500 font-medium">Địa chỉ:</span>
+              <span className="text-gray-500 font-medium">Khu vực:</span>
               <span className="col-span-2">
                 {data.preferredLocation || data.permanentAddress || "-"}
               </span>
@@ -177,6 +217,11 @@ export default function ApplicationDetailPage() {
               <CardTitle>Quản lý tuyển dụng</CardTitle>
             </CardHeader>
             <CardContent className="space-y-4 pt-6">
+              <div className="space-y-2">
+                <Label>Ngày ứng tuyển</Label>
+                <Input value={formatDisplayDate(data.appliedAt)} readOnly />
+              </div>
+
               <div className="space-y-2">
                 <Label>Trạng thái</Label>
                 <Select
@@ -245,49 +290,6 @@ export default function ApplicationDetailPage() {
                 )}
                 LƯU THAY ĐỔI
               </Button>
-            </CardContent>
-          </Card>
-
-          <Card>
-            <CardHeader>
-              <CardTitle className="text-sm">
-                Trạng thái đồng bộ Google Sheets
-              </CardTitle>
-            </CardHeader>
-            <CardContent>
-              <div className="flex items-center justify-between">
-                <div>
-                  <span
-                    className={`px-2 py-1 text-xs rounded-full font-bold
-                    ${
-                      data.googleSheetSyncStatus === "SUCCESS"
-                        ? "bg-green-100 text-green-700"
-                        : data.googleSheetSyncStatus === "FAILED"
-                          ? "bg-red-100 text-red-700"
-                          : "bg-yellow-100 text-yellow-700"
-                    }
-                  `}
-                  >
-                    {data.googleSheetSyncStatus}
-                  </span>
-                  {data.googleSheetSyncError && (
-                    <p className="text-xs text-red-500 mt-2">
-                      {data.googleSheetSyncError}
-                    </p>
-                  )}
-                </div>
-                <Button
-                  variant="outline"
-                  size="sm"
-                  onClick={() => {
-                    fetch("/api/sync/process", { method: "POST" }).then(() =>
-                      fetchApplication(),
-                    );
-                  }}
-                >
-                  <RefreshCw size={14} className="mr-1" /> Retry Sync
-                </Button>
-              </div>
             </CardContent>
           </Card>
         </div>
