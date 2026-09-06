@@ -372,7 +372,7 @@ export default function UngTuyenPage() {
                         >
                           <FormControl>
                             <SelectTrigger className="h-12">
-                              <SelectValue placeholder="Chọn ca làm việc" />
+                              <SelectValue placeholder="Các Ca Sẽ Xoay" />
                             </SelectTrigger>
                           </FormControl>
                           <SelectContent>
