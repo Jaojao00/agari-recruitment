@@ -1,14 +1,16 @@
-'use client';
+"use client";
 
-import { useState, useEffect } from 'react';
-import { useRouter } from 'next/navigation';
-import { useForm } from 'react-hook-form';
-import { zodResolver } from '@hookform/resolvers/zod';
-import * as z from 'zod';
-import Link from 'next/link';
-import { applicationSchema, ApplicationFormValues } from '@/lib/validation/application';
+import { useState, useEffect } from "react";
+import { useRouter } from "next/navigation";
+import { useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+import Link from "next/link";
+import {
+  applicationSchema,
+  ApplicationFormValues,
+} from "@/lib/validation/application";
 
-import { Button } from '@/components/ui/button';
+import { Button } from "@/components/ui/button";
 import {
   Form,
   FormControl,
@@ -16,18 +18,18 @@ import {
   FormItem,
   FormLabel,
   FormMessage,
-} from '@/components/ui/form';
-import { Input } from '@/components/ui/input';
-import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
+} from "@/components/ui/form";
+import { Input } from "@/components/ui/input";
+import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from '@/components/ui/select';
-import { Textarea } from '@/components/ui/textarea';
-import { ArrowLeft, Loader2, MapPin } from 'lucide-react';
+} from "@/components/ui/select";
+import { Textarea } from "@/components/ui/textarea";
+import { ArrowLeft, Loader2, MapPin } from "lucide-react";
 
 interface Location {
   id: string;
@@ -35,18 +37,40 @@ interface Location {
   address: string;
 }
 
+const defaultLocations: Location[] = [
+  {
+    id: "default-sw-soc-binh-minh",
+    name: "SW SOC - KCN BÌNH MINH VĨNH LONG",
+    address: "KCN Bình Minh, Vĩnh Long",
+  },
+  {
+    id: "default-flm-binh-tan",
+    name: "FLM - BÌNH TÂN, TP HCM",
+    address: "Bình Tân, TP HCM",
+  },
+];
+
 export default function UngTuyenPage() {
   const router = useRouter();
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [error, setError] = useState<string | null>(null);
-  const [locations, setLocations] = useState<Location[]>([]);
+  const [locations, setLocations] = useState<Location[]>(defaultLocations);
   const [locationsLoading, setLocationsLoading] = useState(true);
 
   useEffect(() => {
-    fetch('/api/locations')
-      .then(r => r.json())
-      .then(d => {
-        setLocations(d.locations || []);
+    fetch("/api/locations")
+      .then((r) => r.json())
+      .then((d) => {
+        const fetchedLocations: Location[] = d.locations || [];
+        const fetchedNames = new Set(
+          fetchedLocations.map((location) => location.name),
+        );
+        setLocations([
+          ...fetchedLocations,
+          ...defaultLocations.filter(
+            (location) => !fetchedNames.has(location.name),
+          ),
+        ]);
         setLocationsLoading(false);
       })
       .catch(() => setLocationsLoading(false));
@@ -55,11 +79,11 @@ export default function UngTuyenPage() {
   const form = useForm<ApplicationFormValues>({
     resolver: zodResolver(applicationSchema),
     defaultValues: {
-      fullName: '',
-      cccd: '',
-      phone: '',
-      preferredLocation: '',
-      note: '',
+      fullName: "",
+      cccd: "",
+      phone: "",
+      preferredLocation: "",
+      note: "",
     },
   });
 
@@ -67,22 +91,24 @@ export default function UngTuyenPage() {
     setIsSubmitting(true);
     setError(null);
     try {
-      const response = await fetch('/api/applications', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+      const response = await fetch("/api/applications", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
         body: JSON.stringify(data),
       });
 
       const result = await response.json();
 
       if (!response.ok) {
-        throw new Error(result.error || 'Có lỗi xảy ra. Vui lòng thử lại.');
+        throw new Error(result.error || "Có lỗi xảy ra. Vui lòng thử lại.");
       }
 
       // Redirect to success page with application ID
       router.push(`/thong-bao-thanh-cong?id=${result.applicationId}`);
-    } catch (err: any) {
-      setError(err.message || 'Có lỗi xảy ra. Vui lòng thử lại.');
+    } catch (err: unknown) {
+      setError(
+        err instanceof Error ? err.message : "Có lỗi xảy ra. Vui lòng thử lại.",
+      );
     } finally {
       setIsSubmitting(false);
     }
@@ -92,15 +118,22 @@ export default function UngTuyenPage() {
     <div className="min-h-screen bg-gray-50 py-8 px-4">
       <div className="max-w-2xl mx-auto">
         <div className="mb-6 flex items-center">
-          <Link href="/" className="text-red-700 flex items-center gap-2 hover:underline font-medium">
+          <Link
+            href="/"
+            className="text-red-700 flex items-center gap-2 hover:underline font-medium"
+          >
             <ArrowLeft size={16} /> Về trang chủ
           </Link>
         </div>
 
         <div className="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden">
           <div className="bg-red-700 p-6 text-center text-white">
-            <h1 className="text-2xl font-bold uppercase">Điền Thông Tin Ứng Tuyển</h1>
-            <p className="text-red-100 mt-2 text-sm">Vui lòng điền đầy đủ và chính xác thông tin bên dưới</p>
+            <h1 className="text-2xl font-bold uppercase">
+              Điền Thông Tin Ứng Tuyển
+            </h1>
+            <p className="text-red-100 mt-2 text-sm">
+              Vui lòng điền đầy đủ và chính xác thông tin bên dưới
+            </p>
           </div>
 
           <div className="p-6 md:p-8">
@@ -111,8 +144,10 @@ export default function UngTuyenPage() {
             )}
 
             <Form {...form}>
-              <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
-                
+              <form
+                onSubmit={form.handleSubmit(onSubmit)}
+                className="space-y-6"
+              >
                 <FormField
                   control={form.control}
                   name="fullName"
@@ -120,7 +155,11 @@ export default function UngTuyenPage() {
                     <FormItem>
                       <FormLabel>Họ và tên *</FormLabel>
                       <FormControl>
-                        <Input placeholder="Nhập họ và tên của bạn" {...field} className="h-12" />
+                        <Input
+                          placeholder="Nhập họ và tên của bạn"
+                          {...field}
+                          className="h-12"
+                        />
                       </FormControl>
                       <FormMessage />
                     </FormItem>
@@ -135,7 +174,11 @@ export default function UngTuyenPage() {
                       <FormLabel>Ngày - Tháng - Năm sinh *</FormLabel>
                       <FormControl>
                         {/* Using simple date input for mobile optimization */}
-                        <Input type="date" {...field} className="h-12 block w-full" />
+                        <Input
+                          type="date"
+                          {...field}
+                          className="h-12 block w-full"
+                        />
                       </FormControl>
                       <FormMessage />
                     </FormItem>
@@ -150,7 +193,12 @@ export default function UngTuyenPage() {
                       <FormItem>
                         <FormLabel>Số CCCD *</FormLabel>
                         <FormControl>
-                          <Input type="number" placeholder="Nhập 12 số CCCD" {...field} className="h-12" />
+                          <Input
+                            type="number"
+                            placeholder="Nhập 12 số CCCD"
+                            {...field}
+                            className="h-12"
+                          />
                         </FormControl>
                         <FormMessage />
                       </FormItem>
@@ -164,7 +212,12 @@ export default function UngTuyenPage() {
                       <FormItem>
                         <FormLabel>Số điện thoại Zalo *</FormLabel>
                         <FormControl>
-                          <Input type="tel" placeholder="Nhập số điện thoại" {...field} className="h-12" />
+                          <Input
+                            type="tel"
+                            placeholder="Nhập số điện thoại"
+                            {...field}
+                            className="h-12"
+                          />
                         </FormControl>
                         <FormMessage />
                       </FormItem>
@@ -188,13 +241,17 @@ export default function UngTuyenPage() {
                             <FormControl>
                               <RadioGroupItem value="Nam" />
                             </FormControl>
-                            <FormLabel className="font-normal cursor-pointer">Nam</FormLabel>
+                            <FormLabel className="font-normal cursor-pointer">
+                              Nam
+                            </FormLabel>
                           </FormItem>
                           <FormItem className="flex items-center space-x-2 space-y-0">
                             <FormControl>
                               <RadioGroupItem value="Nữ" />
                             </FormControl>
-                            <FormLabel className="font-normal cursor-pointer">Nữ</FormLabel>
+                            <FormLabel className="font-normal cursor-pointer">
+                              Nữ
+                            </FormLabel>
                           </FormItem>
                         </RadioGroup>
                       </FormControl>
@@ -217,10 +274,14 @@ export default function UngTuyenPage() {
                           {locationsLoading ? (
                             <div className="flex items-center gap-2 text-gray-400 py-4">
                               <Loader2 size={16} className="animate-spin" />
-                              <span className="text-sm">Đang tải danh sách khu vực...</span>
+                              <span className="text-sm">
+                                Đang tải danh sách khu vực...
+                              </span>
                             </div>
                           ) : locations.length === 0 ? (
-                            <p className="text-sm text-gray-400 py-2">Chưa có khu vực nào. Vui lòng liên hệ admin.</p>
+                            <p className="text-sm text-gray-400 py-2">
+                              Chưa có khu vực nào. Vui lòng liên hệ admin.
+                            </p>
                           ) : (
                             locations.map((loc) => {
                               const isSelected = field.value === loc.name;
@@ -230,23 +291,33 @@ export default function UngTuyenPage() {
                                   onClick={() => field.onChange(loc.name)}
                                   className={`cursor-pointer rounded-xl border-2 p-4 transition-all select-none ${
                                     isSelected
-                                      ? 'border-red-600 bg-red-50 shadow-sm'
-                                      : 'border-gray-200 bg-white hover:border-red-300 hover:bg-red-50/30'
+                                      ? "border-red-600 bg-red-50 shadow-sm"
+                                      : "border-gray-200 bg-white hover:border-red-300 hover:bg-red-50/30"
                                   }`}
                                 >
                                   <div className="flex items-start gap-3">
-                                    <div className={`w-5 h-5 rounded-full border-2 flex items-center justify-center shrink-0 mt-0.5 transition-all ${
-                                      isSelected ? 'border-red-600 bg-red-600' : 'border-gray-300'
-                                    }`}>
+                                    <div
+                                      className={`w-5 h-5 rounded-full border-2 flex items-center justify-center shrink-0 mt-0.5 transition-all ${
+                                        isSelected
+                                          ? "border-red-600 bg-red-600"
+                                          : "border-gray-300"
+                                      }`}
+                                    >
                                       {isSelected && (
                                         <div className="w-2 h-2 rounded-full bg-white" />
                                       )}
                                     </div>
                                     <div>
-                                      <p className={`font-bold text-sm ${isSelected ? 'text-red-700' : 'text-gray-800'}`}>
+                                      <p
+                                        className={`font-bold text-sm ${isSelected ? "text-red-700" : "text-gray-800"}`}
+                                      >
                                         {loc.name}
                                       </p>
-                                      <p className="text-xs text-gray-500 mt-0.5">{loc.address}</p>
+                                      {loc.address && (
+                                        <p className="text-xs text-gray-500 mt-0.5">
+                                          {loc.address}
+                                        </p>
+                                      )}
                                     </div>
                                   </div>
                                 </div>
@@ -267,7 +338,10 @@ export default function UngTuyenPage() {
                     render={({ field }) => (
                       <FormItem>
                         <FormLabel>Trình độ học vấn *</FormLabel>
-                        <Select onValueChange={field.onChange} defaultValue={field.value}>
+                        <Select
+                          onValueChange={field.onChange}
+                          defaultValue={field.value}
+                        >
                           <FormControl>
                             <SelectTrigger className="h-12">
                               <SelectValue placeholder="Chọn trình độ học vấn" />
@@ -292,16 +366,25 @@ export default function UngTuyenPage() {
                     render={({ field }) => (
                       <FormItem>
                         <FormLabel>Ca làm việc mong muốn *</FormLabel>
-                        <Select onValueChange={field.onChange} defaultValue={field.value}>
+                        <Select
+                          onValueChange={field.onChange}
+                          defaultValue={field.value}
+                        >
                           <FormControl>
                             <SelectTrigger className="h-12">
                               <SelectValue placeholder="Chọn ca làm việc" />
                             </SelectTrigger>
                           </FormControl>
                           <SelectContent>
-                            <SelectItem value="Ca 1: 06:00 - 15:00">Ca 1: 06:00 – 15:00</SelectItem>
-                            <SelectItem value="Ca 2: 13:00 - 22:00">Ca 2: 13:00 – 22:00</SelectItem>
-                            <SelectItem value="Ca 3: 22:00 - 06:00">Ca 3: 22:00 – 06:00</SelectItem>
+                            <SelectItem value="Ca 1: 06:00 - 15:00">
+                              Ca 1: 06:00 – 15:00
+                            </SelectItem>
+                            <SelectItem value="Ca 2: 13:00 - 22:00">
+                              Ca 2: 13:00 – 22:00
+                            </SelectItem>
+                            <SelectItem value="Ca 3: 22:00 - 06:00">
+                              Ca 3: 22:00 – 06:00
+                            </SelectItem>
                           </SelectContent>
                         </Select>
                         <FormMessage />
@@ -331,9 +414,9 @@ export default function UngTuyenPage() {
                     <FormItem>
                       <FormLabel>Ghi chú (không bắt buộc)</FormLabel>
                       <FormControl>
-                        <Textarea 
-                          placeholder="Nhập ghi chú khác (nếu có)" 
-                          {...field} 
+                        <Textarea
+                          placeholder="Nhập ghi chú khác (nếu có)"
+                          {...field}
                           className="min-h-[100px]"
                         />
                       </FormControl>
@@ -342,8 +425,8 @@ export default function UngTuyenPage() {
                   )}
                 />
 
-                <Button 
-                  type="submit" 
+                <Button
+                  type="submit"
                   className="w-full h-14 text-lg font-bold bg-red-700 hover:bg-red-800 text-white rounded-full mt-8"
                   disabled={isSubmitting}
                 >
@@ -353,7 +436,7 @@ export default function UngTuyenPage() {
                       ĐANG GỬI HỒ SƠ...
                     </>
                   ) : (
-                    'GỬI HỒ SƠ ỨNG TUYỂN'
+                    "GỬI HỒ SƠ ỨNG TUYỂN"
                   )}
                 </Button>
               </form>
