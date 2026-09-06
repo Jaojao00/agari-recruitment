@@ -2,8 +2,8 @@
 
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
-import { useForm } from 'react-form-hooks'; // Wait, I use react-hook-form
-import { useForm as useReactHookForm } from 'react-hook-form';
+ // Wait, I use react-hook-form
+import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import * as z from 'zod';
 import Link from 'next/link';
@@ -36,7 +36,7 @@ export default function UngTuyenPage() {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
-  const form = useReactHookForm<ApplicationFormValues>({
+  const form = useForm<ApplicationFormValues>({
     resolver: zodResolver(applicationSchema),
     defaultValues: {
       fullName: '',

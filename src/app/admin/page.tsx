@@ -6,18 +6,18 @@ import { Application } from '@/lib/firebase/models';
 // Server Component
 export default async function AdminDashboard() {
   const snapshot = await adminDb.collection('applications').get();
-  const applications = snapshot.docs.map(doc => doc.data() as Application);
+  const applications = snapshot.docs.map((doc: any) => doc.data() as Application);
 
   const total = applications.length;
-  const newApps = applications.filter(a => a.status === 'NEW').length;
-  const contacted = applications.filter(a => a.status === 'CONTACTED').length;
-  const interviewed = applications.filter(a => a.status === 'INTERVIEWED').length;
-  const passed = applications.filter(a => a.status === 'PASSED').length;
-  const hired = applications.filter(a => a.status === 'HIRED').length;
-  const expired = applications.filter(a => a.status === 'EXPIRED').length;
+  const newApps = applications.filter((a: any) => a.status === 'NEW').length;
+  const contacted = applications.filter((a: any) => a.status === 'CONTACTED').length;
+  const interviewed = applications.filter((a: any) => a.status === 'INTERVIEWED').length;
+  const passed = applications.filter((a: any) => a.status === 'PASSED').length;
+  const hired = applications.filter((a: any) => a.status === 'HIRED').length;
+  const expired = applications.filter((a: any) => a.status === 'EXPIRED').length;
 
-  const male = applications.filter(a => a.gender === 'Nam').length;
-  const female = applications.filter(a => a.gender === 'Nữ').length;
+  const male = applications.filter((a: any) => a.gender === 'Nam').length;
+  const female = applications.filter((a: any) => a.gender === 'Nữ').length;
 
   return (
     <div className="space-y-6">

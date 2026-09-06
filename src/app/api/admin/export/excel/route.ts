@@ -8,13 +8,13 @@ export async function GET(request: Request) {
     const { searchParams } = new URL(request.url);
     const status = searchParams.get('status') || '';
     
-    let query: FirebaseFirestore.Query = adminDb.collection('applications').orderBy('createdAt', 'desc');
+    let query: any = adminDb.collection('applications').orderBy('createdAt', 'desc');
     if (status && status !== 'ALL') {
       query = query.where('status', '==', status);
     }
     
     const snapshot = await query.get();
-    const data = snapshot.docs.map(doc => doc.data() as Application);
+    const data = snapshot.docs.map((doc: any) => doc.data() as Application);
 
     const workbook = new ExcelJS.Workbook();
     const sheet = workbook.addWorksheet('Applications');
@@ -41,7 +41,7 @@ export async function GET(request: Request) {
     sheet.getRow(1).font = { bold: true };
     sheet.views = [{ state: 'frozen', ySplit: 1 }];
 
-    data.forEach(app => {
+    data.forEach((app: any) => {
       sheet.addRow({
         id: app.applicationId,
         name: app.fullName,

@@ -98,7 +98,7 @@ export default function ApplicationsPage() {
           />
         </div>
         <div className="w-full md:w-48">
-          <Select value={statusFilter} onValueChange={(val) => { setStatusFilter(val); setPage(1); }}>
+          <Select value={statusFilter} onValueChange={(val) => { setStatusFilter(val as any); setPage(1); }}>
             <SelectTrigger>
               <SelectValue placeholder="Tất cả trạng thái" />
             </SelectTrigger>

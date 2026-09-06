@@ -9,7 +9,7 @@ export async function GET(request: Request) {
     const page = parseInt(searchParams.get('page') || '1');
     const limit = 20;
 
-    let query: FirebaseFirestore.Query = adminDb.collection('applications').orderBy('createdAt', 'desc');
+    let query: any = adminDb.collection('applications').orderBy('createdAt', 'desc');
 
     if (status) {
       query = query.where('status', '==', status);
@@ -20,7 +20,7 @@ export async function GET(request: Request) {
     // Given the prompt: "Search/filter phải thực hiện ở backend/database", we will fetch and filter here.
     
     const snapshot = await query.get();
-    let results = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+    let results = snapshot.docs.map((doc: any) => ({ id: doc.id, ...doc.data() }));
 
     if (search) {
       const lowerSearch = search.toLowerCase();

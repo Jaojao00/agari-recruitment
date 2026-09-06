@@ -1,5 +1,6 @@
 import { NextResponse } from 'next/server';
 import { adminDb } from '@/lib/firebase/admin';
+import { FieldValue } from 'firebase-admin/firestore';
 import { addRowToSheet, updateRowInSheet } from '@/lib/google-sheets';
 import { Application } from '@/lib/firebase/models';
 
@@ -45,7 +46,7 @@ export async function POST(request: Request) {
           await appDoc.ref.update({
             googleSheetSyncStatus: 'SUCCESS',
             googleSheetLastSyncAt: new Date(),
-            googleSheetSyncError: adminDb.FieldValue.delete()
+            googleSheetSyncError: FieldValue.delete()
           });
         } else {
           const rowNumber = await addRowToSheet(appData);
@@ -54,7 +55,7 @@ export async function POST(request: Request) {
               googleSheetSyncStatus: 'SUCCESS',
               googleSheetRow: rowNumber,
               googleSheetLastSyncAt: new Date(),
-              googleSheetSyncError: adminDb.FieldValue.delete()
+              googleSheetSyncError: FieldValue.delete()
             });
           } else {
              // If addRowToSheet returns null, probably missing ENV

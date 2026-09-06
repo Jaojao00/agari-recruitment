@@ -148,7 +148,7 @@ export default function ApplicationDetailPage() {
             <CardContent className="space-y-4 pt-6">
               <div className="space-y-2">
                 <Label>Trạng thái</Label>
-                <Select value={status} onValueChange={setStatus}>
+                <Select value={status} onValueChange={(val) => setStatus(val || "")}>
                   <SelectTrigger>
                     <SelectValue placeholder="Chọn trạng thái" />
                   </SelectTrigger>

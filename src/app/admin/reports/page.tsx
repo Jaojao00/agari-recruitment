@@ -21,7 +21,7 @@ export default function ReportsPage() {
          <div className="space-y-4">
            <div className="space-y-2">
              <Label>Lọc theo trạng thái</Label>
-             <Select value={status} onValueChange={setStatus}>
+             <Select value={status} onValueChange={(val) => setStatus(val || "")}>
                <SelectTrigger>
                  <SelectValue placeholder="Tất cả trạng thái" />
                </SelectTrigger>

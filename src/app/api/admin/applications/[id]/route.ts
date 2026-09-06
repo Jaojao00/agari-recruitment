@@ -1,7 +1,7 @@
 import { NextResponse } from 'next/server';
 import { adminDb } from '@/lib/firebase/admin';
 
-export async function GET(request: Request, { params }: { params: { id: string } }) {
+export async function GET(request: Request, { params }: any) {
   try {
     const doc = await adminDb.collection('applications').doc(params.id).get();
     if (!doc.exists) return NextResponse.json({ error: 'Not found' }, { status: 404 });
@@ -11,7 +11,7 @@ export async function GET(request: Request, { params }: { params: { id: string }
   }
 }
 
-export async function PATCH(request: Request, { params }: { params: { id: string } }) {
+export async function PATCH(request: Request, { params }: any) {
   try {
     const body = await request.json();
     const { status, hiredAt, expiredAt, adminNote, adminId, adminName } = body;

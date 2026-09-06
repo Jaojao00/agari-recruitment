@@ -36,7 +36,7 @@ export async function POST(request: Request) {
     // Read a counter document
     const counterRef = adminDb.collection('settings').doc('counters');
     
-    const newAppId = await adminDb.runTransaction(async (transaction) => {
+    const newAppId = await adminDb.runTransaction(async (transaction: any) => {
       const counterDoc = await transaction.get(counterRef);
       let currentCount = 0;
       if (counterDoc.exists) {
