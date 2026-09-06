@@ -50,6 +50,22 @@ const defaultLocations: Location[] = [
   },
 ];
 
+async function readJsonResponse<T>(response: Response): Promise<T> {
+  const body = await response.text();
+
+  if (!body.trim()) {
+    throw new Error(`Máy chủ không trả về dữ liệu (HTTP ${response.status}).`);
+  }
+
+  try {
+    return JSON.parse(body) as T;
+  } catch {
+    throw new Error(
+      `Máy chủ trả về dữ liệu không hợp lệ (HTTP ${response.status}).`,
+    );
+  }
+}
+
 export default function UngTuyenPage() {
   const router = useRouter();
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -59,7 +75,9 @@ export default function UngTuyenPage() {
 
   useEffect(() => {
     fetch("/api/locations")
-      .then((r) => r.json())
+      .then((response) =>
+        readJsonResponse<{ locations?: Location[] }>(response),
+      )
       .then((d) => {
         const fetchedLocations: Location[] = d.locations || [];
         const fetchedNames = new Set(
@@ -97,7 +115,10 @@ export default function UngTuyenPage() {
         body: JSON.stringify(data),
       });
 
-      const result = await response.json();
+      const result = await readJsonResponse<{
+        error?: string;
+        applicationId?: string;
+      }>(response);
 
       if (!response.ok) {
         throw new Error(result.error || "Có lỗi xảy ra. Vui lòng thử lại.");
