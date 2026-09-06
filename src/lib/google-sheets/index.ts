@@ -78,25 +78,26 @@ function applicationToRow(application: Record<string, any>) {
   ];
 }
 
-async function getAppendRange() {
+async function getNextApplicationRow() {
   const response = await getSheetsClient().spreadsheets.values.get({
     spreadsheetId: getSpreadsheetId(),
     range: `'${getSheetName()}'!A1:A`,
   });
   const rows = response.data.values || [];
-  const firstApplicationRow = rows.findIndex((row) =>
-    /^AG-\d{4}-\d{6}$/i.test(String(row[0] ?? "").trim()),
-  );
+  let lastApplicationRow = 0;
 
-  if (firstApplicationRow >= 0) {
-    return `'${getSheetName()}'!A${firstApplicationRow + 1}:R`;
-  }
+  rows.forEach((row, index) => {
+    if (/^AG-\d{4}-\d{6}$/i.test(String(row[0] ?? "").trim())) {
+      lastApplicationRow = index + 1;
+    }
+  });
+
+  if (lastApplicationRow > 0) return lastApplicationRow + 1;
 
   const firstHeaderRow = rows.findIndex((row) =>
     /mã hồ sơ|application\s*id/i.test(String(row[0] ?? "").trim()),
   );
-  const firstDataRow = firstHeaderRow >= 0 ? firstHeaderRow + 2 : 1;
-  return `'${getSheetName()}'!A${firstDataRow}:R`;
+  return firstHeaderRow >= 0 ? firstHeaderRow + 2 : 1;
 }
 
 function rowToApplication(row: string[], rowNumber: number): SheetApplication {
@@ -149,15 +150,24 @@ export async function getApplicationsFromSheet(): Promise<SheetApplication[]> {
 }
 
 export async function addApplicationToSheet(application: Record<string, any>) {
-  const response = await getSheetsClient().spreadsheets.values.append({
+  const rowNumber = await getNextApplicationRow();
+  await getSheetsClient().spreadsheets.values.update({
     spreadsheetId: getSpreadsheetId(),
-    range: await getAppendRange(),
+    range: `'${getSheetName()}'!A${rowNumber}:R${rowNumber}`,
     valueInputOption: "USER_ENTERED",
     requestBody: { values: [applicationToRow(application)] },
   });
-  const updatedRange = response.data.updates?.updatedRange || "";
-  const match = updatedRange.match(/[A-Z]+(\d+)/);
-  return match ? Number(match[1]) : null;
+
+  const verification = await getSheetsClient().spreadsheets.values.get({
+    spreadsheetId: getSpreadsheetId(),
+    range: `'${getSheetName()}'!A${rowNumber}`,
+  });
+  const savedApplicationId = String(verification.data.values?.[0]?.[0] ?? "");
+  if (savedApplicationId !== String(application.applicationId)) {
+    throw new Error("Google Sheets không xác nhận được hồ sơ vừa ghi");
+  }
+
+  return rowNumber;
 }
 
 export async function updateApplicationInSheet(
