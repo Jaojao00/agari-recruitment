@@ -418,7 +418,7 @@ export default function UngTuyenPage() {
                   name="availableStartDate"
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel>Ngày có thể nhận lịch phỏng vấn *</FormLabel>
+                      <FormLabel>Ngày có thể nhận Việc *</FormLabel>
                       <FormControl>
                         <Input type="date" {...field} className="h-12" />
                       </FormControl>
