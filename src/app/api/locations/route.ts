@@ -4,20 +4,16 @@ import { adminDb } from '@/lib/firebase/admin';
 // GET /api/locations - Public: fetch all active locations
 export async function GET() {
   try {
-    const snapshot = await adminDb
-      .collection('locations')
-      .where('isActive', '==', true)
-      .orderBy('order', 'asc')
-      .get();
+    const snapshot = await adminDb.collection('locations').get();
 
-    const locations = snapshot.docs.map((doc: any) => ({
-      id: doc.id,
-      ...doc.data(),
-    }));
+    const locations = snapshot.docs
+      .map((doc: any) => ({ id: doc.id, ...doc.data() }))
+      .filter((loc: any) => loc.isActive !== false)
+      .sort((a: any, b: any) => (a.order || 0) - (b.order || 0));
 
     return NextResponse.json({ locations });
-  } catch (error) {
-    console.error('Fetch locations error:', error);
-    return NextResponse.json({ error: 'Khong the tai danh sach khu vuc.' }, { status: 500 });
+  } catch (error: any) {
+    console.error('GET locations error:', error);
+    return NextResponse.json({ locations: [] }, { status: 200 });
   }
 }

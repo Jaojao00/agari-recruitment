@@ -4,19 +4,17 @@ import { adminDb } from '@/lib/firebase/admin';
 // GET - Admin: fetch all locations
 export async function GET() {
   try {
-    const snapshot = await adminDb
-      .collection('locations')
-      .orderBy('order', 'asc')
-      .get();
+    // Use simple get() without orderBy to avoid index issues on empty collection
+    const snapshot = await adminDb.collection('locations').get();
 
-    const locations = snapshot.docs.map((doc: any) => ({
-      id: doc.id,
-      ...doc.data(),
-    }));
+    const locations = snapshot.docs
+      .map((doc: any) => ({ id: doc.id, ...doc.data() }))
+      .sort((a: any, b: any) => (a.order || 0) - (b.order || 0));
 
     return NextResponse.json({ locations });
-  } catch (error) {
-    return NextResponse.json({ error: 'Loi server' }, { status: 500 });
+  } catch (error: any) {
+    console.error('Admin GET locations error:', error);
+    return NextResponse.json({ locations: [], error: error.message }, { status: 200 });
   }
 }
 
@@ -30,9 +28,11 @@ export async function POST(request: Request) {
       return NextResponse.json({ error: 'Ten va dia chi la bat buoc.' }, { status: 400 });
     }
 
-    // Get current max order
-    const snapshot = await adminDb.collection('locations').orderBy('order', 'desc').limit(1).get();
-    const maxOrder = snapshot.empty ? 0 : (snapshot.docs[0].data().order || 0);
+    // Get current count for ordering
+    const snapshot = await adminDb.collection('locations').get();
+    const maxOrder = snapshot.docs.reduce((max: number, doc: any) => {
+      return Math.max(max, doc.data().order || 0);
+    }, 0);
 
     const docRef = adminDb.collection('locations').doc();
     await docRef.set({
@@ -45,7 +45,8 @@ export async function POST(request: Request) {
     });
 
     return NextResponse.json({ success: true, id: docRef.id }, { status: 201 });
-  } catch (error) {
-    return NextResponse.json({ error: 'Loi server' }, { status: 500 });
+  } catch (error: any) {
+    console.error('Admin POST locations error:', error);
+    return NextResponse.json({ error: error.message || 'Loi server' }, { status: 500 });
   }
 }
