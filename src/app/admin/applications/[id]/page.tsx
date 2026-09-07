@@ -1,8 +1,8 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 import { useParams } from "next/navigation";
-import { Application } from "@/lib/firebase/models";
+import { Application, DateValue } from "@/lib/firebase/models";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -25,6 +25,26 @@ import {
 import Link from "next/link";
 import { useAuth } from "@/lib/auth/auth-context";
 
+function formatDateInput(value: DateValue | null | undefined) {
+  if (!value) return "";
+  const date =
+    typeof value === "object" && "_seconds" in value
+      ? new Date(value._seconds * 1000)
+      : new Date(value);
+  return Number.isNaN(date.getTime()) ? "" : date.toISOString().split("T")[0];
+}
+
+function formatDisplayDate(value: DateValue | null | undefined) {
+  if (!value) return "-";
+  const date =
+    typeof value === "object" && "_seconds" in value
+      ? new Date(value._seconds * 1000)
+      : new Date(value);
+  return Number.isNaN(date.getTime())
+    ? String(value)
+    : date.toLocaleDateString("vi-VN");
+}
+
 export default function ApplicationDetailPage() {
   const { id } = useParams();
   const { user } = useAuth();
@@ -39,29 +59,7 @@ export default function ApplicationDetailPage() {
   const [expiredAt, setExpiredAt] = useState("");
   const [adminNote, setAdminNote] = useState("");
 
-  const formatDateInput = (value: any) => {
-    if (!value) return "";
-    const date = value._seconds
-      ? new Date(value._seconds * 1000)
-      : new Date(value);
-    return Number.isNaN(date.getTime()) ? "" : date.toISOString().split("T")[0];
-  };
-
-  const formatDisplayDate = (value: any) => {
-    if (!value) return "-";
-    const date = value._seconds
-      ? new Date(value._seconds * 1000)
-      : new Date(value);
-    return Number.isNaN(date.getTime())
-      ? String(value)
-      : date.toLocaleDateString("vi-VN");
-  };
-
-  useEffect(() => {
-    fetchApplication();
-  }, [id]);
-
-  const fetchApplication = async () => {
+  const fetchApplication = useCallback(async () => {
     try {
       const res = await fetch(`/api/admin/applications/${id}`);
       if (res.ok) {
@@ -77,7 +75,14 @@ export default function ApplicationDetailPage() {
     } finally {
       setLoading(false);
     }
-  };
+  }, [id]);
+
+  useEffect(() => {
+    const timer = window.setTimeout(() => {
+      void fetchApplication();
+    }, 0);
+    return () => window.clearTimeout(timer);
+  }, [fetchApplication]);
 
   const handleSave = async () => {
     setSaving(true);
@@ -101,7 +106,7 @@ export default function ApplicationDetailPage() {
       } else {
         alert("Có lỗi xảy ra.");
       }
-    } catch (error) {
+    } catch {
       alert("Có lỗi xảy ra.");
     } finally {
       setSaving(false);
@@ -185,10 +190,8 @@ export default function ApplicationDetailPage() {
               <span className="col-span-2">{data.gender}</span>
             </div>
             <div className="grid grid-cols-3 gap-2 py-2 border-b">
-              <span className="text-gray-500 font-medium">Khu vực:</span>
-              <span className="col-span-2">
-                {data.preferredLocation || data.permanentAddress || "-"}
-              </span>
+              <span className="text-gray-500 font-medium">Địa chỉ:</span>
+              <span className="col-span-2">{data.permanentAddress || "-"}</span>
             </div>
             <div className="grid grid-cols-3 gap-2 py-2 border-b">
               <span className="text-gray-500 font-medium">Học vấn:</span>
@@ -220,6 +223,11 @@ export default function ApplicationDetailPage() {
               <div className="space-y-2">
                 <Label>Ngày ứng tuyển</Label>
                 <Input value={formatDisplayDate(data.appliedAt)} readOnly />
+              </div>
+
+              <div className="space-y-2">
+                <Label>Khu vực tuyển dụng</Label>
+                <Input value={data.preferredLocation || "-"} readOnly />
               </div>
 
               <div className="space-y-2">

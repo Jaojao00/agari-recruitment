@@ -7,12 +7,18 @@ export async function GET() {
     const snapshot = await adminDb.collection("locations").get();
 
     const locations = snapshot.docs
-      .map((doc: any) => ({ id: doc.id, ...doc.data() }))
-      .sort((a: any, b: any) => (a.order || 0) - (b.order || 0));
+      .map((doc) => ({
+        id: doc.id,
+        ...(doc.data() as { order?: unknown }),
+      }))
+      .sort((a, b) => Number(a.order || 0) - Number(b.order || 0));
 
     return NextResponse.json({ locations });
-  } catch (error: any) {
-    console.error("Admin GET locations error:", error?.message || error);
+  } catch (error: unknown) {
+    console.error(
+      "Admin GET locations error:",
+      error instanceof Error ? error.message : error,
+    );
     // Return empty list instead of 500 so UI doesn't crash
     return NextResponse.json({ locations: [] });
   }
@@ -33,8 +39,8 @@ export async function POST(request: Request) {
     }
 
     const snapshot = await adminDb.collection("locations").get();
-    const maxOrder = snapshot.docs.reduce((max: number, doc: any) => {
-      return Math.max(max, doc.data().order || 0);
+    const maxOrder = snapshot.docs.reduce((max: number, doc) => {
+      return Math.max(max, Number(doc.data().order || 0));
     }, 0);
 
     const docRef = adminDb.collection("locations").doc();
@@ -48,11 +54,9 @@ export async function POST(request: Request) {
     });
 
     return NextResponse.json({ success: true, id: docRef.id }, { status: 201 });
-  } catch (error: any) {
-    console.error("Admin POST locations error:", error?.message || error);
-    return NextResponse.json(
-      { error: error?.message || "Loi server" },
-      { status: 500 },
-    );
+  } catch (error: unknown) {
+    const message = error instanceof Error ? error.message : "Loi server";
+    console.error("Admin POST locations error:", message);
+    return NextResponse.json({ error: message }, { status: 500 });
   }
 }

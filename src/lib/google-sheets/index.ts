@@ -25,7 +25,31 @@ function getGoogleAuth() {
   });
 }
 
-type SheetApplication = Record<string, any> & {
+type SheetApplicationFields = {
+  applicationId?: string;
+  fullName?: string;
+  dateOfBirth?: string;
+  cccd?: string;
+  phone?: string;
+  gender?: string;
+  preferredLocation?: string;
+  permanentAddress?: string;
+  education?: string;
+  preferredShift?: string;
+  availableStartDate?: string;
+  appliedAt?: unknown;
+  createdAt?: unknown;
+  status?: string;
+  hiredAt?: unknown;
+  expiredAt?: unknown;
+  note?: string;
+  adminNote?: string;
+  updatedAt?: unknown;
+  googleSheetRow?: number;
+  googleSheetSyncStatus?: string;
+};
+
+type SheetApplication = SheetApplicationFields & {
   id: string;
   applicationId: string;
   status: string;
@@ -55,7 +79,7 @@ function formatSheetDate(value: unknown) {
   return value instanceof Date ? value.toISOString() : String(value ?? "");
 }
 
-function applicationToRow(application: Record<string, any>) {
+function applicationToRow(application: SheetApplicationFields) {
   return [
     application.applicationId,
     application.fullName,
@@ -151,7 +175,9 @@ export async function getApplicationsFromSheet(): Promise<SheetApplication[]> {
     );
 }
 
-export async function addApplicationToSheet(application: Record<string, any>) {
+export async function addApplicationToSheet(
+  application: SheetApplicationFields,
+) {
   const rowNumber = await getNextApplicationRow();
   await getSheetsClient().spreadsheets.values.update({
     spreadsheetId: getSpreadsheetId(),
@@ -174,7 +200,7 @@ export async function addApplicationToSheet(application: Record<string, any>) {
 
 export async function updateApplicationInSheet(
   rowNumber: number,
-  application: Record<string, any>,
+  application: SheetApplicationFields,
 ) {
   await getSheetsClient().spreadsheets.values.update({
     spreadsheetId: getSpreadsheetId(),

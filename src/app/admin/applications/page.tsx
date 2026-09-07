@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 import Link from "next/link";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
@@ -19,7 +19,6 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import { Badge } from "@/components/ui/badge";
 import { Application, ApplicationStatus } from "@/lib/firebase/models";
 import { useDebounce } from "@/lib/utils"; // I'll need to create this hook
 import { Eye, EyeOff, Loader2, Search } from "lucide-react";
@@ -36,11 +35,7 @@ export default function ApplicationsPage() {
   const [revealedCccd, setRevealedCccd] = useState<Record<string, boolean>>({});
   const [updatingStatus, setUpdatingStatus] = useState<string | null>(null);
 
-  useEffect(() => {
-    fetchApplications();
-  }, [debouncedSearch, statusFilter, page]);
-
-  const fetchApplications = async () => {
+  const fetchApplications = useCallback(async () => {
     setLoading(true);
     try {
       const query = new URLSearchParams();
@@ -61,7 +56,14 @@ export default function ApplicationsPage() {
     } finally {
       setLoading(false);
     }
-  };
+  }, [debouncedSearch, statusFilter, page]);
+
+  useEffect(() => {
+    const timer = window.setTimeout(() => {
+      void fetchApplications();
+    }, 0);
+    return () => window.clearTimeout(timer);
+  }, [fetchApplications]);
 
   const getStatusBadge = (status: string) => {
     const map: Record<string, { label: string; color: string }> = {
@@ -160,7 +162,7 @@ export default function ApplicationsPage() {
           <Select
             value={statusFilter}
             onValueChange={(val) => {
-              setStatusFilter(val as any);
+              setStatusFilter(val || "");
               setPage(1);
             }}
           >

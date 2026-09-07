@@ -1,9 +1,9 @@
-﻿'use client';
-import { useState, useEffect } from 'react';
-import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { MapPin, Plus, Trash2, Eye, EyeOff, Loader2 } from 'lucide-react';
+﻿"use client";
+import { useState, useEffect } from "react";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { MapPin, Plus, Trash2, Eye, EyeOff, Loader2 } from "lucide-react";
 
 interface Location {
   id: string;
@@ -19,44 +19,50 @@ export default function AdminLocationsPage() {
   const [loading, setLoading] = useState(true);
   const [showForm, setShowForm] = useState(false);
   const [saving, setSaving] = useState(false);
-  const [form, setForm] = useState({ name: '', address: '', mapUrl: '' });
+  const [form, setForm] = useState({ name: "", address: "", mapUrl: "" });
 
   const fetchLocations = async () => {
     setLoading(true);
-    const res = await fetch('/api/admin/locations');
+    const res = await fetch("/api/admin/locations");
     const data = await res.json();
     setLocations(data.locations || []);
     setLoading(false);
   };
 
-  useEffect(() => { fetchLocations(); }, []);
+  useEffect(() => {
+    const timer = window.setTimeout(() => {
+      void fetchLocations();
+    }, 0);
+    return () => window.clearTimeout(timer);
+  }, []);
 
   const handleAdd = async () => {
-    if (!form.name || !form.address) return alert('Vui long nhap ten va dia chi');
+    if (!form.name || !form.address)
+      return alert("Vui long nhap ten va dia chi");
     setSaving(true);
-    await fetch('/api/admin/locations', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
+    await fetch("/api/admin/locations", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
       body: JSON.stringify(form),
     });
-    setForm({ name: '', address: '', mapUrl: '' });
+    setForm({ name: "", address: "", mapUrl: "" });
     setShowForm(false);
     await fetchLocations();
     setSaving(false);
   };
 
   const toggleActive = async (loc: Location) => {
-    await fetch('/api/admin/locations/' + loc.id, {
-      method: 'PATCH',
-      headers: { 'Content-Type': 'application/json' },
+    await fetch("/api/admin/locations/" + loc.id, {
+      method: "PATCH",
+      headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ isActive: !loc.isActive }),
     });
     await fetchLocations();
   };
 
   const handleDelete = async (id: string, name: string) => {
-    if (!confirm('Xoa khu vuc: ' + name + '?')) return;
-    await fetch('/api/admin/locations/' + id, { method: 'DELETE' });
+    if (!confirm("Xoa khu vuc: " + name + "?")) return;
+    await fetch("/api/admin/locations/" + id, { method: "DELETE" });
     await fetchLocations();
   };
 
@@ -69,51 +75,79 @@ export default function AdminLocationsPage() {
             Quan ly khu vuc tuyen dung
           </h1>
           <p className="text-sm text-gray-500 mt-1">
-            Cac khu vuc nay se hien thi trong form ung tuyen de ung vien lua chon.
+            Cac khu vuc nay se hien thi trong form ung tuyen de ung vien lua
+            chon.
           </p>
         </div>
-        <Button onClick={() => setShowForm(!showForm)} className="bg-red-700 hover:bg-red-800 text-white">
+        <Button
+          onClick={() => setShowForm(!showForm)}
+          className="bg-red-700 hover:bg-red-800 text-white"
+        >
           <Plus size={16} className="mr-1" /> Them khu vuc
         </Button>
       </div>
 
       {showForm && (
         <Card className="mb-6 border-red-200 bg-red-50">
-          <CardHeader><CardTitle className="text-lg">Them khu vuc moi</CardTitle></CardHeader>
+          <CardHeader>
+            <CardTitle className="text-lg">Them khu vuc moi</CardTitle>
+          </CardHeader>
           <CardContent className="space-y-3">
             <div>
-              <label className="text-sm font-medium text-gray-700">Ten khu vuc *</label>
+              <label className="text-sm font-medium text-gray-700">
+                Ten khu vuc *
+              </label>
               <Input
                 placeholder="Vi du: SW SOC - KCN BINH MINH VINH LONG"
                 value={form.name}
-                onChange={e => setForm(p => ({ ...p, name: e.target.value }))}
+                onChange={(e) =>
+                  setForm((p) => ({ ...p, name: e.target.value }))
+                }
                 className="mt-1 h-11"
               />
             </div>
             <div>
-              <label className="text-sm font-medium text-gray-700">Dia chi *</label>
+              <label className="text-sm font-medium text-gray-700">
+                Dia chi *
+              </label>
               <Input
                 placeholder="Vi du: Lo 01, Kho A01, KCN Binh Minh, Vinh Long"
                 value={form.address}
-                onChange={e => setForm(p => ({ ...p, address: e.target.value }))}
+                onChange={(e) =>
+                  setForm((p) => ({ ...p, address: e.target.value }))
+                }
                 className="mt-1 h-11"
               />
             </div>
             <div>
-              <label className="text-sm font-medium text-gray-700">Link Google Maps (tuy chon)</label>
+              <label className="text-sm font-medium text-gray-700">
+                Link Google Maps (tuy chon)
+              </label>
               <Input
                 placeholder="https://maps.app.goo.gl/..."
                 value={form.mapUrl}
-                onChange={e => setForm(p => ({ ...p, mapUrl: e.target.value }))}
+                onChange={(e) =>
+                  setForm((p) => ({ ...p, mapUrl: e.target.value }))
+                }
                 className="mt-1 h-11"
               />
             </div>
             <div className="flex gap-2 pt-2">
-              <Button onClick={handleAdd} disabled={saving} className="bg-red-700 hover:bg-red-800 text-white">
-                {saving ? <Loader2 size={14} className="animate-spin mr-1" /> : <Plus size={14} className="mr-1" />}
+              <Button
+                onClick={handleAdd}
+                disabled={saving}
+                className="bg-red-700 hover:bg-red-800 text-white"
+              >
+                {saving ? (
+                  <Loader2 size={14} className="animate-spin mr-1" />
+                ) : (
+                  <Plus size={14} className="mr-1" />
+                )}
                 Luu khu vuc
               </Button>
-              <Button variant="outline" onClick={() => setShowForm(false)}>Huy</Button>
+              <Button variant="outline" onClick={() => setShowForm(false)}>
+                Huy
+              </Button>
             </div>
           </CardContent>
         </Card>
@@ -131,16 +165,33 @@ export default function AdminLocationsPage() {
       ) : (
         <div className="space-y-3">
           {locations.map((loc) => (
-            <Card key={loc.id} className={'border ' + (loc.isActive ? 'border-gray-200' : 'border-gray-100 opacity-60')}>
+            <Card
+              key={loc.id}
+              className={
+                "border " +
+                (loc.isActive
+                  ? "border-gray-200"
+                  : "border-gray-100 opacity-60")
+              }
+            >
               <CardContent className="flex items-center justify-between p-4">
                 <div className="flex items-start gap-3">
-                  <div className={'w-3 h-3 rounded-full mt-1.5 shrink-0 ' + (loc.isActive ? 'bg-green-500' : 'bg-gray-300')} />
+                  <div
+                    className={
+                      "w-3 h-3 rounded-full mt-1.5 shrink-0 " +
+                      (loc.isActive ? "bg-green-500" : "bg-gray-300")
+                    }
+                  />
                   <div>
                     <p className="font-bold text-gray-900">{loc.name}</p>
                     <p className="text-sm text-gray-500">{loc.address}</p>
                     {loc.mapUrl && (
-                      <a href={loc.mapUrl} target="_blank" rel="noopener noreferrer"
-                        className="text-xs text-blue-500 hover:underline">
+                      <a
+                        href={loc.mapUrl}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="text-xs text-blue-500 hover:underline"
+                      >
                         Xem ban do
                       </a>
                     )}
@@ -151,10 +202,16 @@ export default function AdminLocationsPage() {
                     variant="outline"
                     size="sm"
                     onClick={() => toggleActive(loc)}
-                    title={loc.isActive ? 'An khoi ung vien' : 'Hien thi voi ung vien'}
+                    title={
+                      loc.isActive
+                        ? "An khoi ung vien"
+                        : "Hien thi voi ung vien"
+                    }
                   >
                     {loc.isActive ? <Eye size={14} /> : <EyeOff size={14} />}
-                    <span className="ml-1 text-xs">{loc.isActive ? 'Hien' : 'An'}</span>
+                    <span className="ml-1 text-xs">
+                      {loc.isActive ? "Hien" : "An"}
+                    </span>
                   </Button>
                   <Button
                     variant="outline"

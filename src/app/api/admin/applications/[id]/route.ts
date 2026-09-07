@@ -20,7 +20,7 @@ export async function GET(
     if (!application)
       return NextResponse.json({ error: "Not found" }, { status: 404 });
     return NextResponse.json(application);
-  } catch (error) {
+  } catch {
     return NextResponse.json({ error: "Server error" }, { status: 500 });
   }
 }
@@ -39,7 +39,7 @@ export async function PATCH(
     if (!application)
       return NextResponse.json({ error: "Not found" }, { status: 404 });
 
-    const updateData: any = { ...application, updatedAt: new Date() };
+    const updateData = { ...application, updatedAt: new Date() };
 
     if (status) updateData.status = status;
     if (adminNote !== undefined) updateData.adminNote = adminNote;

@@ -9,17 +9,18 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import { Button } from "@/components/ui/button";
-import { Application } from "@/lib/firebase/models";
+import { Application, DateValue } from "@/lib/firebase/models";
 import Link from "next/link";
 
 export default function RecruitedPage() {
   const [data, setData] = useState<Application[]>([]);
 
-  const formatDate = (value: any) => {
+  const formatDate = (value: DateValue | null | undefined) => {
     if (!value) return "-";
-    const date = value._seconds
-      ? new Date(value._seconds * 1000)
-      : new Date(value);
+    const date =
+      typeof value === "object" && "_seconds" in value
+        ? new Date(value._seconds * 1000)
+        : new Date(value);
     return Number.isNaN(date.getTime())
       ? "-"
       : date.toLocaleDateString("vi-VN");

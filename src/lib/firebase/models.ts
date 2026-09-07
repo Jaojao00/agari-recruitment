@@ -11,6 +11,7 @@ export type ApplicationStatus =
   | "CANCELLED";
 
 export type SyncStatus = "PENDING" | "SUCCESS" | "FAILED";
+export type DateValue = string | number | Date | { _seconds: number };
 
 export interface Application {
   id?: string;
@@ -33,21 +34,21 @@ export interface Application {
 
   status: ApplicationStatus;
 
-  appliedAt: any; // Firestore Timestamp
-  contactedAt?: any;
-  interviewDate?: any;
-  hiredAt?: any;
-  expiredAt?: any;
-  workingStartDate?: any;
+  appliedAt: DateValue; // Firestore Timestamp or serialized date
+  contactedAt?: DateValue;
+  interviewDate?: DateValue;
+  hiredAt?: DateValue;
+  expiredAt?: DateValue;
+  workingStartDate?: DateValue;
 
   adminNote?: string;
 
-  createdAt: any;
-  updatedAt: any;
+  createdAt: DateValue;
+  updatedAt: DateValue;
 
   googleSheetSyncStatus: SyncStatus;
   googleSheetRow?: number;
-  googleSheetLastSyncAt?: any;
+  googleSheetLastSyncAt?: DateValue;
   googleSheetSyncError?: string;
 
   createdBy?: string;
@@ -60,8 +61,8 @@ export interface ApplicationLog {
   action: string;
   oldStatus?: ApplicationStatus;
   newStatus?: ApplicationStatus;
-  changes?: Record<string, any>;
+  changes?: Record<string, unknown>;
   adminId: string;
   adminName: string;
-  createdAt: any;
+  createdAt: DateValue;
 }

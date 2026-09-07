@@ -1,4 +1,5 @@
 import Link from "next/link";
+import type { HTMLAttributes } from "react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import {
@@ -7,7 +8,6 @@ import {
   DollarSign,
   Clock,
   ShieldCheck,
-  ChevronDown,
 } from "lucide-react";
 
 export default function HomePage() {
@@ -456,10 +456,14 @@ export default function HomePage() {
 }
 
 // Temporary inline Badge component until we generate it or if it wasn't added properly
-function Badge({ className, variant, ...props }: any) {
+function Badge({
+  className,
+  variant,
+  ...props
+}: HTMLAttributes<HTMLSpanElement> & { variant?: string }) {
   return (
     <span
-      className={`inline-flex items-center rounded-full border px-2.5 py-0.5 text-xs font-semibold transition-colors focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 ${className}`}
+      className={`inline-flex items-center rounded-full ${variant === "outline" ? "border" : ""} px-2.5 py-0.5 text-xs font-semibold transition-colors focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 ${className}`}
       {...props}
     />
   );
