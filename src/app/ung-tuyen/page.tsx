@@ -410,19 +410,19 @@ export default function UngTuyenPage() {
                           onValueChange={field.onChange}
                         >
                           <FormControl>
-                            <SelectTrigger className="h-12">
+                            <SelectTrigger className="h-12 w-full">
                               <SelectValue placeholder="Chọn ca cố định" />
                             </SelectTrigger>
                           </FormControl>
-                          <SelectContent>
+                          <SelectContent className="w-[min(26rem,calc(100vw-2rem))]">
                             <SelectItem value="Ca 1: 06:00 - 15:00">
-                              Ca 1: 06:00 - 15:00 - 250.000 VNĐ/ca
+                              Ca 1 · 06:00 - 15:00 · 250.000 VNĐ/ca
                             </SelectItem>
                             <SelectItem value="Ca 2: 13:00 - 22:00">
-                              Ca 2: 13:00 - 22:00 - 250.000 VNĐ/ca
+                              Ca 2 · 13:00 - 22:00 · 250.000 VNĐ/ca
                             </SelectItem>
                             <SelectItem value="Ca 3: 22:00 - 06:00">
-                              Ca 3: 22:00 - 06:00 - 300.000 VNĐ/ca
+                              Ca 3 · 22:00 - 06:00 · 300.000 VNĐ/ca
                             </SelectItem>
                           </SelectContent>
                         </Select>

@@ -39,9 +39,8 @@ export default function SpxFulltimePage() {
             <ArrowLeft size={17} />
             Về trang tuyển dụng
           </Link>
-          <span className="text-xl font-black italic tracking-tight text-[#d90012]">
-            SPX{" "}
-            <span className="text-xs not-italic text-slate-500">EXPRESS</span>
+          <span className="text-right text-sm font-black uppercase tracking-tight text-[#d90012] md:text-base">
+            AGARI - TUYỂN DỤNG KV MIỀN TÂY
           </span>
         </div>
       </header>
