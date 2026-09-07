@@ -27,6 +27,9 @@ function getGoogleAuth() {
 
 type SheetApplicationFields = {
   applicationId?: string;
+  jobId?: string;
+  jobTitle?: string;
+  workSchedule?: string;
   fullName?: string;
   dateOfBirth?: string;
   cccd?: string;
@@ -100,6 +103,9 @@ function applicationToRow(application: SheetApplicationFields) {
     application.adminNote || "",
     formatSheetDate(application.updatedAt || new Date()),
     "SUCCESS",
+    application.jobId || "warehouse-rotating-shift",
+    application.jobTitle || "Nhân viên kho - Ca xoay",
+    application.workSchedule || "",
   ];
 }
 
@@ -149,13 +155,16 @@ function rowToApplication(row: string[], rowNumber: number): SheetApplication {
     updatedAt: row[17] || "",
     googleSheetRow: rowNumber,
     googleSheetSyncStatus: row[18] || "SUCCESS",
+    jobId: row[19] || "warehouse-rotating-shift",
+    jobTitle: row[20] || "Nhân viên kho - Ca xoay",
+    workSchedule: row[21] || "",
   };
 }
 
 export async function getApplicationsFromSheet(): Promise<SheetApplication[]> {
   const response = await getSheetsClient().spreadsheets.values.get({
     spreadsheetId: getSpreadsheetId(),
-    range: `'${getSheetName()}'!A1:S`,
+    range: `'${getSheetName()}'!A1:V`,
   });
   const rows = response.data.values || [];
   const firstCell = String(rows[0]?.[0] ?? "")
@@ -181,7 +190,7 @@ export async function addApplicationToSheet(
   const rowNumber = await getNextApplicationRow();
   await getSheetsClient().spreadsheets.values.update({
     spreadsheetId: getSpreadsheetId(),
-    range: `'${getSheetName()}'!A${rowNumber}:S${rowNumber}`,
+    range: `'${getSheetName()}'!A${rowNumber}:V${rowNumber}`,
     valueInputOption: "USER_ENTERED",
     requestBody: { values: [applicationToRow(application)] },
   });
@@ -204,7 +213,7 @@ export async function updateApplicationInSheet(
 ) {
   await getSheetsClient().spreadsheets.values.update({
     spreadsheetId: getSpreadsheetId(),
-    range: `'${getSheetName()}'!A${rowNumber}:S${rowNumber}`,
+    range: `'${getSheetName()}'!A${rowNumber}:V${rowNumber}`,
     valueInputOption: "USER_ENTERED",
     requestBody: { values: [applicationToRow(application)] },
   });

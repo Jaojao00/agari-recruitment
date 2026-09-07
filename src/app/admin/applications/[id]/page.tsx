@@ -138,6 +138,10 @@ export default function ApplicationDetailPage() {
           <p className="text-sm font-semibold text-red-700">
             {data.applicationId}
           </p>
+          <p className="text-sm text-gray-600">
+            {data.jobTitle || "Nhân viên kho - Ca xoay"}
+            {data.workSchedule ? ` - ${data.workSchedule}` : ""}
+          </p>
         </div>
       </div>
 

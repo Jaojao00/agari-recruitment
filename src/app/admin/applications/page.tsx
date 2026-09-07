@@ -193,6 +193,7 @@ export default function ApplicationsPage() {
           <TableHeader>
             <TableRow>
               <TableHead>Mã hồ sơ</TableHead>
+              <TableHead>Vị trí</TableHead>
               <TableHead>Họ và tên</TableHead>
               <TableHead>Ngày sinh</TableHead>
               <TableHead>Số CCCD</TableHead>
@@ -223,6 +224,18 @@ export default function ApplicationsPage() {
                 <TableRow key={app.id}>
                   <TableCell className="font-medium text-red-700">
                     {app.applicationId}
+                  </TableCell>
+                  <TableCell>
+                    <div className="max-w-48 text-sm">
+                      <p className="font-semibold">
+                        {app.jobTitle || "Nhân viên kho - Ca xoay"}
+                      </p>
+                      {app.workSchedule ? (
+                        <p className="text-xs text-gray-500">
+                          {app.workSchedule}
+                        </p>
+                      ) : null}
+                    </div>
                   </TableCell>
                   <TableCell className="font-semibold">
                     {app.fullName}

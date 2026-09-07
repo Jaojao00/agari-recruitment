@@ -5,6 +5,9 @@ export const applicationSchema = z.object({
     .string()
     .trim()
     .min(2, { message: "Họ và tên phải có ít nhất 2 ký tự" }),
+  jobId: z.string().trim().optional(),
+  jobTitle: z.string().trim().optional(),
+  workSchedule: z.string().trim().optional(),
   dateOfBirth: z
     .string()
     .trim()
@@ -68,6 +71,9 @@ export function normalizeApplicationPayload(raw: unknown) {
 
   return {
     fullName: stringValue(source.fullName),
+    jobId: stringValue(source.jobId) || "warehouse-rotating-shift",
+    jobTitle: stringValue(source.jobTitle) || "Nhân viên kho - Ca xoay",
+    workSchedule: stringValue(source.workSchedule),
     dateOfBirth: stringValue(source.dateOfBirth),
     cccd: stringValue(source.cccd).replace(/\s+/g, ""),
     phone: stringValue(source.phone).replace(/\s+/g, ""),

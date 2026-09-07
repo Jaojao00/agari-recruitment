@@ -16,6 +16,9 @@ export type DateValue = string | number | Date | { _seconds: number };
 export interface Application {
   id?: string;
   applicationId: string;
+  jobId?: string;
+  jobTitle?: string;
+  workSchedule?: string;
   fullName: string;
   dateOfBirth: string; // YYYY-MM-DD
   cccd: string;

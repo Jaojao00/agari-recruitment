@@ -38,6 +38,17 @@ interface Location {
   address?: string;
 }
 
+const jobOptions = {
+  "warehouse-rotating-shift": {
+    title: "Nhân viên kho - Ca xoay",
+    schedule: "Ca xoay theo lịch công ty",
+  },
+  "spx-fulltime": {
+    title: "Nhân viên kho SPX Full-time",
+    schedule: "Ca cố định: 06:00 - 15:00, 13:00 - 22:00 hoặc 22:00 - 06:00",
+  },
+} as const;
+
 const defaultLocations: Location[] = [
   {
     id: "default-sw-soc-binh-minh",
@@ -79,6 +90,9 @@ export default function UngTuyenPage() {
   const [error, setError] = useState<string | null>(null);
   const [locations, setLocations] = useState<Location[]>(defaultLocations);
   const [locationsLoading, setLocationsLoading] = useState(true);
+  const [jobId, setJobId] = useState<keyof typeof jobOptions>(
+    "warehouse-rotating-shift",
+  );
 
   useEffect(() => {
     fetch("/api/locations")
@@ -113,10 +127,31 @@ export default function UngTuyenPage() {
       permanentAddress: "",
       preferredLocation: "",
       note: "",
+      jobId: "warehouse-rotating-shift",
+      jobTitle: jobOptions["warehouse-rotating-shift"].title,
+      workSchedule: jobOptions["warehouse-rotating-shift"].schedule,
     },
   });
 
+  useEffect(() => {
+    const requestedJob = new URLSearchParams(window.location.search).get("job");
+    if (requestedJob === "spx-fulltime") {
+      const timer = window.setTimeout(() => {
+        setJobId(requestedJob);
+        form.setValue("jobId", requestedJob);
+        form.setValue("jobTitle", jobOptions[requestedJob].title);
+        form.setValue("workSchedule", "");
+      }, 0);
+      return () => window.clearTimeout(timer);
+    }
+    return undefined;
+  }, [form]);
+
   async function onSubmit(data: ApplicationFormValues) {
+    if (jobId === "spx-fulltime" && !data.workSchedule) {
+      setError("Vui lòng chọn ca cố định muốn đăng ký.");
+      return;
+    }
     setIsSubmitting(true);
     setError(null);
     try {
@@ -167,6 +202,13 @@ export default function UngTuyenPage() {
             <p className="text-red-100 mt-2 text-sm">
               Vui lòng điền đầy đủ và chính xác thông tin bên dưới
             </p>
+            <div className="mt-4 rounded-lg bg-white/15 px-4 py-3 text-left">
+              <p className="text-xs uppercase text-red-100">Vị trí ứng tuyển</p>
+              <p className="font-bold">{jobOptions[jobId].title}</p>
+              <p className="text-sm text-red-100">
+                {jobOptions[jobId].schedule}
+              </p>
+            </div>
           </div>
 
           <div className="p-6 md:p-8">
@@ -355,6 +397,40 @@ export default function UngTuyenPage() {
                     </FormItem>
                   )}
                 />
+
+                {jobId === "spx-fulltime" ? (
+                  <FormField
+                    control={form.control}
+                    name="workSchedule"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel>Ca cố định muốn đăng ký *</FormLabel>
+                        <Select
+                          value={field.value}
+                          onValueChange={field.onChange}
+                        >
+                          <FormControl>
+                            <SelectTrigger className="h-12">
+                              <SelectValue placeholder="Chọn ca cố định" />
+                            </SelectTrigger>
+                          </FormControl>
+                          <SelectContent>
+                            <SelectItem value="Ca 1: 06:00 - 15:00">
+                              Ca 1: 06:00 - 15:00 - 250.000 VNĐ/ca
+                            </SelectItem>
+                            <SelectItem value="Ca 2: 13:00 - 22:00">
+                              Ca 2: 13:00 - 22:00 - 250.000 VNĐ/ca
+                            </SelectItem>
+                            <SelectItem value="Ca 3: 22:00 - 06:00">
+                              Ca 3: 22:00 - 06:00 - 300.000 VNĐ/ca
+                            </SelectItem>
+                          </SelectContent>
+                        </Select>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+                ) : null}
 
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6 pt-4 border-t border-gray-100">
                   <FormField
