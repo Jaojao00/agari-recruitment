@@ -12,6 +12,7 @@ import {
   LogOut,
   Menu,
   MapPin,
+  ClipboardList,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 
@@ -36,6 +37,11 @@ function AdminSidebar() {
       name: "Báo cáo",
       path: "/admin/reports",
       icon: <FileSpreadsheet size={20} />,
+    },
+    {
+      name: "Quản lý tin tuyển dụng",
+      path: "/admin/jobs",
+      icon: <ClipboardList size={20} />,
     },
     {
       name: "Khu vực tuyển dụng",
