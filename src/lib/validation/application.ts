@@ -24,6 +24,10 @@ export const applicationSchema = z.object({
   gender: z.enum(["Nam", "Nữ"] as [string, ...string[]], {
     message: "Vui lòng chọn giới tính",
   }),
+  permanentAddress: z
+    .string()
+    .trim()
+    .min(5, { message: "Vui lòng nhập địa chỉ cụ thể" }),
   preferredLocation: z
     .string()
     .trim()
@@ -68,6 +72,7 @@ export function normalizeApplicationPayload(raw: unknown) {
     cccd: stringValue(source.cccd).replace(/\s+/g, ""),
     phone: stringValue(source.phone).replace(/\s+/g, ""),
     gender: stringValue(source.gender),
+    permanentAddress: stringValue(source.permanentAddress),
     preferredLocation: stringValue(source.preferredLocation ?? source.location),
     education: stringValue(source.education),
     preferredShift: stringValue(source.preferredShift),

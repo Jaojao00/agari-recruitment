@@ -110,6 +110,7 @@ export default function UngTuyenPage() {
       fullName: "",
       cccd: "",
       phone: "",
+      permanentAddress: "",
       preferredLocation: "",
       note: "",
     },
@@ -286,6 +287,24 @@ export default function UngTuyenPage() {
                             </FormLabel>
                           </FormItem>
                         </RadioGroup>
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+
+                <FormField
+                  control={form.control}
+                  name="permanentAddress"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>Địa chỉ *</FormLabel>
+                      <FormControl>
+                        <Input
+                          placeholder="Nhập địa chỉ hiện tại của bạn"
+                          {...field}
+                          className="h-12"
+                        />
                       </FormControl>
                       <FormMessage />
                     </FormItem>
