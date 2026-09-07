@@ -25,15 +25,10 @@ export async function GET() {
   try {
     const { adminDb } = await import("@/lib/firebase/admin");
     const snapshot = await adminDb.collection("jobs").get();
-    const jobs = snapshot.docs
-      .map((doc) => ({ id: doc.id, ...doc.data() }))
-      .sort((first, second) => {
-        const firstDate =
-          first.createdAt instanceof Date ? first.createdAt.getTime() : 0;
-        const secondDate =
-          second.createdAt instanceof Date ? second.createdAt.getTime() : 0;
-        return secondDate - firstDate;
-      });
+    const jobs = snapshot.docs.map((doc) => ({
+      id: doc.id,
+      ...doc.data(),
+    }));
     return NextResponse.json({ jobs });
   } catch (error) {
     console.error("Admin GET jobs error:", error);
