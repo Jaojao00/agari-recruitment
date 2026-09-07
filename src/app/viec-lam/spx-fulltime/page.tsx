@@ -51,26 +51,24 @@ export default function SpxFulltimePage() {
           className="relative min-h-[470px] overflow-hidden rounded-3xl bg-[#d90012] bg-cover bg-center text-white shadow-xl md:min-h-[540px]"
           style={{ backgroundImage: "url('/mid-autumn-bg.webp')" }}
         >
-          <div className="absolute inset-0 bg-gradient-to-r from-[#8f000d]/90 via-[#b90012]/70 to-[#6d000b]/25" />
-          <div className="absolute inset-0 bg-black/10" />
           <div className="relative flex min-h-[470px] items-center px-6 py-10 md:min-h-[540px] md:px-12 md:py-16">
             <div className="max-w-3xl">
-              <p className="mb-4 inline-flex rounded-full bg-yellow-400 px-3 py-1 text-xs font-black uppercase tracking-[0.18em] text-red-900">
+              <p className="mb-4 inline-flex rounded-full bg-yellow-400 px-3 py-1 text-xs font-black uppercase tracking-[0.18em] text-red-900 shadow-md">
                 Cơ hội việc làm chính thức
               </p>
-              <h1 className="max-w-3xl text-4xl font-black uppercase leading-[1.05] tracking-tight md:text-6xl">
+              <h1 className="max-w-3xl text-4xl font-black uppercase leading-[1.05] tracking-tight drop-shadow-[0_2px_3px_rgba(0,0,0,0.65)] md:text-6xl">
                 Nhân viên kho SPX
                 <span className="mt-2 block text-yellow-300">Full-time</span>
               </h1>
-              <p className="mt-5 max-w-2xl text-base leading-7 text-red-50 md:text-lg">
+              <p className="mt-5 max-w-2xl text-base leading-7 text-white drop-shadow-[0_1px_2px_rgba(0,0,0,0.7)] md:text-lg">
                 Làm việc ổn định tại KCN Bình Minh, đầy đủ hợp đồng, bảo hiểm và
                 chính sách đãi ngộ rõ ràng.
               </p>
               <div className="mt-8 flex flex-wrap gap-3 text-sm font-semibold">
-                <span className="inline-flex items-center gap-2 rounded-full bg-white/15 px-4 py-2">
+                <span className="inline-flex items-center gap-2 rounded-full bg-black/35 px-4 py-2 shadow-sm">
                   <MapPin size={16} /> KCN Bình Minh, Vĩnh Long
                 </span>
-                <span className="inline-flex items-center gap-2 rounded-full bg-white/15 px-4 py-2">
+                <span className="inline-flex items-center gap-2 rounded-full bg-black/35 px-4 py-2 shadow-sm">
                   <BriefcaseBusiness size={16} /> Làm 26 công/tháng
                 </span>
               </div>
