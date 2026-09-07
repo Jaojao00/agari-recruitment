@@ -1,5 +1,4 @@
 import { NextResponse } from "next/server";
-import { adminDb } from "@/lib/firebase/admin";
 
 const DEFAULT_JOB_IMAGE = "/job-default.svg";
 
@@ -24,11 +23,17 @@ function normalizeJob(body: Record<string, unknown>) {
 
 export async function GET() {
   try {
-    const snapshot = await adminDb
-      .collection("jobs")
-      .orderBy("createdAt", "desc")
-      .get();
-    const jobs = snapshot.docs.map((doc) => ({ id: doc.id, ...doc.data() }));
+    const { adminDb } = await import("@/lib/firebase/admin");
+    const snapshot = await adminDb.collection("jobs").get();
+    const jobs = snapshot.docs
+      .map((doc) => ({ id: doc.id, ...doc.data() }))
+      .sort((first, second) => {
+        const firstDate =
+          first.createdAt instanceof Date ? first.createdAt.getTime() : 0;
+        const secondDate =
+          second.createdAt instanceof Date ? second.createdAt.getTime() : 0;
+        return secondDate - firstDate;
+      });
     return NextResponse.json({ jobs });
   } catch (error) {
     console.error("Admin GET jobs error:", error);
@@ -41,6 +46,7 @@ export async function GET() {
 
 export async function POST(request: Request) {
   try {
+    const { adminDb } = await import("@/lib/firebase/admin");
     const body = (await request.json()) as Record<string, unknown>;
     const job = normalizeJob(body);
     if (!job.title || !job.location || !job.description) {

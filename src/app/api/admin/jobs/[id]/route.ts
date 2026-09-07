@@ -1,5 +1,4 @@
 import { NextResponse } from "next/server";
-import { adminDb } from "@/lib/firebase/admin";
 
 const DEFAULT_JOB_IMAGE = "/job-default.svg";
 
@@ -7,6 +6,7 @@ type JobRouteContext = { params: Promise<{ id: string }> };
 
 export async function PATCH(request: Request, { params }: JobRouteContext) {
   try {
+    const { adminDb } = await import("@/lib/firebase/admin");
     const { id } = await params;
     const body = (await request.json()) as Record<string, unknown>;
     const job = {
@@ -56,6 +56,7 @@ export async function PATCH(request: Request, { params }: JobRouteContext) {
 
 export async function DELETE(_request: Request, { params }: JobRouteContext) {
   try {
+    const { adminDb } = await import("@/lib/firebase/admin");
     const { id } = await params;
     await adminDb.collection("jobs").doc(id).delete();
     return NextResponse.json({ success: true });

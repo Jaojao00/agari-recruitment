@@ -61,8 +61,21 @@ export default function AdminJobsPage() {
     setLoading(true);
     try {
       const response = await fetch("/api/admin/jobs");
-      const result = await response.json();
+      const body = await response.text();
+      let result: { jobs?: Job[]; error?: string } = {};
+      if (body.trim()) {
+        result = JSON.parse(body) as { jobs?: Job[]; error?: string };
+      }
+      if (!response.ok) {
+        throw new Error(
+          result.error ||
+            `Không thể tải danh sách tin (HTTP ${response.status}).`,
+        );
+      }
       setJobs(result.jobs || []);
+    } catch (error) {
+      console.error("Load jobs error:", error);
+      setJobs([]);
     } finally {
       setLoading(false);
     }
