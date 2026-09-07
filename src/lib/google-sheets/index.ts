@@ -131,7 +131,7 @@ function rowToApplication(row: string[], rowNumber: number): SheetApplication {
 export async function getApplicationsFromSheet(): Promise<SheetApplication[]> {
   const response = await getSheetsClient().spreadsheets.values.get({
     spreadsheetId: getSpreadsheetId(),
-    range: `'${getSheetName()}'!A1:R`,
+    range: `'${getSheetName()}'!A1:S`,
   });
   const rows = response.data.values || [];
   const firstCell = String(rows[0]?.[0] ?? "")
@@ -155,7 +155,7 @@ export async function addApplicationToSheet(application: Record<string, any>) {
   const rowNumber = await getNextApplicationRow();
   await getSheetsClient().spreadsheets.values.update({
     spreadsheetId: getSpreadsheetId(),
-    range: `'${getSheetName()}'!A${rowNumber}:R${rowNumber}`,
+    range: `'${getSheetName()}'!A${rowNumber}:S${rowNumber}`,
     valueInputOption: "USER_ENTERED",
     requestBody: { values: [applicationToRow(application)] },
   });
@@ -178,7 +178,7 @@ export async function updateApplicationInSheet(
 ) {
   await getSheetsClient().spreadsheets.values.update({
     spreadsheetId: getSpreadsheetId(),
-    range: `'${getSheetName()}'!A${rowNumber}:R${rowNumber}`,
+    range: `'${getSheetName()}'!A${rowNumber}:S${rowNumber}`,
     valueInputOption: "USER_ENTERED",
     requestBody: { values: [applicationToRow(application)] },
   });
