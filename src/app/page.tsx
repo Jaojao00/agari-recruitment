@@ -99,93 +99,72 @@ export default function HomePage() {
 
       <section
         id="vi-tri-khac"
-        className="bg-red-50 border-y border-red-100 py-14"
+        className="border-y border-red-100 bg-white py-12"
       >
         <div className="container mx-auto px-4">
-          <div className="mb-8 text-center">
-            <p className="font-bold uppercase tracking-wide text-red-700">
-              Cơ hội tuyển dụng mới
-            </p>
-            <h2 className="mt-2 text-3xl font-bold uppercase text-gray-900">
-              Nhân viên kho SPX Full-time
-            </h2>
-            <p className="mt-2 text-gray-600">KCN Bình Minh, Vĩnh Long</p>
+          <div className="mb-6 flex items-end justify-between gap-4">
+            <div>
+              <p className="text-sm font-bold uppercase tracking-[0.18em] text-red-700">
+                Vị trí đang tuyển
+              </p>
+              <h2 className="mt-2 text-2xl font-bold text-gray-900 md:text-3xl">
+                Cơ hội việc làm mới
+              </h2>
+            </div>
+            <span className="hidden rounded-full bg-green-50 px-3 py-1 text-xs font-semibold text-green-700 sm:block">
+              Đang nhận hồ sơ
+            </span>
           </div>
 
-          <div className="grid gap-6 lg:grid-cols-3">
-            <Card className="border-red-200 shadow-sm lg:col-span-2">
-              <CardHeader>
-                <CardTitle className="text-red-700">
-                  Ca làm việc & mức lương
-                </CardTitle>
-              </CardHeader>
-              <CardContent className="space-y-3 text-gray-700">
-                <div className="grid gap-3 sm:grid-cols-3">
-                  <div className="rounded-lg bg-blue-50 p-4 text-center">
-                    <strong className="block text-blue-700">Ca 1</strong>
-                    06:00 - 15:00
-                    <b className="mt-1 block">250.000 VNĐ/ca</b>
-                  </div>
-                  <div className="rounded-lg bg-green-50 p-4 text-center">
-                    <strong className="block text-green-700">Ca 2</strong>
-                    13:00 - 22:00
-                    <b className="mt-1 block">250.000 VNĐ/ca</b>
-                  </div>
-                  <div className="rounded-lg bg-purple-50 p-4 text-center">
-                    <strong className="block text-purple-700">Ca 3</strong>
-                    22:00 - 06:00
-                    <b className="mt-1 block">300.000 VNĐ/ca</b>
-                  </div>
+          <article className="overflow-hidden rounded-2xl border border-gray-200 bg-white shadow-sm transition hover:-translate-y-0.5 hover:shadow-lg">
+            <div className="grid md:grid-cols-[220px_1fr_auto] md:items-stretch">
+              <div className="flex min-h-44 items-center justify-center bg-[#d90012] p-6 text-center text-white">
+                <div>
+                  <p className="text-4xl font-black italic tracking-tight">
+                    SPX
+                  </p>
+                  <p className="mt-2 text-xs font-bold uppercase tracking-[0.2em] text-yellow-300">
+                    Express
+                  </p>
+                  <div className="mx-auto mt-5 h-1 w-12 bg-yellow-400" />
                 </div>
-                <p className="text-sm">
-                  Làm 26 công/tháng, công ty sắp xếp lịch nghỉ 4 ngày.
-                </p>
-                <ul className="grid gap-2 text-sm md:grid-cols-2">
-                  <li>✔ Thưởng chuyên cần thêm 750.000 VNĐ/tháng.</li>
-                  <li>✔ Lãnh lương định kỳ ngày 05 và 20 hàng tháng.</li>
-                  <li>✔ Ký hợp đồng, đầy đủ BHXH và BHYT.</li>
-                  <li>✔ Có lương tháng 13.</li>
-                </ul>
-              </CardContent>
-            </Card>
-
-            <Card className="border-red-200 bg-red-700 text-white shadow-sm">
-              <CardHeader>
-                <CardTitle className="text-white">Yêu cầu đơn giản</CardTitle>
-              </CardHeader>
-              <CardContent className="space-y-4 text-sm">
-                <p>
-                  Nam/Nữ từ 18 - 35 tuổi, sức khỏe tốt, chăm chỉ, nhanh nhẹn.
-                </p>
-                <p>Bắt buộc có CCCD gốc và ứng dụng VNeID mức 2.</p>
-                <p>
-                  Làm việc tại Lô 01, kho số A01, KCN Bình Minh, Ấp Mỹ Lợi, Xã
-                  Mỹ Hoà, Tỉnh Vĩnh Long.
-                </p>
-                <Link href="/ung-tuyen?job=spx-fulltime" className="block">
-                  <Button className="w-full bg-yellow-400 font-bold text-red-800 hover:bg-yellow-300">
-                    ỨNG TUYỂN SPX FULL-TIME
+              </div>
+              <div className="space-y-4 p-6 md:p-7">
+                <div>
+                  <p className="text-xs font-bold uppercase tracking-[0.16em] text-red-700">
+                    Full-time · Chính thức
+                  </p>
+                  <h3 className="mt-1 text-xl font-bold text-gray-900 md:text-2xl">
+                    Nhân viên kho SPX
+                  </h3>
+                  <p className="mt-1 text-sm text-gray-500">
+                    KCN Bình Minh, Vĩnh Long
+                  </p>
+                </div>
+                <div className="flex flex-wrap gap-2 text-sm">
+                  <span className="rounded-md bg-red-50 px-3 py-1.5 font-semibold text-red-700">
+                    250.000 - 300.000 VNĐ/ca
+                  </span>
+                  <span className="rounded-md bg-gray-100 px-3 py-1.5 text-gray-700">
+                    3 ca cố định
+                  </span>
+                  <span className="rounded-md bg-gray-100 px-3 py-1.5 text-gray-700">
+                    Đủ BHXH, BHYT
+                  </span>
+                </div>
+              </div>
+              <div className="flex items-center border-t border-gray-100 p-6 md:border-l md:border-t-0 md:p-7">
+                <Link
+                  href="/viec-lam/spx-fulltime"
+                  className="w-full md:w-auto"
+                >
+                  <Button className="w-full bg-red-700 font-bold text-white hover:bg-red-800 md:min-w-40">
+                    XEM CHI TIẾT
                   </Button>
                 </Link>
-              </CardContent>
-            </Card>
-          </div>
-
-          <div className="mx-auto mt-6 max-w-4xl rounded-xl bg-white p-6 shadow-sm">
-            <h3 className="mb-3 text-lg font-bold text-gray-900">
-              Mô tả công việc
-            </h3>
-            <ul className="grid gap-2 text-sm text-gray-700 md:grid-cols-2">
-              <li>• Lên/xuống hàng, kéo hàng, đổ bao và xử lý hàng hóa.</li>
-              <li>
-                • Phân loại, sắp xếp, tiếp nhận, kiểm tra và đóng gói đơn hàng.
-              </li>
-              <li className="md:col-span-2">
-                • Được đào tạo sử dụng máy ASM để xử lý và scan hàng hóa theo
-                phân công.
-              </li>
-            </ul>
-          </div>
+              </div>
+            </div>
+          </article>
         </div>
       </section>
 
