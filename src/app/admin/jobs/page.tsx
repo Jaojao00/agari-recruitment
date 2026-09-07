@@ -33,6 +33,8 @@ type Job = {
 
 type JobForm = Omit<Job, "id" | "isPublished"> & { isPublished: boolean };
 
+const DEFAULT_JOB_IMAGE = "/job-default.svg";
+
 const emptyForm: JobForm = {
   title: "",
   company: "",
@@ -42,7 +44,7 @@ const emptyForm: JobForm = {
   description: "",
   requirements: "",
   benefits: "",
-  imageUrl: "",
+  imageUrl: DEFAULT_JOB_IMAGE,
   applicationUrl: "/ung-tuyen",
   isPublished: true,
 };
@@ -92,7 +94,7 @@ export default function AdminJobsPage() {
       description: job.description,
       requirements: job.requirements || "",
       benefits: job.benefits || "",
-      imageUrl: job.imageUrl || "",
+      imageUrl: job.imageUrl || DEFAULT_JOB_IMAGE,
       applicationUrl: job.applicationUrl || "/ung-tuyen",
       isPublished: job.isPublished,
     });
@@ -223,12 +225,15 @@ export default function AdminJobsPage() {
               />
             </label>
             <label className="space-y-1 text-sm font-medium">
-              Link ảnh đại diện
+              Link ảnh đại diện (tuỳ chọn)
               <Input
                 value={form.imageUrl}
                 onChange={(e) => updateField("imageUrl", e.target.value)}
-                placeholder="/poster-spx.webp hoặc URL ảnh"
+                placeholder="Mặc định: ảnh AGARI tuyển dụng miền Tây"
               />
+              <span className="text-xs font-normal text-gray-500">
+                Để trống sẽ tự dùng ảnh mặc định theo mẫu tuyển dụng.
+              </span>
             </label>
             <label className="space-y-1 text-sm font-medium md:col-span-2">
               Link trang ứng tuyển
@@ -309,6 +314,12 @@ export default function AdminJobsPage() {
           {jobs.map((job) => (
             <Card key={job.id} className={!job.isPublished ? "opacity-60" : ""}>
               <CardContent className="p-5">
+                <div
+                  className="mb-4 h-32 rounded-lg bg-cover bg-center"
+                  style={{
+                    backgroundImage: `url("${job.imageUrl || DEFAULT_JOB_IMAGE}")`,
+                  }}
+                />
                 <div className="flex items-start justify-between gap-3">
                   <div>
                     <div className="mb-2 flex items-center gap-2">

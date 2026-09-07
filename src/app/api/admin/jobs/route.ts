@@ -1,6 +1,8 @@
 import { NextResponse } from "next/server";
 import { adminDb } from "@/lib/firebase/admin";
 
+const DEFAULT_JOB_IMAGE = "/job-default.svg";
+
 function normalizeJob(body: Record<string, unknown>) {
   const text = (key: string) =>
     typeof body[key] === "string" ? body[key].trim() : "";
@@ -14,7 +16,7 @@ function normalizeJob(body: Record<string, unknown>) {
     description: text("description"),
     requirements: text("requirements"),
     benefits: text("benefits"),
-    imageUrl: text("imageUrl"),
+    imageUrl: text("imageUrl") || DEFAULT_JOB_IMAGE,
     applicationUrl: text("applicationUrl") || "/ung-tuyen",
     isPublished: body.isPublished !== false,
   };

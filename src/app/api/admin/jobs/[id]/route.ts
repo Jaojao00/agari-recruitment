@@ -1,6 +1,8 @@
 import { NextResponse } from "next/server";
 import { adminDb } from "@/lib/firebase/admin";
 
+const DEFAULT_JOB_IMAGE = "/job-default.svg";
+
 type JobRouteContext = { params: Promise<{ id: string }> };
 
 export async function PATCH(request: Request, { params }: JobRouteContext) {
@@ -31,7 +33,7 @@ export async function PATCH(request: Request, { params }: JobRouteContext) {
         ? { benefits: body.benefits.trim() }
         : {}),
       ...(typeof body.imageUrl === "string"
-        ? { imageUrl: body.imageUrl.trim() }
+        ? { imageUrl: body.imageUrl.trim() || DEFAULT_JOB_IMAGE }
         : {}),
       ...(typeof body.applicationUrl === "string"
         ? { applicationUrl: body.applicationUrl.trim() }

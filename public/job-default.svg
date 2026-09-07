@@ -1,0 +1,14 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 360" role="img" aria-labelledby="title desc">
+  <title id="title">AGARI tuyển dụng khu vực miền Tây</title>
+  <desc id="desc">Ảnh đại diện mặc định cho tin tuyển dụng</desc>
+  <rect width="640" height="360" rx="24" fill="#d90012"/>
+  <circle cx="548" cy="72" r="112" fill="none" stroke="#f5b800" stroke-opacity=".35" stroke-width="24"/>
+  <circle cx="78" cy="310" r="148" fill="none" stroke="#a90010" stroke-width="36"/>
+  <g fill="#fff" font-family="Arial, Helvetica, sans-serif" font-weight="800">
+    <text x="58" y="115" font-size="64" font-style="italic">AGARI</text>
+    <text x="62" y="168" font-size="22" letter-spacing="4">TUYỂN DỤNG</text>
+    <text x="62" y="230" font-size="34">CƠ HỘI VIỆC LÀM</text>
+    <text x="62" y="278" font-size="34" fill="#ffd21a">KV MIỀN TÂY</text>
+  </g>
+  <rect x="62" y="302" width="96" height="6" rx="3" fill="#ffd21a"/>
+</svg>
