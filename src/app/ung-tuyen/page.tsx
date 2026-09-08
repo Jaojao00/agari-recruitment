@@ -216,6 +216,11 @@ export default function UngTuyenPage() {
               <p className="text-sm text-red-100">
                 {jobOptions[jobId].schedule}
               </p>
+              {(jobId === "warehouse-rotating-shift" || jobId === "spx-fulltime") && (
+                <p className="text-sm italic text-yellow-100 border-t border-white/20 mt-2 pt-2">
+                  * Đối với các bạn nhân viên đã có mã nhân viên thì hãy điền vào nhé.
+                </p>
+              )}
             </div>
           </div>
 
