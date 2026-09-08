@@ -73,10 +73,17 @@ function getSpreadsheetId() {
   return spreadsheetId;
 }
 
-function getDefaultSheetName() {
-  return (process.env.GOOGLE_SHEETS_TAB ?? "Trang tính1")
-    .trim()
-    .replace(/^"|"$/g, "");
+async function getDefaultSheetName() {
+  const titles = await getSheetTitles();
+  const envTab = (process.env.GOOGLE_SHEETS_TAB ?? "").trim().replace(/^"|"$/g, "");
+  
+  if (envTab && titles.some(s => s.title === envTab)) {
+    return envTab;
+  }
+  
+  // Tự động tìm sheet gốc (gid: 0) hoặc sheet đầu tiên nếu không có GOOGLE_SHEETS_TAB hợp lệ
+  const defaultSheet = titles.find((s) => s.gid === 0) || titles[0];
+  return defaultSheet ? defaultSheet.title : "Trang tính1";
 }
 
 let sheetInfoCache: { gid: number; title: string }[] | null = null;
@@ -95,7 +102,7 @@ async function getSheetTitles() {
 }
 
 async function getJobSheetName(jobId?: string): Promise<string> {
-  const defaultSheetName = getDefaultSheetName();
+  const defaultSheetName = await getDefaultSheetName();
 
   if (jobId === "agari-part-time") {
     const titles = await getSheetTitles();
@@ -201,10 +208,13 @@ function rowToApplication(
 }
 
 export async function getApplicationsFromSheet(): Promise<SheetApplication[]> {
-  const defaultSheetName = getDefaultSheetName();
+  const defaultSheetName = await getDefaultSheetName();
   const titles = await getSheetTitles();
 
-  const targetSheetNames = new Set<string>([defaultSheetName]);
+  const targetSheetNames = new Set<string>();
+  if (titles.some((s) => s.title === defaultSheetName)) {
+    targetSheetNames.add(defaultSheetName);
+  }
 
   const ptSheet = titles.find((s) => s.gid === 902668352);
   if (ptSheet) targetSheetNames.add(ptSheet.title);
