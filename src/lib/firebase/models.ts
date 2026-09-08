@@ -24,6 +24,7 @@ export interface Application {
   cccd: string;
   phone: string;
   gender: "Nam" | "Nữ";
+  opsCode?: string;
   preferredLocation?: string;
   permanentAddress: string;
 

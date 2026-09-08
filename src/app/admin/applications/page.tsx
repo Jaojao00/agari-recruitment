@@ -199,11 +199,11 @@ function ApplicationsContent() {
               <TableHead>Mã hồ sơ</TableHead>
               <TableHead>Vị trí</TableHead>
               <TableHead>Họ và tên</TableHead>
+              <TableHead>Mã Ops</TableHead>
               <TableHead>Ngày sinh</TableHead>
               <TableHead>Số CCCD</TableHead>
               <TableHead>Số điện thoại</TableHead>
               <TableHead>Giới tính</TableHead>
-                <TableHead>Mã Ops</TableHead>
               <TableHead>Trạng thái</TableHead>
               <TableHead className="text-right">Thao tác</TableHead>
             </TableRow>
@@ -211,14 +211,14 @@ function ApplicationsContent() {
           <TableBody>
             {loading ? (
               <TableRow>
-                <TableCell colSpan={9} className="text-center h-32">
+                <TableCell colSpan={10} className="text-center h-32">
                   <Loader2 className="h-6 w-6 animate-spin mx-auto text-gray-400" />
                 </TableCell>
               </TableRow>
             ) : data.length === 0 ? (
               <TableRow>
                 <TableCell
-                  colSpan={9}
+                  colSpan={10}
                   className="text-center h-32 text-gray-500"
                 >
                   Không tìm thấy ứng viên phù hợp.
@@ -245,6 +245,7 @@ function ApplicationsContent() {
                   <TableCell className="font-semibold">
                     {app.fullName}
                   </TableCell>
+                  <TableCell className="font-mono text-sm text-gray-700">{app.opsCode || "-"}</TableCell>
                   <TableCell>{app.dateOfBirth || "-"}</TableCell>
                   <TableCell>
                     <button
