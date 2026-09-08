@@ -39,7 +39,7 @@ function SuccessContent() {
       </p>
 
       <a
-        href="https://zalo.me/g/giokqvvnzshngxnfpcdl"
+        href="https://zalo.me/g/sqjgbx906"
         target="_blank"
         rel="noopener noreferrer"
         className="mb-3 flex h-12 w-full items-center justify-center rounded-full bg-blue-600 text-base font-bold text-white transition hover:bg-blue-700"
