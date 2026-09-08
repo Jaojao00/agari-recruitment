@@ -138,8 +138,6 @@ function applicationToRow(application: SheetApplicationFields) {
     application.availableStartDate,
     formatSheetDate(application.appliedAt || new Date()),
     application.status || "NEW",
-    formatSheetDate(application.hiredAt),
-    formatSheetDate(application.expiredAt),
     application.note || "",
     application.adminNote || "",
     formatSheetDate(application.updatedAt || new Date()),
@@ -147,6 +145,8 @@ function applicationToRow(application: SheetApplicationFields) {
     application.jobId || "warehouse-rotating-shift",
     application.jobTitle || "Nhân viên kho - Ca xoay",
     application.workSchedule || "",
+    formatSheetDate(application.hiredAt),
+    formatSheetDate(application.expiredAt),
   ];
 }
 
@@ -193,17 +193,17 @@ function rowToApplication(
     appliedAt: row[11] || "",
     createdAt: row[11] || "",
     status: row[12] || "NEW",
-    hiredAt: row[13] || "",
-    expiredAt: row[14] || "",
-    note: row[15] || "",
-    adminNote: row[16] || "",
-    updatedAt: row[17] || "",
+    note: row[13] || "",
+    adminNote: row[14] || "",
+    updatedAt: row[15] || "",
+    googleSheetSyncStatus: row[16] || "SUCCESS",
+    jobId: row[17] || "warehouse-rotating-shift",
+    jobTitle: row[18] || "Nhân viên kho - Ca xoay",
+    workSchedule: row[19] || "",
+    hiredAt: row[20] || "",
+    expiredAt: row[21] || "",
     googleSheetRow: rowNumber,
     googleSheetName: sheetName,
-    googleSheetSyncStatus: row[18] || "SUCCESS",
-    jobId: row[19] || "warehouse-rotating-shift",
-    jobTitle: row[20] || "Nhân viên kho - Ca xoay",
-    workSchedule: row[21] || "",
   };
 }
 
