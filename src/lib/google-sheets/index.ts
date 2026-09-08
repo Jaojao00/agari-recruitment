@@ -30,6 +30,7 @@ type SheetApplicationFields = {
   jobId?: string;
   jobTitle?: string;
   workSchedule?: string;
+  opsCode?: string;
   fullName?: string;
   dateOfBirth?: string;
   cccd?: string;
@@ -147,6 +148,7 @@ function applicationToRow(application: SheetApplicationFields) {
     application.workSchedule || "",
     formatSheetDate(application.hiredAt),
     formatSheetDate(application.expiredAt),
+    application.opsCode || "",
   ];
 }
 
@@ -202,6 +204,7 @@ function rowToApplication(
     workSchedule: row[19] || "",
     hiredAt: row[20] || "",
     expiredAt: row[21] || "",
+    opsCode: row[22] || "",
     googleSheetRow: rowNumber,
     googleSheetName: sheetName,
   };

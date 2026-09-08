@@ -8,6 +8,7 @@ export const applicationSchema = z.object({
   jobId: z.string().trim().optional(),
   jobTitle: z.string().trim().optional(),
   workSchedule: z.string().trim().optional(),
+  opsCode: z.string().trim().optional(),
   dateOfBirth: z
     .string()
     .trim()
@@ -84,6 +85,7 @@ export function normalizeApplicationPayload(raw: unknown) {
     preferredShift: stringValue(source.preferredShift),
     availableStartDate: stringValue(source.availableStartDate),
     note: stringValue(source.note),
+    opsCode: stringValue(source.opsCode),
   };
 }
 

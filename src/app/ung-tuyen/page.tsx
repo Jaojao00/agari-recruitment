@@ -131,6 +131,7 @@ export default function UngTuyenPage() {
       permanentAddress: "",
       preferredLocation: "",
       note: "",
+      opsCode: "",
       jobId: "warehouse-rotating-shift",
       jobTitle: jobOptions["warehouse-rotating-shift"].title,
       workSchedule: jobOptions["warehouse-rotating-shift"].schedule,
@@ -307,40 +308,63 @@ export default function UngTuyenPage() {
                   />
                 </div>
 
-                <FormField
-                  control={form.control}
-                  name="gender"
-                  render={({ field }) => (
-                    <FormItem className="space-y-3">
-                      <FormLabel>Giới tính *</FormLabel>
-                      <FormControl>
-                        <RadioGroup
-                          onValueChange={field.onChange}
-                          defaultValue={field.value}
-                          className="flex space-x-6"
-                        >
-                          <FormItem className="flex items-center space-x-2 space-y-0">
-                            <FormControl>
-                              <RadioGroupItem value="Nam" />
-                            </FormControl>
-                            <FormLabel className="font-normal cursor-pointer">
-                              Nam
-                            </FormLabel>
-                          </FormItem>
-                          <FormItem className="flex items-center space-x-2 space-y-0">
-                            <FormControl>
-                              <RadioGroupItem value="Nữ" />
-                            </FormControl>
-                            <FormLabel className="font-normal cursor-pointer">
-                              Nữ
-                            </FormLabel>
-                          </FormItem>
-                        </RadioGroup>
-                      </FormControl>
-                      <FormMessage />
-                    </FormItem>
+                <div className={`grid gap-6 ${(jobId === "warehouse-rotating-shift" || jobId === "spx-fulltime") ? "md:grid-cols-2" : ""}`}>
+                  <FormField
+                    control={form.control}
+                    name="gender"
+                    render={({ field }) => (
+                      <FormItem className="space-y-3">
+                        <FormLabel>Giới tính *</FormLabel>
+                        <FormControl>
+                          <RadioGroup
+                            onValueChange={field.onChange}
+                            defaultValue={field.value}
+                            className="flex space-x-6"
+                          >
+                            <FormItem className="flex items-center space-x-2 space-y-0">
+                              <FormControl>
+                                <RadioGroupItem value="Nam" />
+                              </FormControl>
+                              <FormLabel className="font-normal cursor-pointer">
+                                Nam
+                              </FormLabel>
+                            </FormItem>
+                            <FormItem className="flex items-center space-x-2 space-y-0">
+                              <FormControl>
+                                <RadioGroupItem value="Nữ" />
+                              </FormControl>
+                              <FormLabel className="font-normal cursor-pointer">
+                                Nữ
+                              </FormLabel>
+                            </FormItem>
+                          </RadioGroup>
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+
+                  {(jobId === "warehouse-rotating-shift" || jobId === "spx-fulltime") && (
+                    <FormField
+                      control={form.control}
+                      name="opsCode"
+                      render={({ field }) => (
+                        <FormItem>
+                          <FormLabel>Mã Ops của nhân viên <span className="text-muted-foreground font-normal italic text-xs">(Tùy chọn)</span></FormLabel>
+                          <FormControl>
+                            <Input
+                              placeholder="Nhập mã Ops (không bắt buộc)"
+                              {...field}
+                              value={field.value || ""}
+                              className="h-12"
+                            />
+                          </FormControl>
+                          <FormMessage />
+                        </FormItem>
+                      )}
+                    />
                   )}
-                />
+                </div>
 
                 <FormField
                   control={form.control}
