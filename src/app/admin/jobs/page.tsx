@@ -133,7 +133,16 @@ export default function AdminJobsPage() {
           body: JSON.stringify(form),
         },
       );
-      if (!response.ok) throw new Error("Không thể lưu tin tuyển dụng.");
+      const responseBody = await response.text();
+      let responseResult: { error?: string } = {};
+      if (responseBody.trim()) {
+        responseResult = JSON.parse(responseBody) as { error?: string };
+      }
+      if (!response.ok) {
+        throw new Error(
+          responseResult.error || "Không thể lưu tin tuyển dụng.",
+        );
+      }
       setShowForm(false);
       setForm(emptyForm);
       setEditingId(null);

@@ -2,6 +2,10 @@ import { NextResponse } from "next/server";
 
 const DEFAULT_JOB_IMAGE = "/job-default.svg";
 
+function errorMessage(error: unknown) {
+  return error instanceof Error ? error.message : "Lỗi không xác định";
+}
+
 type JobRouteContext = { params: Promise<{ id: string }> };
 
 export async function PATCH(request: Request, { params }: JobRouteContext) {
@@ -46,9 +50,9 @@ export async function PATCH(request: Request, { params }: JobRouteContext) {
     await adminDb.collection("jobs").doc(id).update(job);
     return NextResponse.json({ success: true });
   } catch (error) {
-    console.error("Admin PATCH job error:", error);
+    console.error("Admin PATCH job error:", errorMessage(error));
     return NextResponse.json(
-      { error: "Không thể cập nhật tin tuyển dụng." },
+      { error: `Không thể cập nhật tin tuyển dụng: ${errorMessage(error)}` },
       { status: 500 },
     );
   }
@@ -61,9 +65,9 @@ export async function DELETE(_request: Request, { params }: JobRouteContext) {
     await adminDb.collection("jobs").doc(id).delete();
     return NextResponse.json({ success: true });
   } catch (error) {
-    console.error("Admin DELETE job error:", error);
+    console.error("Admin DELETE job error:", errorMessage(error));
     return NextResponse.json(
-      { error: "Không thể xoá tin tuyển dụng." },
+      { error: `Không thể xoá tin tuyển dụng: ${errorMessage(error)}` },
       { status: 500 },
     );
   }

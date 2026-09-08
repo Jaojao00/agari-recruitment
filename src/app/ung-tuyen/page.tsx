@@ -47,6 +47,10 @@ const jobOptions = {
     title: "Nhân viên kho SPX Full-time",
     schedule: "Ca cố định: 06:00 - 15:00, 13:00 - 22:00 hoặc 22:00 - 06:00",
   },
+  "agari-part-time": {
+    title: "Lao động phổ thông AGARI Part-time",
+    schedule: "Đăng ký lịch làm việc linh hoạt theo tuần",
+  },
 } as const;
 
 const defaultLocations: Location[] = [
@@ -135,7 +139,7 @@ export default function UngTuyenPage() {
 
   useEffect(() => {
     const requestedJob = new URLSearchParams(window.location.search).get("job");
-    if (requestedJob === "spx-fulltime") {
+    if (requestedJob === "spx-fulltime" || requestedJob === "agari-part-time") {
       const timer = window.setTimeout(() => {
         setJobId(requestedJob);
         form.setValue("jobId", requestedJob);
@@ -148,7 +152,10 @@ export default function UngTuyenPage() {
   }, [form]);
 
   async function onSubmit(data: ApplicationFormValues) {
-    if (jobId === "spx-fulltime" && !data.workSchedule) {
+    if (
+      (jobId === "spx-fulltime" || jobId === "agari-part-time") &&
+      !data.workSchedule
+    ) {
       setError("Vui lòng chọn ca cố định muốn đăng ký.");
       return;
     }
@@ -398,13 +405,13 @@ export default function UngTuyenPage() {
                   )}
                 />
 
-                {jobId === "spx-fulltime" ? (
+                {jobId === "spx-fulltime" || jobId === "agari-part-time" ? (
                   <FormField
                     control={form.control}
                     name="workSchedule"
                     render={({ field }) => (
                       <FormItem>
-                        <FormLabel>Ca cố định muốn đăng ký *</FormLabel>
+                        <FormLabel>Ca muốn đăng ký *</FormLabel>
                         <Select
                           value={field.value}
                           onValueChange={field.onChange}
@@ -414,7 +421,7 @@ export default function UngTuyenPage() {
                               <SelectValue placeholder="Chọn ca cố định" />
                             </SelectTrigger>
                           </FormControl>
-                          <SelectContent className="w-[min(26rem,calc(100vw-2rem))]">
+                          <SelectContent className="w-[min(30rem,calc(100vw-2rem))]">
                             <SelectItem value="Ca 1: 06:00 - 15:00">
                               Ca 1 · 06:00 - 15:00 · 250.000 VNĐ/ca
                             </SelectItem>
@@ -424,6 +431,16 @@ export default function UngTuyenPage() {
                             <SelectItem value="Ca 3: 22:00 - 06:00">
                               Ca 3 · 22:00 - 06:00 · 300.000 VNĐ/ca
                             </SelectItem>
+                            {jobId === "agari-part-time" ? (
+                              <>
+                                <SelectItem value="Ca 4: 18:00 - 22:00">
+                                  Ca 4 · 18:00 - 22:00 · 125.000 VNĐ/ca
+                                </SelectItem>
+                                <SelectItem value="Ca 5: 06:00 - 11:00">
+                                  Ca 5 · 06:00 - 11:00 · 155.000 VNĐ/ca
+                                </SelectItem>
+                              </>
+                            ) : null}
                           </SelectContent>
                         </Select>
                         <FormMessage />

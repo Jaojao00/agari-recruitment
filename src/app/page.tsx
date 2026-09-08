@@ -116,55 +116,103 @@ export default function HomePage() {
             </span>
           </div>
 
-          <article className="overflow-hidden rounded-2xl border border-gray-200 bg-white shadow-sm transition hover:-translate-y-0.5 hover:shadow-lg">
-            <div className="grid md:grid-cols-[220px_1fr_auto] md:items-stretch">
-              <div className="flex min-h-44 items-center justify-center bg-[#d90012] p-6 text-center text-white">
-                <div>
-                  <p className="text-4xl font-black italic tracking-tight">
-                    SPX
-                  </p>
-                  <p className="mt-2 text-xs font-bold uppercase tracking-[0.2em] text-yellow-300">
-                    Express
-                  </p>
-                  <div className="mx-auto mt-5 h-1 w-12 bg-yellow-400" />
+          <div className="grid gap-4 lg:grid-cols-2">
+            <article className="overflow-hidden rounded-2xl border border-gray-200 bg-white shadow-sm transition hover:-translate-y-0.5 hover:shadow-lg">
+              <div className="grid md:grid-cols-[150px_1fr] md:items-stretch">
+                <div className="flex min-h-44 items-center justify-center bg-[#d90012] p-6 text-center text-white">
+                  <div>
+                    <p className="text-4xl font-black italic tracking-tight">
+                      SPX
+                    </p>
+                    <p className="mt-2 text-xs font-bold uppercase tracking-[0.2em] text-yellow-300">
+                      Express
+                    </p>
+                    <div className="mx-auto mt-5 h-1 w-12 bg-yellow-400" />
+                  </div>
+                </div>
+                <div className="space-y-4 p-6 md:p-7">
+                  <div>
+                    <p className="text-xs font-bold uppercase tracking-[0.16em] text-red-700">
+                      Full-time · Chính thức
+                    </p>
+                    <h3 className="mt-1 text-xl font-bold text-gray-900 md:text-2xl">
+                      Nhân viên kho SPX
+                    </h3>
+                    <p className="mt-1 text-sm text-gray-500">
+                      KCN Bình Minh, Vĩnh Long
+                    </p>
+                  </div>
+                  <div className="flex flex-wrap gap-2 text-sm">
+                    <span className="rounded-md bg-red-50 px-3 py-1.5 font-semibold text-red-700">
+                      250.000 - 300.000 VNĐ/ca
+                    </span>
+                    <span className="rounded-md bg-gray-100 px-3 py-1.5 text-gray-700">
+                      3 ca cố định
+                    </span>
+                    <span className="rounded-md bg-gray-100 px-3 py-1.5 text-gray-700">
+                      Đủ BHXH, BHYT
+                    </span>
+                  </div>
+                </div>
+                <div className="border-t border-gray-100 p-6 md:col-span-2 md:p-7">
+                  <Link
+                    href="/viec-lam/spx-fulltime"
+                    className="w-full md:w-auto"
+                  >
+                    <Button className="w-full bg-red-700 font-bold text-white hover:bg-red-800 md:min-w-40">
+                      XEM CHI TIẾT
+                    </Button>
+                  </Link>
                 </div>
               </div>
-              <div className="space-y-4 p-6 md:p-7">
-                <div>
-                  <p className="text-xs font-bold uppercase tracking-[0.16em] text-red-700">
-                    Full-time · Chính thức
-                  </p>
-                  <h3 className="mt-1 text-xl font-bold text-gray-900 md:text-2xl">
-                    Nhân viên kho SPX
-                  </h3>
-                  <p className="mt-1 text-sm text-gray-500">
-                    KCN Bình Minh, Vĩnh Long
-                  </p>
+            </article>
+            <article className="overflow-hidden rounded-2xl border border-gray-200 bg-white shadow-sm transition hover:-translate-y-0.5 hover:shadow-lg">
+              <div className="grid md:grid-cols-[150px_1fr] md:items-stretch">
+                <div className="flex min-h-44 items-center justify-center bg-[#e32620] p-6 text-center text-white">
+                  <div>
+                    <p className="text-3xl font-black italic tracking-tight">
+                      AGARI
+                    </p>
+                    <p className="mt-2 text-xs font-bold uppercase tracking-[0.15em] text-yellow-300">
+                      Part-time
+                    </p>
+                    <div className="mx-auto mt-5 h-1 w-12 bg-yellow-400" />
+                  </div>
                 </div>
-                <div className="flex flex-wrap gap-2 text-sm">
-                  <span className="rounded-md bg-red-50 px-3 py-1.5 font-semibold text-red-700">
-                    250.000 - 300.000 VNĐ/ca
-                  </span>
-                  <span className="rounded-md bg-gray-100 px-3 py-1.5 text-gray-700">
-                    3 ca cố định
-                  </span>
-                  <span className="rounded-md bg-gray-100 px-3 py-1.5 text-gray-700">
-                    Đủ BHXH, BHYT
-                  </span>
+                <div className="space-y-4 p-6">
+                  <div>
+                    <p className="text-xs font-bold uppercase tracking-[0.16em] text-red-700">
+                      Part-time · Linh hoạt
+                    </p>
+                    <h3 className="mt-1 text-xl font-bold text-gray-900">
+                      Lao động phổ thông
+                    </h3>
+                    <p className="mt-1 text-sm text-gray-500">
+                      KCN Bình Minh, Vĩnh Long
+                    </p>
+                  </div>
+                  <div className="flex flex-wrap gap-2 text-sm">
+                    <span className="rounded-md bg-red-50 px-3 py-1.5 font-semibold text-red-700">
+                      125.000 - 280.000 VNĐ/ca
+                    </span>
+                    <span className="rounded-md bg-gray-100 px-3 py-1.5 text-gray-700">
+                      Đăng ký lịch tuần
+                    </span>
+                  </div>
+                </div>
+                <div className="border-t border-gray-100 p-6 md:col-span-2">
+                  <Link
+                    href="/viec-lam/agari-part-time"
+                    className="block w-full"
+                  >
+                    <Button className="w-full bg-red-700 font-bold text-white hover:bg-red-800">
+                      XEM CHI TIẾT
+                    </Button>
+                  </Link>
                 </div>
               </div>
-              <div className="flex items-center border-t border-gray-100 p-6 md:border-l md:border-t-0 md:p-7">
-                <Link
-                  href="/viec-lam/spx-fulltime"
-                  className="w-full md:w-auto"
-                >
-                  <Button className="w-full bg-red-700 font-bold text-white hover:bg-red-800 md:min-w-40">
-                    XEM CHI TIẾT
-                  </Button>
-                </Link>
-              </div>
-            </div>
-          </article>
+            </article>
+          </div>
         </div>
       </section>
 

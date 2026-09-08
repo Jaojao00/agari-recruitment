@@ -2,6 +2,10 @@ import { NextResponse } from "next/server";
 
 const DEFAULT_JOB_IMAGE = "/job-default.svg";
 
+function errorMessage(error: unknown) {
+  return error instanceof Error ? error.message : "Lỗi không xác định";
+}
+
 function normalizeJob(body: Record<string, unknown>) {
   const text = (key: string) =>
     typeof body[key] === "string" ? body[key].trim() : "";
@@ -31,9 +35,9 @@ export async function GET() {
     }));
     return NextResponse.json({ jobs });
   } catch (error) {
-    console.error("Admin GET jobs error:", error);
+    console.error("Admin GET jobs error:", errorMessage(error));
     return NextResponse.json(
-      { error: "Không thể tải danh sách tin." },
+      { error: `Không thể tải danh sách tin: ${errorMessage(error)}` },
       { status: 500 },
     );
   }
@@ -59,9 +63,9 @@ export async function POST(request: Request) {
     });
     return NextResponse.json({ id: reference.id, ...job }, { status: 201 });
   } catch (error) {
-    console.error("Admin POST jobs error:", error);
+    console.error("Admin POST jobs error:", errorMessage(error));
     return NextResponse.json(
-      { error: "Không thể tạo tin tuyển dụng." },
+      { error: `Không thể tạo tin tuyển dụng: ${errorMessage(error)}` },
       { status: 500 },
     );
   }
