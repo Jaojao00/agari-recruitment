@@ -32,7 +32,7 @@ export async function PATCH(
   try {
     const { id } = await params;
     const body = await request.json();
-    const { status, hiredAt, expiredAt, adminNote } = body;
+    const { status, hiredAt, expiredAt, adminNote, opsCode } = body;
 
     const applications = await getApplicationsFromSheet();
     const application = applications.find((item) => item.id === id);
@@ -43,6 +43,7 @@ export async function PATCH(
 
     if (status) updateData.status = status;
     if (adminNote !== undefined) updateData.adminNote = adminNote;
+    if (opsCode !== undefined) updateData.opsCode = opsCode;
 
     // Parse dates if provided
     if (hiredAt === null || hiredAt === "") updateData.hiredAt = "";

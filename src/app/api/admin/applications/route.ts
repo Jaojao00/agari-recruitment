@@ -6,10 +6,15 @@ export async function GET(request: Request) {
     const { searchParams } = new URL(request.url);
     const search = searchParams.get("search") || "";
     const status = searchParams.get("status") || "";
+    const jobId = searchParams.get("jobId") || "";
     const page = parseInt(searchParams.get("page") || "1");
     const limit = 20;
 
     let results = await getApplicationsFromSheet();
+
+    if (jobId) {
+      results = results.filter((app) => app.jobId === jobId);
+    }
 
     if (status && status !== "ALL") {
       results = results.filter((app) => app.status === status);

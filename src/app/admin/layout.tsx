@@ -23,9 +23,27 @@ function AdminSidebar() {
   const navItems = [
     { name: "Dashboard", path: "/admin", icon: <LayoutDashboard size={20} /> },
     {
-      name: "Hồ sơ ứng tuyển",
+      name: "Hồ sơ ứng tuyển (Tất cả)",
       path: "/admin/applications",
       icon: <Users size={20} />,
+    },
+    {
+      name: "Mục S-BPO",
+      path: "/admin/applications?jobId=warehouse-rotating-shift",
+      icon: <Users size={20} />,
+      isSub: true,
+    },
+    {
+      name: "Mục Full-time",
+      path: "/admin/applications?jobId=spx-fulltime",
+      icon: <Users size={20} />,
+      isSub: true,
+    },
+    {
+      name: "Mục Part-time",
+      path: "/admin/applications?jobId=agari-part-time",
+      icon: <Users size={20} />,
+      isSub: true,
     },
     {
       name: "Đã trúng tuyển",
@@ -59,15 +77,18 @@ function AdminSidebar() {
       <div className="flex-1 py-6">
         <nav className="space-y-1 px-3">
           {navItems.map((item) => {
-            const isActive =
-              pathname === item.path ||
-              (item.path !== "/admin" && pathname.startsWith(item.path));
+            // We need to match query params if present, but since layout doesn't use useSearchParams easily,
+            // we will use a simpler active logic
+            const isExactPath = item.path.includes("?") ? false : pathname === item.path;
+            const isSubPath = item.path !== "/admin" && !item.path.includes("?") && pathname.startsWith(item.path);
+            const isActive = isExactPath || isSubPath;
+            
             return (
               <Link key={item.name} href={item.path}>
                 <span
-                  className={`flex items-center gap-3 px-3 py-2 rounded-md transition-colors ${isActive ? "bg-red-700 text-white" : "hover:bg-slate-800 hover:text-white"}`}
+                  className={`flex items-center gap-3 px-3 py-2 rounded-md transition-colors ${item.isSub ? "ml-6 text-sm" : ""} ${isActive ? "bg-red-700 text-white" : "hover:bg-slate-800 hover:text-white"}`}
                 >
-                  {item.icon}
+                  {!item.isSub && item.icon}
                   {item.name}
                 </span>
               </Link>

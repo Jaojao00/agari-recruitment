@@ -1,6 +1,7 @@
 "use client";
 
-import { useState, useEffect, useCallback } from "react";
+import { useState, useEffect, useCallback, Suspense } from "react";
+import { useSearchParams } from "next/navigation";
 import Link from "next/link";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
@@ -23,7 +24,9 @@ import { Application, ApplicationStatus } from "@/lib/firebase/models";
 import { useDebounce } from "@/lib/utils"; // I'll need to create this hook
 import { Eye, EyeOff, Loader2, Search } from "lucide-react";
 
-export default function ApplicationsPage() {
+function ApplicationsContent() {
+  const searchParams = useSearchParams();
+  const jobIdFilter = searchParams.get("jobId");
   const [data, setData] = useState<Application[]>([]);
   const [loading, setLoading] = useState(true);
   const [search, setSearch] = useState("");
@@ -40,6 +43,7 @@ export default function ApplicationsPage() {
     try {
       const query = new URLSearchParams();
       if (debouncedSearch) query.append("search", debouncedSearch);
+      if (jobIdFilter) query.append("jobId", jobIdFilter);
       if (statusFilter && statusFilter !== "ALL")
         query.append("status", statusFilter);
       query.append("page", page.toString());
@@ -56,7 +60,7 @@ export default function ApplicationsPage() {
     } finally {
       setLoading(false);
     }
-  }, [debouncedSearch, statusFilter, page]);
+  }, [debouncedSearch, statusFilter, page, jobIdFilter]);
 
   useEffect(() => {
     const timer = window.setTimeout(() => {
@@ -199,6 +203,7 @@ export default function ApplicationsPage() {
               <TableHead>Số CCCD</TableHead>
               <TableHead>Số điện thoại</TableHead>
               <TableHead>Giới tính</TableHead>
+                <TableHead>Mã Ops</TableHead>
               <TableHead>Trạng thái</TableHead>
               <TableHead className="text-right">Thao tác</TableHead>
             </TableRow>
@@ -344,5 +349,13 @@ export default function ApplicationsPage() {
         </div>
       )}
     </div>
+  );
+}
+
+export default function ApplicationsPage() {
+  return (
+    <Suspense fallback={<div className="p-8 flex justify-center"><Loader2 className="animate-spin text-red-600" /></div>}>
+      <ApplicationsContent />
+    </Suspense>
   );
 }

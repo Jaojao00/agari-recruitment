@@ -55,6 +55,7 @@ export default function ApplicationDetailPage() {
 
   // Form states
   const [status, setStatus] = useState("");
+  const [opsCode, setOpsCode] = useState("");
   const [hiredAt, setHiredAt] = useState("");
   const [expiredAt, setExpiredAt] = useState("");
   const [adminNote, setAdminNote] = useState("");
@@ -68,6 +69,7 @@ export default function ApplicationDetailPage() {
         setStatus(app.status);
         setAdminNote(app.adminNote || "");
         setHiredAt(formatDateInput(app.hiredAt));
+        setOpsCode(app.opsCode || "");
         setExpiredAt(formatDateInput(app.expiredAt));
       }
     } catch (error) {
@@ -92,6 +94,7 @@ export default function ApplicationDetailPage() {
         adminNote,
         hiredAt: hiredAt || null,
         expiredAt: expiredAt || null,
+        opsCode: opsCode || "",
         adminId: user?.uid,
         adminName: user?.email,
       };
@@ -173,6 +176,17 @@ export default function ApplicationDetailPage() {
             <CardTitle>Thông tin cá nhân</CardTitle>
           </CardHeader>
           <CardContent className="space-y-4">
+            <div className="grid grid-cols-3 gap-2 py-2 border-b items-center">
+              <span className="text-gray-500 font-medium">Mã Ops:</span>
+              <div className="col-span-2">
+                <Input
+                  value={opsCode}
+                  onChange={(e) => setOpsCode(e.target.value)}
+                  placeholder="Nhập mã Ops..."
+                  className="h-8 max-w-[200px]"
+                />
+              </div>
+            </div>
             <div className="grid grid-cols-3 gap-2 py-2 border-b">
               <span className="text-gray-500 font-medium">Họ tên:</span>
               <span className="col-span-2 font-semibold">{data.fullName}</span>
@@ -183,11 +197,11 @@ export default function ApplicationDetailPage() {
             </div>
             <div className="grid grid-cols-3 gap-2 py-2 border-b">
               <span className="text-gray-500 font-medium">CCCD:</span>
-              <span className="col-span-2 font-mono">{data.cccd}</span>
+              <span className="col-span-2 font-mono">{String(data.cccd).padStart(12, "0")}</span>
             </div>
             <div className="grid grid-cols-3 gap-2 py-2 border-b">
               <span className="text-gray-500 font-medium">Số điện thoại:</span>
-              <span className="col-span-2 font-bold">{data.phone}</span>
+              <span className="col-span-2 font-bold">{String(data.phone).startsWith("0") ? data.phone : "0" + data.phone}</span>
             </div>
             <div className="grid grid-cols-3 gap-2 py-2 border-b">
               <span className="text-gray-500 font-medium">Giới tính:</span>
