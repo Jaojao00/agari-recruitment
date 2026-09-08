@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
@@ -22,53 +22,48 @@ export default function AgariChinhThucPage() {
   ];
 
   return (
-    <div className="min-h-screen bg-slate-50/50 pb-32">
-      <div className="border-b border-red-100 bg-white">
-        <div className="container mx-auto px-4 py-6 md:py-8 lg:px-12 xl:max-w-6xl">
+    <div className="min-h-screen bg-[#fff8f5] pb-28 text-slate-900">
+      <header className="border-b border-red-100 bg-white">
+        <div className="mx-auto flex max-w-6xl items-center justify-between px-4 py-4 md:px-6">
           <Link
             href="/"
-            className="mb-6 inline-flex items-center gap-2 text-sm font-semibold text-slate-500 transition hover:text-red-700"
+            className="inline-flex items-center gap-2 text-sm font-semibold text-slate-600 transition hover:text-red-700"
           >
-            <ArrowLeft size={16} /> Quay lại trang chủ
+            <ArrowLeft size={17} />
+            Về trang tuyển dụng
           </Link>
-          <div className="mb-2 flex items-center gap-3">
-            <span className="rounded-full bg-red-50 px-3 py-1 text-xs font-bold uppercase tracking-wider text-red-700 ring-1 ring-inset ring-red-600/20">
-              Nhân viên chính thức
-            </span>
-            <span className="rounded-full bg-slate-100 px-3 py-1 text-xs font-bold uppercase tracking-wider text-slate-600">
-              Ca xoay
-            </span>
-          </div>
-          <h1 className="text-3xl font-black tracking-tight text-slate-900 md:text-5xl md:leading-[1.1]">
-            Nhân viên kho SPX Express
-          </h1>
-          <p className="mt-4 flex items-center gap-2 text-slate-600 md:text-lg">
-            <MapPin className="text-red-700" size={20} />
-            KCN Bình Minh, Vĩnh Long
-          </p>
+          <span className="text-right text-sm font-black uppercase tracking-tight text-[#d90012] md:text-base">
+            AGARI - TUYỂN DỤNG KV MIỀN TÂY
+          </span>
         </div>
-      </div>
+      </header>
 
-      <main className="container mx-auto mt-8 px-4 lg:px-12 xl:max-w-6xl">
-        <section className="grid gap-4 md:grid-cols-3">
-          <div className="rounded-2xl border border-red-100 bg-gradient-to-br from-[#fff0f1] to-white p-5 shadow-lg">
-            <div className="mb-1 flex items-center gap-2">
-              <Banknote className="text-[#d90012]" size={20} />
-              <p className="text-xs font-bold uppercase tracking-wide text-red-700">
-                Thu nhập hấp dẫn
-              </p>
-            </div>
-            <p className="mt-2 text-2xl font-black text-[#d90012]">
+      <main className="mx-auto max-w-6xl px-4 py-8 md:px-6 md:py-12">
+        <section
+          className="relative min-h-[250px] sm:min-h-[350px] md:min-h-[470px] lg:min-h-[540px] overflow-hidden rounded-3xl bg-[#d90012] bg-contain bg-center bg-no-repeat text-white shadow-xl"
+          style={{ backgroundImage: "url('/banner-chinh-thuc.png')" }}
+        >
+          {/* Using bg-contain instead of bg-cover to ensure the text in the banner isn't cropped, 
+              but it might look weird if the aspect ratio doesn't match. 
+              Usually banners like this are 16:9 or similar. Let's use bg-cover and center so it fills the box. */}
+        </section>
+
+        <section className="-mt-6 relative z-10 grid gap-4 px-2 md:grid-cols-3 md:px-8">
+          <div className="rounded-2xl border border-red-100 bg-white p-5 shadow-lg">
+            <p className="text-xs font-bold uppercase tracking-wide text-slate-500">
+              Thu nhập hấp dẫn
+            </p>
+            <p className="mt-2 text-2xl font-black text-red-700">
               8.5M - 10.5M
             </p>
-            <p className="text-sm font-medium text-slate-600">VNĐ / tháng</p>
+            <p className="text-sm font-medium text-slate-500">VNĐ / tháng</p>
           </div>
           <div className="rounded-2xl border border-red-100 bg-white p-5 shadow-lg">
             <p className="text-xs font-bold uppercase tracking-wide text-slate-500">
               Lương cơ bản & Phụ cấp
             </p>
             <p className="mt-2 text-xl font-bold text-red-700">7.400.000đ</p>
-            <p className="text-sm text-slate-500">LCB + Cơm + Nhà ở</p>
+            <p className="text-sm font-medium text-slate-500">LCB + Cơm + Nhà ở</p>
           </div>
           <div className="rounded-2xl border border-red-100 bg-white p-5 shadow-lg">
             <p className="text-xs font-bold uppercase tracking-wide text-slate-500">
@@ -77,7 +72,7 @@ export default function AgariChinhThucPage() {
             <p className="mt-2 text-xl font-bold text-red-700">
               Đầy đủ BHXH
             </p>
-            <p className="text-sm text-slate-500">Lương tháng 13 & Quà Lễ Tết</p>
+            <p className="text-sm font-medium text-slate-500">Lương tháng 13 & Quà Lễ Tết</p>
           </div>
         </section>
 
@@ -111,6 +106,42 @@ export default function AgariChinhThucPage() {
               <p className="mt-5 text-sm font-semibold text-slate-700">
                 Lưu ý: Bắt buộc xoay ca theo sự sắp xếp của công ty và sẵn sàng tăng ca khi cần.
               </p>
+            </section>
+
+            <section className="rounded-2xl border border-slate-200 bg-white p-6 shadow-sm md:p-8">
+              <div className="mb-6 flex items-center gap-3">
+                <div className="rounded-xl bg-yellow-50 p-3 text-yellow-700">
+                  <Gift size={22} />
+                </div>
+                <div>
+                  <p className="text-xs font-bold uppercase tracking-wide text-red-700">
+                    Quyền lợi chi tiết
+                  </p>
+                  <h2 className="text-2xl font-bold">
+                    Đãi ngộ rõ ràng, ổn định
+                  </h2>
+                </div>
+              </div>
+              <div className="grid gap-4 md:grid-cols-2">
+                {[
+                  "Lương cơ bản: 4.960.000đ",
+                  "Phụ cấp nhà ở & xăng: 1.660.000đ",
+                  "Phụ cấp cơm: 780.000đ",
+                  "Lương tháng 13 & quà Lễ, Tết đầy đủ",
+                  "Đóng Bảo Hiểm Xã Hội (BHXH) đầy đủ theo quy định",
+                ].map((benefit) => (
+                  <div
+                    key={benefit}
+                    className="flex gap-3 text-sm leading-6 text-slate-600 font-medium"
+                  >
+                    <CheckCircle2
+                      className="mt-1 shrink-0 text-green-600"
+                      size={18}
+                    />
+                    <span>{benefit}</span>
+                  </div>
+                ))}
+              </div>
             </section>
 
             <section className="rounded-2xl border border-slate-200 bg-white p-6 shadow-sm md:p-8">
@@ -155,42 +186,6 @@ export default function AgariChinhThucPage() {
                   Được đào tạo vào máy ASM để xử lý hàng hóa, scan hàng theo sự phân công.
                 </li>
               </ul>
-            </section>
-
-            <section className="rounded-2xl border border-slate-200 bg-white p-6 shadow-sm md:p-8">
-              <div className="mb-6 flex items-center gap-3">
-                <div className="rounded-xl bg-yellow-50 p-3 text-yellow-700">
-                  <Gift size={22} />
-                </div>
-                <div>
-                  <p className="text-xs font-bold uppercase tracking-wide text-red-700">
-                    Quyền lợi chi tiết
-                  </p>
-                  <h2 className="text-2xl font-bold">
-                    Đãi ngộ rõ ràng, ổn định
-                  </h2>
-                </div>
-              </div>
-              <div className="grid gap-4 md:grid-cols-2">
-                {[
-                  "Lương cơ bản: 4.960.000đ",
-                  "Phụ cấp nhà ở & xăng: 1.660.000đ",
-                  "Phụ cấp cơm: 780.000đ",
-                  "Lương tháng 13 & quà Lễ, Tết đầy đủ",
-                  "Đóng Bảo Hiểm Xã Hội (BHXH) đầy đủ theo quy định",
-                ].map((benefit) => (
-                  <div
-                    key={benefit}
-                    className="flex gap-3 text-sm leading-6 text-slate-600 font-medium"
-                  >
-                    <CheckCircle2
-                      className="mt-1 shrink-0 text-green-600"
-                      size={18}
-                    />
-                    <span>{benefit}</span>
-                  </div>
-                ))}
-              </div>
             </section>
           </div>
 
@@ -237,7 +232,7 @@ export default function AgariChinhThucPage() {
             href="/ung-tuyen?job=warehouse-rotating-shift"
             className="ml-auto w-full md:w-auto"
           >
-            <Button className="h-12 w-full bg-[#d90012] px-8 font-bold text-white hover:bg-red-800 md:w-auto">
+            <Button className="h-12 w-full bg-[#d90012] px-8 font-bold text-white hover:bg-red-800 md:w-auto rounded-full text-lg md:text-base">
               ỨNG TUYỂN NGAY
             </Button>
           </Link>
