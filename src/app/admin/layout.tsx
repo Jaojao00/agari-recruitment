@@ -77,6 +77,10 @@ function AdminSidebar() {
       <div className="flex-1 py-6">
         <nav className="space-y-1 px-3">
           {navItems.map((item) => {
+            const isApplicationsPage = pathname.startsWith("/admin/applications");
+            if (item.isSub && !isApplicationsPage) {
+              return null;
+            }
             // We need to match query params if present, but since layout doesn't use useSearchParams easily,
             // we will use a simpler active logic
             const isExactPath = item.path.includes("?") ? false : pathname === item.path;
