@@ -1,4 +1,4 @@
-import { google } from "googleapis";
+﻿import { google } from "googleapis";
 
 const SCOPES = ["https://www.googleapis.com/auth/spreadsheets"];
 
@@ -49,6 +49,7 @@ type SheetApplicationFields = {
   adminNote?: string;
   updatedAt?: unknown;
   googleSheetRow?: number;
+  googleSheetName?: string;
   googleSheetSyncStatus?: string;
 };
 
@@ -72,10 +73,43 @@ function getSpreadsheetId() {
   return spreadsheetId;
 }
 
-function getSheetName() {
+function getDefaultSheetName() {
   return (process.env.GOOGLE_SHEETS_TAB ?? "Trang tính1")
     .trim()
     .replace(/^"|"$/g, "");
+}
+
+let sheetInfoCache: { gid: number; title: string }[] | null = null;
+
+async function getSheetTitles() {
+  if (sheetInfoCache) return sheetInfoCache;
+  const response = await getSheetsClient().spreadsheets.get({
+    spreadsheetId: getSpreadsheetId(),
+  });
+  sheetInfoCache =
+    response.data.sheets?.map((s) => ({
+      gid: s.properties?.sheetId || 0,
+      title: s.properties?.title || "",
+    })) || [];
+  return sheetInfoCache;
+}
+
+async function getJobSheetName(jobId?: string): Promise<string> {
+  const defaultSheetName = getDefaultSheetName();
+
+  if (jobId === "agari-part-time") {
+    const titles = await getSheetTitles();
+    const sheet = titles.find((s) => s.gid === 902668352);
+    if (sheet) return sheet.title;
+  }
+
+  if (jobId === "spx-fulltime") {
+    const titles = await getSheetTitles();
+    const sheet = titles.find((s) => s.gid === 1291225589);
+    if (sheet) return sheet.title;
+  }
+
+  return defaultSheetName;
 }
 
 function formatSheetDate(value: unknown) {
@@ -109,10 +143,10 @@ function applicationToRow(application: SheetApplicationFields) {
   ];
 }
 
-async function getNextApplicationRow() {
+async function getNextApplicationRow(sheetName: string) {
   const response = await getSheetsClient().spreadsheets.values.get({
     spreadsheetId: getSpreadsheetId(),
-    range: `'${getSheetName()}'!A1:A`,
+    range: `'${sheetName}'!A1:A`,
   });
   const rows = response.data.values || [];
   let lastApplicationRow = 0;
@@ -131,9 +165,13 @@ async function getNextApplicationRow() {
   return firstHeaderRow >= 0 ? firstHeaderRow + 2 : 1;
 }
 
-function rowToApplication(row: string[], rowNumber: number): SheetApplication {
+function rowToApplication(
+  row: string[],
+  rowNumber: number,
+  sheetName: string,
+): SheetApplication {
   return {
-    id: String(rowNumber),
+    id: `${sheetName}_${rowNumber}`,
     applicationId: row[0] || `SHEET-${rowNumber}`,
     fullName: row[1] || "",
     dateOfBirth: row[2] || "",
@@ -154,6 +192,7 @@ function rowToApplication(row: string[], rowNumber: number): SheetApplication {
     adminNote: row[16] || "",
     updatedAt: row[17] || "",
     googleSheetRow: rowNumber,
+    googleSheetName: sheetName,
     googleSheetSyncStatus: row[18] || "SUCCESS",
     jobId: row[19] || "warehouse-rotating-shift",
     jobTitle: row[20] || "Nhân viên kho - Ca xoay",
@@ -162,42 +201,65 @@ function rowToApplication(row: string[], rowNumber: number): SheetApplication {
 }
 
 export async function getApplicationsFromSheet(): Promise<SheetApplication[]> {
-  const response = await getSheetsClient().spreadsheets.values.get({
-    spreadsheetId: getSpreadsheetId(),
-    range: `'${getSheetName()}'!A1:V`,
-  });
-  const rows = response.data.values || [];
-  const firstCell = String(rows[0]?.[0] ?? "")
-    .trim()
-    .toLowerCase();
-  const hasHeader =
-    firstCell === "mã hồ sơ" ||
-    firstCell === "applicationid" ||
-    firstCell === "application id";
-  const dataRows = hasHeader ? rows.slice(1) : rows;
-  const firstDataRowNumber = hasHeader ? 2 : 1;
+  const defaultSheetName = getDefaultSheetName();
+  const titles = await getSheetTitles();
 
-  return dataRows
-    .map((row, index) => rowToApplication(row, index + firstDataRowNumber))
-    .filter((application) =>
-      /^AG-\d{4}-\d{6}$/i.test(application.applicationId),
-    );
+  const targetSheetNames = new Set<string>([defaultSheetName]);
+
+  const ptSheet = titles.find((s) => s.gid === 902668352);
+  if (ptSheet) targetSheetNames.add(ptSheet.title);
+
+  const ftSheet = titles.find((s) => s.gid === 1291225589);
+  if (ftSheet) targetSheetNames.add(ftSheet.title);
+
+  let allApplications: SheetApplication[] = [];
+
+  for (const sheetTitle of targetSheetNames) {
+    const response = await getSheetsClient().spreadsheets.values.get({
+      spreadsheetId: getSpreadsheetId(),
+      range: `'${sheetTitle}'!A1:V`,
+    });
+    const rows = response.data.values || [];
+    const firstCell = String(rows[0]?.[0] ?? "")
+      .trim()
+      .toLowerCase();
+    const hasHeader =
+      firstCell === "mã hồ sơ" ||
+      firstCell === "applicationid" ||
+      firstCell === "application id";
+    const dataRows = hasHeader ? rows.slice(1) : rows;
+    const firstDataRowNumber = hasHeader ? 2 : 1;
+
+    const sheetApps = dataRows
+      .map((row, index) =>
+        rowToApplication(row, index + firstDataRowNumber, sheetTitle),
+      )
+      .filter((application) =>
+        /^AG-\d{4}-\d{6}$/i.test(application.applicationId),
+      );
+
+    allApplications = allApplications.concat(sheetApps);
+  }
+
+  return allApplications;
 }
 
 export async function addApplicationToSheet(
   application: SheetApplicationFields,
 ) {
-  const rowNumber = await getNextApplicationRow();
+  const sheetName = await getJobSheetName(application.jobId);
+  const rowNumber = await getNextApplicationRow(sheetName);
+  
   await getSheetsClient().spreadsheets.values.update({
     spreadsheetId: getSpreadsheetId(),
-    range: `'${getSheetName()}'!A${rowNumber}:V${rowNumber}`,
+    range: `'${sheetName}'!A${rowNumber}:V${rowNumber}`,
     valueInputOption: "USER_ENTERED",
     requestBody: { values: [applicationToRow(application)] },
   });
 
   const verification = await getSheetsClient().spreadsheets.values.get({
     spreadsheetId: getSpreadsheetId(),
-    range: `'${getSheetName()}'!A${rowNumber}`,
+    range: `'${sheetName}'!A${rowNumber}`,
   });
   const savedApplicationId = String(verification.data.values?.[0]?.[0] ?? "");
   if (savedApplicationId !== String(application.applicationId)) {
@@ -208,12 +270,18 @@ export async function addApplicationToSheet(
 }
 
 export async function updateApplicationInSheet(
-  rowNumber: number,
   application: SheetApplicationFields,
 ) {
+  const sheetName = application.googleSheetName || await getJobSheetName(application.jobId);
+  const rowNumber = application.googleSheetRow;
+  
+  if (!rowNumber) {
+    throw new Error("Missing rowNumber for update");
+  }
+  
   await getSheetsClient().spreadsheets.values.update({
     spreadsheetId: getSpreadsheetId(),
-    range: `'${getSheetName()}'!A${rowNumber}:V${rowNumber}`,
+    range: `'${sheetName}'!A${rowNumber}:V${rowNumber}`,
     valueInputOption: "USER_ENTERED",
     requestBody: { values: [applicationToRow(application)] },
   });

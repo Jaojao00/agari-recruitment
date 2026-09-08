@@ -1,4 +1,4 @@
-import { NextResponse } from "next/server";
+﻿import { NextResponse } from "next/server";
 import {
   getApplicationsFromSheet,
   updateApplicationInSheet,
@@ -50,7 +50,7 @@ export async function PATCH(
     if (expiredAt === null || expiredAt === "") updateData.expiredAt = "";
     else if (expiredAt) updateData.expiredAt = new Date(expiredAt);
 
-    await updateApplicationInSheet(Number(id), updateData);
+    await updateApplicationInSheet(updateData);
 
     return NextResponse.json({ success: true });
   } catch (error) {
