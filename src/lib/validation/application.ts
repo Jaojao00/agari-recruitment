@@ -8,7 +8,9 @@ export const applicationSchema = z.object({
   jobId: z.string().trim().optional(),
   jobTitle: z.string().trim().optional(),
   workSchedule: z.string().trim().optional(),
-  opsCode: z.string().trim().optional(),
+  opsCode: z.string().trim().refine(val => !val || /^Ops\d+$/i.test(val), {
+    message: "Mã Ops phải bắt đầu bằng chữ 'Ops' viết liền với số (VD: Ops29509)",
+  }).optional(),
   dateOfBirth: z
     .string()
     .trim()
