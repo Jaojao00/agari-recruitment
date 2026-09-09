@@ -72,7 +72,7 @@ function AdminSidebar() {
   ];
 
   return (
-    <div className="w-64 bg-[#0F172A] text-slate-300 min-h-screen flex flex-col hidden md:flex shrink-0 shadow-xl z-20 relative">
+    <div className="w-72 bg-[#0F172A] text-slate-300 min-h-screen flex flex-col hidden md:flex shrink-0 shadow-xl z-20 relative">
       <div className="h-16 flex items-center px-6 bg-[#D90000] text-white font-black text-xl tracking-wider uppercase shrink-0">
         AGARI <span className="font-light ml-2 text-sm tracking-widest">ADMIN</span>
       </div>
