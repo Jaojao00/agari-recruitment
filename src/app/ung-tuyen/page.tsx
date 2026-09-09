@@ -48,7 +48,7 @@ const jobOptions = {
     schedule: "Ca cố định: 06:00 - 15:00, 13:00 - 22:00 hoặc 22:00 - 06:00",
   },
   "agari-part-time": {
-    title: "Lao động phổ thông AGARI Part-time",
+    title: "Nhân viên kho part-time",
     schedule: "Đăng ký lịch làm việc linh hoạt theo tuần",
   },
 } as const;

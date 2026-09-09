@@ -230,10 +230,10 @@ function ApplicationsContent() {
                   <TableCell className="font-medium text-red-700">
                     {app.applicationId}
                   </TableCell>
-                  <TableCell>
+                  <TableCell className="whitespace-normal min-w-[200px]">
                     <div className="max-w-48 text-sm">
                       <p className="font-semibold">
-                        {app.jobTitle || "Nhân viên kho - Ca xoay"}
+                        {(app.jobTitle === "Lao động phổ thông AGARI Part-time" ? "Nhân viên kho part-time" : app.jobTitle) || "Nhân viên kho - Ca xoay"}
                       </p>
                       {app.workSchedule ? (
                         <p className="text-xs text-gray-500">
@@ -242,7 +242,7 @@ function ApplicationsContent() {
                       ) : null}
                     </div>
                   </TableCell>
-                  <TableCell className="font-semibold">
+                  <TableCell className="font-semibold whitespace-normal min-w-[150px]">
                     {app.fullName}
                   </TableCell>
                   <TableCell className="font-mono text-sm text-gray-700">{app.opsCode || "-"}</TableCell>
