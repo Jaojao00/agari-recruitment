@@ -447,7 +447,7 @@ export default function UngTuyenPage() {
                         >
                           <FormControl>
                             <SelectTrigger className="h-12 w-full">
-                              <SelectValue placeholder="Chọn ca cố định" />
+                              <SelectValue placeholder={jobId === "agari-part-time" ? "Chọn ca đăng ký" : "Chọn ca cố định"} />
                             </SelectTrigger>
                           </FormControl>
                           <SelectContent className="w-[min(30rem,calc(100vw-2rem))]">

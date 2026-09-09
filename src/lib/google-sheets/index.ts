@@ -230,7 +230,7 @@ export async function getApplicationsFromSheet(): Promise<SheetApplication[]> {
   for (const sheetTitle of targetSheetNames) {
     const response = await getSheetsClient().spreadsheets.values.get({
       spreadsheetId: getSpreadsheetId(),
-      range: `'${sheetTitle}'!A1:V`,
+      range: `'${sheetTitle}'!A1:W`,
     });
     const rows = response.data.values || [];
     const firstCell = String(rows[0]?.[0] ?? "")
@@ -265,7 +265,7 @@ export async function addApplicationToSheet(
   
   await getSheetsClient().spreadsheets.values.update({
     spreadsheetId: getSpreadsheetId(),
-    range: `'${sheetName}'!A${rowNumber}:V${rowNumber}`,
+    range: `'${sheetName}'!A${rowNumber}:W${rowNumber}`,
     valueInputOption: "USER_ENTERED",
     requestBody: { values: [applicationToRow(application)] },
   });
@@ -294,7 +294,7 @@ export async function updateApplicationInSheet(
   
   await getSheetsClient().spreadsheets.values.update({
     spreadsheetId: getSpreadsheetId(),
-    range: `'${sheetName}'!A${rowNumber}:V${rowNumber}`,
+    range: `'${sheetName}'!A${rowNumber}:W${rowNumber}`,
     valueInputOption: "USER_ENTERED",
     requestBody: { values: [applicationToRow(application)] },
   });
