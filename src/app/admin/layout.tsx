@@ -15,11 +15,12 @@ import {
   ClipboardList,
   Bell,
   Calendar as CalendarIcon,
-  Search,
+  PanelLeftClose,
+  PanelLeftOpen,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 
-function AdminSidebar() {
+function AdminSidebar({ isOpen }: { isOpen: boolean }) {
   const pathname = usePathname();
   const { logout, user } = useAuth();
 
@@ -72,61 +73,65 @@ function AdminSidebar() {
   ];
 
   return (
-    <div className="w-72 bg-[#0F172A] text-slate-300 min-h-screen flex flex-col hidden md:flex shrink-0 shadow-xl z-20 relative">
-      <div className="h-16 flex items-center px-6 bg-[#D90000] text-white font-black text-xl tracking-wider uppercase shrink-0">
-        AGARI <span className="font-light ml-2 text-sm tracking-widest">ADMIN</span>
-      </div>
-
-      <div className="flex-1 py-8 overflow-y-auto custom-scrollbar">
-        <nav className="space-y-1.5 px-4">
-          {navItems.map((item) => {
-            const isApplicationsPage = pathname.startsWith("/admin/applications");
-            if (item.isSub && !isApplicationsPage) {
-              return null;
-            }
-            const isExactPath = item.path.includes("?") ? false : pathname === item.path;
-            const isSubPath = item.path !== "/admin" && !item.path.includes("?") && pathname.startsWith(item.path);
-            const isActive = isExactPath || isSubPath;
-            
-            return (
-              <Link key={item.name} href={item.path}>
-                <span
-                  className={`flex items-center gap-3 px-4 py-3 rounded-xl transition-all duration-200 font-medium ${item.isSub ? "ml-8 text-sm py-2" : ""} ${isActive ? "bg-[#D90000] text-white shadow-lg shadow-red-900/50" : "text-slate-400 hover:bg-slate-800 hover:text-slate-100"}`}
-                >
-                  {!item.isSub && item.icon}
-                  {item.name}
-                </span>
-              </Link>
-            );
-          })}
-        </nav>
-      </div>
-
-      <div className="p-5 border-t border-slate-800/50 bg-[#0B1120]">
-        <div className="flex items-center gap-3 mb-4">
-          <div className="w-10 h-10 rounded-full bg-slate-800 text-white flex items-center justify-center font-bold shadow-inner">
-            {user?.email?.charAt(0).toUpperCase()}
-          </div>
-          <div className="overflow-hidden">
-            <div className="text-sm font-semibold text-slate-200 truncate" title={user?.email || ""}>
-              {user?.email}
-            </div>
-            <div className="text-xs text-slate-500">Quản trị viên</div>
-          </div>
+    <div 
+      className={`bg-[#0F172A] text-slate-300 min-h-screen shrink-0 shadow-xl z-30 transition-all duration-300 overflow-hidden ${isOpen ? "w-72 fixed md:relative inset-y-0 left-0" : "w-0 hidden md:block md:w-0 md:relative"}`}
+    >
+      <div className="w-72 flex flex-col h-full">
+        <div className="h-16 flex items-center px-6 bg-[#D90000] text-white font-black text-xl tracking-wider uppercase shrink-0">
+          AGARI <span className="font-light ml-2 text-sm tracking-widest">ADMIN</span>
         </div>
-        <button
-          onClick={logout}
-          className="w-full flex items-center gap-2 px-3 py-2 text-sm font-medium text-slate-400 hover:text-red-400 hover:bg-red-400/10 rounded-lg transition-colors"
-        >
-          <LogOut size={16} />
-          Đăng xuất
-        </button>
+
+        <div className="flex-1 py-8 overflow-y-auto custom-scrollbar">
+          <nav className="space-y-1.5 px-4">
+            {navItems.map((item) => {
+              const isApplicationsPage = pathname.startsWith("/admin/applications");
+              if (item.isSub && !isApplicationsPage) {
+                return null;
+              }
+              const isExactPath = item.path.includes("?") ? false : pathname === item.path;
+              const isSubPath = item.path !== "/admin" && !item.path.includes("?") && pathname.startsWith(item.path);
+              const isActive = isExactPath || isSubPath;
+              
+              return (
+                <Link key={item.name} href={item.path}>
+                  <span
+                    className={`flex items-center gap-3 px-4 py-3 rounded-xl transition-all duration-200 font-medium whitespace-nowrap ${item.isSub ? "ml-8 text-sm py-2" : ""} ${isActive ? "bg-[#D90000] text-white shadow-lg shadow-red-900/50" : "text-slate-400 hover:bg-slate-800 hover:text-slate-100"}`}
+                  >
+                    {!item.isSub && item.icon}
+                    {item.name}
+                  </span>
+                </Link>
+              );
+            })}
+          </nav>
+        </div>
+
+        <div className="p-5 border-t border-slate-800/50 bg-[#0B1120] shrink-0">
+          <div className="flex items-center gap-3 mb-4">
+            <div className="w-10 h-10 rounded-full bg-slate-800 text-white flex items-center justify-center font-bold shadow-inner">
+              {user?.email?.charAt(0).toUpperCase()}
+            </div>
+            <div className="overflow-hidden">
+              <div className="text-sm font-semibold text-slate-200 truncate" title={user?.email || ""}>
+                {user?.email}
+              </div>
+              <div className="text-xs text-slate-500">Quản trị viên</div>
+            </div>
+          </div>
+          <button
+            onClick={logout}
+            className="w-full flex items-center gap-2 px-3 py-2 text-sm font-medium text-slate-400 hover:text-red-400 hover:bg-red-400/10 rounded-lg transition-colors"
+          >
+            <LogOut size={16} />
+            Đăng xuất
+          </button>
+        </div>
       </div>
     </div>
   );
 }
 
-function AdminHeader() {
+function AdminHeader({ isSidebarOpen, toggleSidebar }: { isSidebarOpen: boolean, toggleSidebar: () => void }) {
   const { user } = useAuth();
   const [currentDate, setCurrentDate] = useState("");
 
@@ -140,10 +145,15 @@ function AdminHeader() {
   }, []);
 
   return (
-    <header className="h-16 bg-gradient-to-r from-[#D90000] to-[#FF3B30] text-white flex items-center px-4 md:px-8 justify-between shrink-0 shadow-md relative z-10">
+    <header className="h-16 bg-gradient-to-r from-[#D90000] to-[#FF3B30] text-white flex items-center px-4 md:px-8 justify-between shrink-0 shadow-md relative z-10 transition-all duration-300">
       <div className="flex items-center gap-3 md:gap-6">
-        <Button variant="ghost" size="icon" className="md:hidden text-white hover:bg-white/20">
-          <Menu />
+        <Button 
+          variant="ghost" 
+          size="icon" 
+          onClick={toggleSidebar}
+          className="text-white hover:bg-white/20"
+        >
+          {isSidebarOpen ? <PanelLeftClose size={24} /> : <PanelLeftOpen size={24} />}
         </Button>
         <div className="hidden md:flex flex-col">
           <div className="flex items-center gap-2">
@@ -180,6 +190,16 @@ function AdminGuard({ children }: { children: React.ReactNode }) {
   const { user, loading } = useAuth();
   const router = useRouter();
   const pathname = usePathname();
+  
+  // State for sidebar toggle
+  const [isSidebarOpen, setIsSidebarOpen] = useState(true);
+
+  // Auto close sidebar on mobile navigation
+  useEffect(() => {
+    if (window.innerWidth < 768) {
+      setIsSidebarOpen(false);
+    }
+  }, [pathname]);
 
   useEffect(() => {
     if (!loading) {
@@ -211,9 +231,21 @@ function AdminGuard({ children }: { children: React.ReactNode }) {
 
   return (
     <div className="flex min-h-screen bg-[#F5F7FA] font-sans">
-      <AdminSidebar />
+      <AdminSidebar isOpen={isSidebarOpen} />
+      
+      {/* Overlay for mobile when sidebar is open */}
+      {isSidebarOpen && (
+        <div 
+          className="fixed inset-0 bg-black/50 z-10 md:hidden" 
+          onClick={() => setIsSidebarOpen(false)}
+        />
+      )}
+      
       <div className="flex-1 flex flex-col min-w-0 h-screen overflow-hidden">
-        <AdminHeader />
+        <AdminHeader 
+          isSidebarOpen={isSidebarOpen} 
+          toggleSidebar={() => setIsSidebarOpen(!isSidebarOpen)} 
+        />
         <main className="flex-1 overflow-auto p-4 md:p-8">
           <div className="w-full">
             {children}
