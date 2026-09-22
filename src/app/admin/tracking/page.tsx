@@ -63,6 +63,7 @@ export default function AdminTrackingPage() {
   const [editingRow, setEditingRow] = useState<CandidateTracking | null>(null);
   const [isAdding, setIsAdding] = useState(false);
   const [saving, setSaving] = useState(false);
+  const [updatingRow, setUpdatingRow] = useState<number | null>(null);
 
   const fetchTrackings = async () => {
     setLoading(true);
@@ -106,6 +107,24 @@ export default function AdminTrackingPage() {
       alert("Lỗi khi lưu dữ liệu");
     }
     setSaving(false);
+  };
+
+  
+  const handleInlineStatusChange = async (item: CandidateTracking, newStatus: string) => {
+    if (item.status === newStatus) return;
+    setUpdatingRow(item.rowNumber);
+    try {
+      await fetch(`/api/admin/tracking/${item.rowNumber}`, {
+        method: "PATCH",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ ...item, status: newStatus }),
+      });
+      setData(prev => prev.map(d => d.rowNumber === item.rowNumber ? { ...d, status: newStatus } : d));
+    } catch (e) {
+      console.error(e);
+      alert("Lỗi khi cập nhật trạng thái");
+    }
+    setUpdatingRow(null);
   };
 
   const handleDelete = async (rowNumber: number) => {
@@ -244,7 +263,33 @@ export default function AdminTrackingPage() {
                   <TableCell className="text-slate-600">{item.joinDate}</TableCell>
                   <TableCell className="text-slate-600 max-w-40 truncate" title={item.team}>{item.team}</TableCell>
                   <TableCell>
-                    <span className="px-2 py-1 bg-slate-100 border border-slate-200 rounded-md text-xs font-semibold">{item.status || "Chưa rõ"}</span>
+                    {updatingRow === item.rowNumber ? (
+                      <Loader2 className="h-4 w-4 animate-spin text-slate-400 mx-auto" />
+                    ) : (
+                      <Select 
+                        value={item.status || "Chưa rõ"} 
+                        onValueChange={(val) => handleInlineStatusChange(item, val || "")}
+                      >
+                        <SelectTrigger className="w-[130px] h-8 text-xs font-semibold bg-slate-50 border-slate-200">
+                          <SelectValue placeholder="Trạng thái" />
+                        </SelectTrigger>
+                        <SelectContent>
+                          <SelectItem value="Mới">Mới</SelectItem>
+                          <SelectItem value="Đang xử lý">Đang xử lý</SelectItem>
+                          <SelectItem value="Đã liên hệ">Đã liên hệ</SelectItem>
+                          <SelectItem value="Chưa phù hợp">Chưa phù hợp</SelectItem>
+                          <SelectItem value="Lịch phỏng vấn">Lịch phỏng vấn</SelectItem>
+                          <SelectItem value="Đã phỏng vấn">Đã phỏng vấn</SelectItem>
+                          <SelectItem value="Đạt">Đạt</SelectItem>
+                          <SelectItem value="Đã trúng tuyển">Đã trúng tuyển</SelectItem>
+                          <SelectItem value="Đã nhận việc">Đã nhận việc</SelectItem>
+                          <SelectItem value="Không nhận việc">Không nhận việc</SelectItem>
+                          <SelectItem value="Hết hạn">Hết hạn</SelectItem>
+                          <SelectItem value="Đã hủy">Đã hủy</SelectItem>
+                          <SelectItem value="Chưa rõ">Chưa rõ</SelectItem>
+                        </SelectContent>
+                      </Select>
+                    )}
                   </TableCell>
                   <TableCell className="text-slate-600 max-w-40 truncate" title={item.note}>{item.note}</TableCell>
                   <TableCell className="text-center sticky right-0 bg-white shadow-[-4px_0_10px_-4px_rgba(0,0,0,0.05)]">
@@ -333,9 +378,19 @@ export default function AdminTrackingPage() {
                       <SelectValue placeholder="Chọn trạng thái" />
                     </SelectTrigger>
                     <SelectContent>
-                      <SelectItem value="Chưa rõ">Chưa rõ</SelectItem>
-                      <SelectItem value="Đã nhận việc">Đã nhận việc</SelectItem>
-                      <SelectItem value="Không nhận việc">Không nhận việc</SelectItem>
+                      <SelectItem value="Mới">Mới</SelectItem>
+                          <SelectItem value="Đang xử lý">Đang xử lý</SelectItem>
+                          <SelectItem value="Đã liên hệ">Đã liên hệ</SelectItem>
+                          <SelectItem value="Chưa phù hợp">Chưa phù hợp</SelectItem>
+                          <SelectItem value="Lịch phỏng vấn">Lịch phỏng vấn</SelectItem>
+                          <SelectItem value="Đã phỏng vấn">Đã phỏng vấn</SelectItem>
+                          <SelectItem value="Đạt">Đạt</SelectItem>
+                          <SelectItem value="Đã trúng tuyển">Đã trúng tuyển</SelectItem>
+                          <SelectItem value="Đã nhận việc">Đã nhận việc</SelectItem>
+                          <SelectItem value="Không nhận việc">Không nhận việc</SelectItem>
+                          <SelectItem value="Hết hạn">Hết hạn</SelectItem>
+                          <SelectItem value="Đã hủy">Đã hủy</SelectItem>
+                          <SelectItem value="Chưa rõ">Chưa rõ</SelectItem>
                     </SelectContent>
                   </Select>
                 </div>
