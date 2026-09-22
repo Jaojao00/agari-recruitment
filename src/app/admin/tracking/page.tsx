@@ -24,7 +24,7 @@ type CandidateTracking = {
   stt: string;
   fullName: string;
   phone: string;
-  source: string;
+  opsCode: string;
   cvDate: string;
   screeningResult: string;
   interviewDate: string;
@@ -42,7 +42,7 @@ const DEFAULT_TRACKING: CandidateTracking = {
   stt: "",
   fullName: "",
   phone: "",
-  source: "",
+  opsCode: "",
   cvDate: "",
   screeningResult: "",
   interviewDate: "",
@@ -198,7 +198,7 @@ export default function AdminTrackingPage() {
               <TableHead className="font-bold text-slate-600 w-12">STT</TableHead>
               <TableHead className="font-bold text-slate-600 min-w-40">Họ tên</TableHead>
               <TableHead className="font-bold text-slate-600 min-w-32">SĐT</TableHead>
-              <TableHead className="font-bold text-slate-600 min-w-28">Nguồn</TableHead>
+              <TableHead className="font-bold text-slate-600 min-w-28">Mã Ops</TableHead>
               <TableHead className="font-bold text-slate-600 min-w-28">Ngày nhận CV</TableHead>
               <TableHead className="font-bold text-slate-600 min-w-36">Kết quả sàng lọc</TableHead>
               <TableHead className="font-bold text-slate-600 min-w-28">Ngày PV</TableHead>
@@ -234,7 +234,7 @@ export default function AdminTrackingPage() {
                   <TableCell className="text-center font-medium text-slate-500">{item.stt || idx + 1}</TableCell>
                   <TableCell className="font-semibold text-slate-800">{item.fullName}</TableCell>
                   <TableCell className="text-slate-600">{item.phone}</TableCell>
-                  <TableCell className="text-slate-600">{item.source}</TableCell>
+                  <TableCell className="text-slate-600">{item.opsCode}</TableCell>
                   <TableCell className="text-slate-600">{item.cvDate}</TableCell>
                   <TableCell className="text-slate-600">{item.screeningResult}</TableCell>
                   <TableCell className="text-slate-600">{item.interviewDate}</TableCell>
@@ -288,8 +288,8 @@ export default function AdminTrackingPage() {
                 </div>
 
                 <div>
-                  <label className="text-xs font-bold text-slate-500 mb-1 block">Nguồn</label>
-                  <Input value={editingRow.source} onChange={e => setEditingRow({...editingRow, source: e.target.value})} />
+                  <label className="text-xs font-bold text-slate-500 mb-1 block">Mã Ops</label>
+                  <Input value={editingRow.opsCode} onChange={e => setEditingRow({...editingRow, opsCode: e.target.value})} />
                 </div>
                 <div>
                   <label className="text-xs font-bold text-slate-500 mb-1 block">Ngày nhận CV</label>
@@ -328,7 +328,16 @@ export default function AdminTrackingPage() {
 
                 <div>
                   <label className="text-xs font-bold text-slate-500 mb-1 block">Trạng thái</label>
-                  <Input value={editingRow.status} onChange={e => setEditingRow({...editingRow, status: e.target.value})} />
+                  <Select value={editingRow.status || "Chưa rõ"} onValueChange={val => setEditingRow({...editingRow, status: val || ""})}>
+                    <SelectTrigger className="w-full">
+                      <SelectValue placeholder="Chọn trạng thái" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="Chưa rõ">Chưa rõ</SelectItem>
+                      <SelectItem value="Đã nhận việc">Đã nhận việc</SelectItem>
+                      <SelectItem value="Không nhận việc">Không nhận việc</SelectItem>
+                    </SelectContent>
+                  </Select>
                 </div>
                 <div className="md:col-span-2">
                   <label className="text-xs font-bold text-slate-500 mb-1 block">Ghi chú</label>

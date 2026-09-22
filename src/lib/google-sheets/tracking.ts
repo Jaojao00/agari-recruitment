@@ -36,7 +36,7 @@ export type CandidateTracking = {
   stt: string;
   fullName: string;
   phone: string;
-  source: string;
+  opsCode: string;
   cvDate: string;
   screeningResult: string;
   interviewDate: string;
@@ -88,7 +88,7 @@ export async function getTrackingsFromSheet(): Promise<CandidateTracking[]> {
       stt: getCol(row, "STT"),
       fullName: getCol(row, "Họ tên"),
       phone: getCol(row, "SĐT"),
-      source: getCol(row, "Nguồn"),
+      opsCode: getCol(row, "Mã Ops") || getCol(row, "Mã Ops"),
       cvDate: getCol(row, "Ngày nhận CV"),
       screeningResult: getCol(row, "Kết quả sàng lọc"),
       interviewDate: getCol(row, "Ngày PV"),
@@ -117,7 +117,7 @@ export async function addTrackingToSheet(data: Partial<CandidateTracking>) {
   let headers: string[] = [];
   
   if (rows.length === 0) {
-    headers = ["STT", "Họ tên", "SĐT", "Nguồn", "Ngày nhận CV", "Kết quả sàng lọc", "Ngày PV", "Kết quả PV", "Ngày gửi offer", "Xác nhận nhận việc", "Ngày nhận việc", "Ca/Team", "Trạng thái", "Ghi chú"];
+    headers = ["STT", "Họ tên", "SĐT", "Mã Ops", "Ngày nhận CV", "Kết quả sàng lọc", "Ngày PV", "Kết quả PV", "Ngày gửi offer", "Xác nhận nhận việc", "Ngày nhận việc", "Ca/Team", "Trạng thái", "Ghi chú"];
     await sheets.spreadsheets.values.update({
       spreadsheetId,
       range: `'${sheetName}'!A1`,
@@ -153,7 +153,7 @@ export async function addTrackingToSheet(data: Partial<CandidateTracking>) {
   setCol("STT", String(nextStt));
   setCol("Họ tên", data.fullName || "");
   setCol("SĐT", data.phone || "");
-  setCol("Nguồn", data.source || "");
+  setCol("Mã Ops", data.opsCode || "");
   setCol("Ngày nhận CV", data.cvDate || "");
   setCol("Kết quả sàng lọc", data.screeningResult || "");
   setCol("Ngày PV", data.interviewDate || "");
@@ -202,7 +202,7 @@ export async function updateTrackingInSheet(rowNumber: number, data: Partial<Can
 
   setCol("Họ tên", data.fullName);
   setCol("SĐT", data.phone);
-  setCol("Nguồn", data.source);
+  setCol("Mã Ops", data.opsCode);
   setCol("Ngày nhận CV", data.cvDate);
   setCol("Kết quả sàng lọc", data.screeningResult);
   setCol("Ngày PV", data.interviewDate);
