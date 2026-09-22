@@ -71,8 +71,9 @@ export async function getTrackingsFromSheet(): Promise<CandidateTracking[]> {
 
   const headers = rows[0].map(h => String(h).trim().toLowerCase());
   
-  const getCol = (row: string[], name: string) => {
-    const idx = headers.indexOf(name.toLowerCase());
+  const getCol = (row: string[], name: string, fallback?: string) => {
+    let idx = headers.indexOf(name.toLowerCase());
+    if (idx < 0 && fallback) idx = headers.indexOf(fallback.toLowerCase());
     return idx >= 0 ? (row[idx] || "") : "";
   };
 
@@ -88,7 +89,7 @@ export async function getTrackingsFromSheet(): Promise<CandidateTracking[]> {
       stt: getCol(row, "STT"),
       fullName: getCol(row, "Họ tên"),
       phone: getCol(row, "SĐT"),
-      opsCode: getCol(row, "Mã Ops") || getCol(row, "Mã Ops"),
+      opsCode: getCol(row, "Mã Ops", "Nguồn"),
       cvDate: getCol(row, "Ngày nhận CV"),
       screeningResult: getCol(row, "Kết quả sàng lọc"),
       interviewDate: getCol(row, "Ngày PV"),
@@ -139,8 +140,9 @@ export async function addTrackingToSheet(data: Partial<CandidateTracking>) {
   }
 
   const newRow: string[] = new Array(headers.length).fill("");
-  const setCol = (name: string, value: string) => {
-    const idx = headers.findIndex(h => String(h).trim().toLowerCase() === name.toLowerCase());
+  const setCol = (name: string, fallback: string, value: string) => {
+    let idx = headers.findIndex(h => String(h).trim().toLowerCase() === name.toLowerCase());
+    if (idx < 0) idx = headers.findIndex(h => String(h).trim().toLowerCase() === fallback.toLowerCase());
     if (idx >= 0) newRow[idx] = value;
   };
 
@@ -150,28 +152,50 @@ export async function addTrackingToSheet(data: Partial<CandidateTracking>) {
     if (!isNaN(stt) && stt >= nextStt) nextStt = stt + 1;
   }
 
-  setCol("STT", String(nextStt));
-  setCol("Họ tên", data.fullName || "");
-  setCol("SĐT", data.phone || "");
-  setCol("Mã Ops", data.opsCode || "");
-  setCol("Ngày nhận CV", data.cvDate || "");
-  setCol("Kết quả sàng lọc", data.screeningResult || "");
-  setCol("Ngày PV", data.interviewDate || "");
-  setCol("Kết quả PV", data.interviewResult || "");
-  setCol("Ngày gửi offer", data.offerDate || "");
-  setCol("Xác nhận nhận việc", data.offerConfirmed || "");
-  setCol("Ngày nhận việc", data.joinDate || "");
-  setCol("Ca/Team", data.team || "");
-  setCol("Trạng thái", data.status || "");
-  setCol("Ghi chú", data.note || "");
+  setCol("STT", "STT", String(nextStt));
+  setCol("Họ tên", "Họ tên", data.fullName || "");
+  setCol("SĐT", "SĐT", data.phone || "");
+  setCol("Mã Ops", "Nguồn", data.opsCode || "");
+  setCol("Ngày nhận CV", "Ngày nhận CV", data.cvDate || "");
+  setCol("Kết quả sàng lọc", "Kết quả sàng lọc", data.screeningResult || "");
+  setCol("Ngày PV", "Ngày PV", data.interviewDate || "");
+  setCol("Kết quả PV", "Kết quả PV", data.interviewResult || "");
+  setCol("Ngày gửi offer", "Ngày gửi offer", data.offerDate || "");
+  setCol("Xác nhận nhận việc", "Xác nhận nhận việc", data.offerConfirmed || "");
+  setCol("Ngày nhận việc", "Ngày nhận việc", data.joinDate || "");
+  setCol("Ca/Team", "Ca/Team", data.team || "");
+  setCol("Trạng thái", "Trạng thái", data.status || "");
+  setCol("Ghi chú", "Ghi chú", data.note || "");
 
-  await sheets.spreadsheets.values.append({
-    spreadsheetId,
-    range: `'${sheetName}'!A1`,
-    valueInputOption: "USER_ENTERED",
-    insertDataOption: "INSERT_ROWS",
-    requestBody: { values: [newRow] },
-  });
+  
+  // Find first empty row to update instead of appending at the very bottom (which might skip formatted blank rows)
+  let targetRowIndex = -1;
+  for (let i = 1; i < rows.length; i++) {
+    const r = rows[i];
+    // If row has no STT, Ho ten, or SDT, consider it empty
+    if (!r[0] && !r[1] && !r[2]) {
+      targetRowIndex = i + 1;
+      break;
+    }
+  }
+
+  if (targetRowIndex !== -1) {
+    await sheets.spreadsheets.values.update({
+      spreadsheetId,
+      range: `'${sheetName}'!A${targetRowIndex}`,
+      valueInputOption: "USER_ENTERED",
+      requestBody: { values: [newRow] },
+    });
+  } else {
+    await sheets.spreadsheets.values.append({
+      spreadsheetId,
+      range: `'${sheetName}'!A1`,
+      valueInputOption: "USER_ENTERED",
+      insertDataOption: "INSERT_ROWS",
+      requestBody: { values: [newRow] },
+    });
+  }
+
 }
 
 export async function updateTrackingInSheet(rowNumber: number, data: Partial<CandidateTracking>) {
@@ -194,25 +218,26 @@ export async function updateTrackingInSheet(rowNumber: number, data: Partial<Can
   const newRow = [...currentRow];
   while (newRow.length < headers.length) newRow.push("");
 
-  const setCol = (name: string, value: string | undefined) => {
+  const setCol = (name: string, fallback: string, value: string | undefined) => {
     if (value === undefined) return;
-    const idx = headers.findIndex(h => String(h).trim().toLowerCase() === name.toLowerCase());
+    let idx = headers.findIndex(h => String(h).trim().toLowerCase() === name.toLowerCase());
+    if (idx < 0) idx = headers.findIndex(h => String(h).trim().toLowerCase() === fallback.toLowerCase());
     if (idx >= 0) newRow[idx] = value;
   };
 
-  setCol("Họ tên", data.fullName);
-  setCol("SĐT", data.phone);
-  setCol("Mã Ops", data.opsCode);
-  setCol("Ngày nhận CV", data.cvDate);
-  setCol("Kết quả sàng lọc", data.screeningResult);
-  setCol("Ngày PV", data.interviewDate);
-  setCol("Kết quả PV", data.interviewResult);
-  setCol("Ngày gửi offer", data.offerDate);
-  setCol("Xác nhận nhận việc", data.offerConfirmed);
-  setCol("Ngày nhận việc", data.joinDate);
-  setCol("Ca/Team", data.team);
-  setCol("Trạng thái", data.status);
-  setCol("Ghi chú", data.note);
+  setCol("Họ tên", "Họ tên", data.fullName);
+  setCol("SĐT", "SĐT", data.phone);
+  setCol("Mã Ops", "Nguồn", data.opsCode);
+  setCol("Ngày nhận CV", "Ngày nhận CV", data.cvDate);
+  setCol("Kết quả sàng lọc", "Kết quả sàng lọc", data.screeningResult);
+  setCol("Ngày PV", "Ngày PV", data.interviewDate);
+  setCol("Kết quả PV", "Kết quả PV", data.interviewResult);
+  setCol("Ngày gửi offer", "Ngày gửi offer", data.offerDate);
+  setCol("Xác nhận nhận việc", "Xác nhận nhận việc", data.offerConfirmed);
+  setCol("Ngày nhận việc", "Ngày nhận việc", data.joinDate);
+  setCol("Ca/Team", "Ca/Team", data.team);
+  setCol("Trạng thái", "Trạng thái", data.status);
+  setCol("Ghi chú", "Ghi chú", data.note);
 
   await sheets.spreadsheets.values.update({
     spreadsheetId,
