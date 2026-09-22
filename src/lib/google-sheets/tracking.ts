@@ -172,8 +172,8 @@ export async function addTrackingToSheet(data: Partial<CandidateTracking>) {
   let targetRowIndex = -1;
   for (let i = 1; i < rows.length; i++) {
     const r = rows[i];
-    // If row has no STT, Ho ten, or SDT, consider it empty
-    if (!r[0] && !r[1] && !r[2]) {
+    // If row has no Ho ten or SDT (ignoring STT, as templates often pre-fill it), consider it empty
+    if (!r[1] && !r[2]) {
       targetRowIndex = i + 1;
       break;
     }
