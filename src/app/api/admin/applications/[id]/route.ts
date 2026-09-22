@@ -62,6 +62,7 @@ export async function PATCH(
         cvDate: new Date().toLocaleDateString("vi-VN"),
         status: "Mới",
         team: application.jobTitle,
+        opsCode: updateData.opsCode || application.opsCode || "",
       }).catch(err => console.error("Error adding tracking:", err));
     }
 
