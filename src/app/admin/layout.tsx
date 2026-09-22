@@ -17,6 +17,7 @@ import {
   Calendar as CalendarIcon,
   PanelLeftClose,
   PanelLeftOpen,
+  UserCheck,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 
@@ -55,6 +56,7 @@ function AdminSidebar({ isOpen }: { isOpen: boolean }) {
       icon: <Users size={20} />,
     },
     { name: "Hết hạn", path: "/admin/expired", icon: <FileX size={20} /> },
+    { name: "Theo dõi ứng viên", path: "/admin/tracking", icon: <UserCheck size={20} /> },
     {
       name: "Báo cáo",
       path: "/admin/reports",

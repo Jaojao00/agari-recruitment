@@ -3,6 +3,7 @@ import {
   getApplicationsFromSheet,
   updateApplicationInSheet,
 } from "@/lib/google-sheets";
+import { addTrackingToSheet } from "@/lib/google-sheets/tracking";
 
 type ApplicationRouteContext = {
   params: Promise<{ id: string }>;
@@ -52,6 +53,17 @@ export async function PATCH(
     else if (expiredAt) updateData.expiredAt = new Date(expiredAt);
 
     await updateApplicationInSheet(updateData);
+
+    // If status changed to PASSED, add to Tracking Sheet
+    if (status === "PASSED" && application.status !== "PASSED") {
+      await addTrackingToSheet({
+        fullName: application.fullName,
+        phone: application.phone,
+        cvDate: new Date().toLocaleDateString("vi-VN"),
+        status: "Mới",
+        team: application.jobTitle,
+      }).catch(err => console.error("Error adding tracking:", err));
+    }
 
     return NextResponse.json({ success: true });
   } catch (error) {
