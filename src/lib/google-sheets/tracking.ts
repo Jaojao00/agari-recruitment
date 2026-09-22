@@ -139,7 +139,20 @@ export async function addTrackingToSheet(data: Partial<CandidateTracking>) {
     }
   }
 
-  const newRow: string[] = new Array(headers.length).fill("");
+  let newRow: string[] = new Array(headers.length).fill("");
+  let targetRowIndex = -1;
+  for (let i = 1; i < rows.length; i++) {
+    const r = rows[i];
+    // If row has no Ho ten or SDT (ignoring STT, as templates often pre-fill it), consider it empty
+    if (!r[1] && !r[2]) {
+      targetRowIndex = i + 1;
+      // Preserve existing row contents (like pre-filled STT)
+      newRow = [...r];
+      // Pad to headers length if needed
+      while (newRow.length < headers.length) newRow.push("");
+      break;
+    }
+  }
   const setCol = (name: string, fallback: string, value: string) => {
     let idx = headers.findIndex(h => String(h).trim().toLowerCase() === name.toLowerCase());
     if (idx < 0) idx = headers.findIndex(h => String(h).trim().toLowerCase() === fallback.toLowerCase());
@@ -152,7 +165,12 @@ export async function addTrackingToSheet(data: Partial<CandidateTracking>) {
     if (!isNaN(stt) && stt >= nextStt) nextStt = stt + 1;
   }
 
-  setCol("STT", "STT", String(nextStt));
+  
+  const sttIdx = headers.findIndex(h => String(h).trim().toLowerCase() === "stt");
+  if (sttIdx < 0 || !newRow[sttIdx] || !newRow[sttIdx].trim()) {
+    setCol("STT", "STT", String(nextStt));
+  }
+
   setCol("Họ tên", "Họ tên", data.fullName || "");
   setCol("SĐT", "SĐT", data.phone || "");
   setCol("Mã Ops", "Nguồn", data.opsCode || "");
@@ -169,15 +187,7 @@ export async function addTrackingToSheet(data: Partial<CandidateTracking>) {
 
   
   // Find first empty row to update instead of appending at the very bottom (which might skip formatted blank rows)
-  let targetRowIndex = -1;
-  for (let i = 1; i < rows.length; i++) {
-    const r = rows[i];
-    // If row has no Ho ten or SDT (ignoring STT, as templates often pre-fill it), consider it empty
-    if (!r[1] && !r[2]) {
-      targetRowIndex = i + 1;
-      break;
-    }
-  }
+  
 
   if (targetRowIndex !== -1) {
     await sheets.spreadsheets.values.update({
