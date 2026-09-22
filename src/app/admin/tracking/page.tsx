@@ -213,8 +213,8 @@ export default function AdminTrackingPage() {
       <div className="flex-1 overflow-auto bg-white relative">
         <Table>
           <TableHeader className="bg-slate-50 sticky top-0 z-10 shadow-sm">
-            <TableRow className="border-b border-slate-100">
-              <TableHead className="font-bold text-slate-600 w-12">STT</TableHead>
+            <TableRow className="border-b border-slate-100 whitespace-nowrap">
+              <TableHead className="font-bold text-slate-600 min-w-16 w-16">STT</TableHead>
               <TableHead className="font-bold text-slate-600 min-w-40">Họ tên</TableHead>
               <TableHead className="font-bold text-slate-600 min-w-32">SĐT</TableHead>
               <TableHead className="font-bold text-slate-600 min-w-28">Mã Ops</TableHead>
@@ -226,7 +226,7 @@ export default function AdminTrackingPage() {
               <TableHead className="font-bold text-slate-600 min-w-40">Xác nhận nhận việc</TableHead>
               <TableHead className="font-bold text-slate-600 min-w-32">Ngày nhận việc</TableHead>
               <TableHead className="font-bold text-slate-600 min-w-36">Ca/Team</TableHead>
-              <TableHead className="font-bold text-slate-600 min-w-28">Trạng thái</TableHead>
+              <TableHead className="font-bold text-slate-600 min-w-[140px]">Trạng thái</TableHead>
               <TableHead className="font-bold text-slate-600 min-w-40">Ghi chú</TableHead>
               <TableHead className="font-bold text-slate-600 text-center sticky right-0 bg-slate-50 w-24">Thao tác</TableHead>
             </TableRow>
@@ -250,7 +250,7 @@ export default function AdminTrackingPage() {
             ) : (
               filteredData.map((item, idx) => (
                 <TableRow key={item.rowNumber} className="border-b border-slate-50 hover:bg-slate-50 whitespace-nowrap">
-                  <TableCell className="text-center font-medium text-slate-500">{item.stt || idx + 1}</TableCell>
+                  <TableCell className="text-center font-medium text-slate-500">{idx + 1}</TableCell>
                   <TableCell className="font-semibold text-slate-800">{item.fullName}</TableCell>
                   <TableCell className="text-slate-600">{item.phone}</TableCell>
                   <TableCell className="text-slate-600">{item.opsCode}</TableCell>
