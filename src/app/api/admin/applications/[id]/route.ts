@@ -61,7 +61,7 @@ export async function PATCH(
         phone: application.phone,
         cvDate: new Date().toLocaleDateString("vi-VN"),
         status: "Mới",
-        team: application.jobTitle,
+        team: application.workSchedule || application.preferredShift || application.jobTitle,
         opsCode: updateData.opsCode || application.opsCode || "",
       }).catch(err => console.error("Error adding tracking:", err));
     }
