@@ -79,7 +79,9 @@ export async function getTrackingsFromSheet(): Promise<CandidateTracking[]> {
   const trackings: CandidateTracking[] = [];
   for (let i = 1; i < rows.length; i++) {
     const row = rows[i];
-    if (!row.some(c => c)) continue;
+    const fullName = getCol(row, "Họ tên");
+    const phone = getCol(row, "SĐT");
+    if (!fullName && !phone) continue;
 
     trackings.push({
       rowNumber: i + 1,
@@ -217,5 +219,17 @@ export async function updateTrackingInSheet(rowNumber: number, data: Partial<Can
     range: `'${sheetName}'!A${rowNumber}`,
     valueInputOption: "USER_ENTERED",
     requestBody: { values: [newRow] },
+  });
+}
+
+export async function deleteTrackingInSheet(rowNumber: number) {
+  const sheetName = await getTrackingSheetName();
+  const sheets = getSheetsClient();
+  const spreadsheetId = getSpreadsheetId();
+
+  // We can just clear the row to be safe and avoid shifting issues
+  await sheets.spreadsheets.values.clear({
+    spreadsheetId,
+    range: `'${sheetName}'!A${rowNumber}:Z${rowNumber}`,
   });
 }
