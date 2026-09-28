@@ -204,10 +204,15 @@ export default function DongThapPage() {
                 <MapPin className="text-red-700" />
                 <h2 className="text-xl font-bold">Địa điểm làm việc</h2>
               </div>
-              <p className="text-sm leading-6 text-slate-600 font-semibold">
-                71-DTP Lap Vo 02 Hub
-              </p>
-              <p className="text-sm leading-6 text-slate-600 mt-1">
+              <ul className="text-sm leading-6 text-slate-600 font-semibold space-y-2 mb-4">
+                <li className="flex gap-2 items-start"><MapPin size={16} className="mt-1 shrink-0 text-slate-400" /> 71-DTP Cao Lanh 03 Hub</li>
+                <li className="flex gap-2 items-start"><MapPin size={16} className="mt-1 shrink-0 text-slate-400" /> 71-DTP Lap Vo 02 Hub</li>
+                <li className="flex gap-2 items-start"><MapPin size={16} className="mt-1 shrink-0 text-slate-400" /> 71-DTP Sa Dec Hub</li>
+                <li className="flex gap-2 items-start"><MapPin size={16} className="mt-1 shrink-0 text-slate-400" /> 71-DTP Tan Binh Hub</li>
+                <li className="flex gap-2 items-start"><MapPin size={16} className="mt-1 shrink-0 text-slate-400" /> 71-DTP Tan Thanh Hub</li>
+              </ul>
+              <p className="text-sm leading-6 text-slate-600 mt-1 pt-4 border-t border-red-100">
+                <span className="font-semibold block mb-1">Ví dụ tại Lấp Vò:</span>
                 Ấp Tân Trong, Xã Tân Mỹ, Huyện Lấp Vò, Đồng Tháp.
               </p>
               <p className="text-sm leading-6 text-slate-500 mt-2">
@@ -219,7 +224,7 @@ export default function DongThapPage() {
                 target="_blank"
                 rel="noreferrer"
               >
-                Mở Google Map tìm đường
+                Mở Google Map tìm đường (Lấp Vò)
               </a>
               <div className="mt-5 pt-5 border-t border-red-200 flex items-center gap-2 text-sm font-bold text-red-700">
                 <Phone size={17} /> Nhắn tin Zalo: 0586.482.344 (Gặp Tài)

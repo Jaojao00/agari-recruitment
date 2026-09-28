@@ -51,6 +51,10 @@ const jobOptions = {
     title: "Nhân viên kho part-time",
     schedule: "Đăng ký lịch làm việc linh hoạt theo tuần",
   },
+  "lap-vo-dong-thap": {
+    title: "Nhân sự kho phân loại - Đồng Tháp",
+    schedule: "Ca ngắn linh hoạt",
+  }
 } as const;
 
 const defaultLocations: Location[] = [
@@ -140,11 +144,12 @@ export default function UngTuyenPage() {
 
   useEffect(() => {
     const requestedJob = new URLSearchParams(window.location.search).get("job");
-    if (requestedJob === "spx-fulltime" || requestedJob === "agari-part-time") {
+    if (requestedJob && requestedJob in jobOptions) {
+      const validJob = requestedJob as keyof typeof jobOptions;
       const timer = window.setTimeout(() => {
-        setJobId(requestedJob);
-        form.setValue("jobId", requestedJob);
-        form.setValue("jobTitle", jobOptions[requestedJob].title);
+        setJobId(validJob);
+        form.setValue("jobId", validJob);
+        form.setValue("jobTitle", jobOptions[validJob].title);
         form.setValue("workSchedule", "");
       }, 0);
       return () => window.clearTimeout(timer);
@@ -153,10 +158,7 @@ export default function UngTuyenPage() {
   }, [form]);
 
   async function onSubmit(data: ApplicationFormValues) {
-    if (
-      (jobId === "spx-fulltime" || jobId === "agari-part-time") &&
-      !data.workSchedule
-    ) {
+    if (jobId !== "warehouse-rotating-shift" && !data.workSchedule) {
       setError("Vui lòng chọn ca cố định muốn đăng ký.");
       return;
     }
@@ -434,7 +436,7 @@ export default function UngTuyenPage() {
                   )}
                 />
 
-                {jobId === "spx-fulltime" || jobId === "agari-part-time" ? (
+                {jobId === "spx-fulltime" || jobId === "agari-part-time" || jobId === "lap-vo-dong-thap" ? (
                   <FormField
                     control={form.control}
                     name="workSchedule"
@@ -478,7 +480,8 @@ export default function UngTuyenPage() {
                   />
                 ) : null}
 
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-6 pt-4 border-t border-gray-100">
+                {jobId !== "lap-vo-dong-thap" && (
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-6 pt-4 border-t border-gray-100">
                   <FormField
                     control={form.control}
                     name="education"
@@ -553,7 +556,8 @@ export default function UngTuyenPage() {
                     )}
                   />
                 </div>
-
+                )}
+                
                 <FormField
                   control={form.control}
                   name="availableStartDate"
