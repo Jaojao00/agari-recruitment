@@ -20,7 +20,7 @@ type DashboardApplication = {
   status?: string;
   gender?: string;
   preferredLocation?: string;
-  preferredShift?: string;
+  workSchedule?: string;
 };
 
 // --- Custom Donut Component ---
@@ -149,7 +149,7 @@ export default async function AdminDashboard() {
 
   const shiftCounts = applications.reduce<Record<string, number>>(
     (counts, application: DashboardApplication) => {
-      const shift = application.preferredShift || "Chưa xác định";
+      const shift = application.workSchedule || "Chưa xác định";
       counts[shift] = (counts[shift] || 0) + 1;
       return counts;
     },
