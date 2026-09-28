@@ -17,7 +17,7 @@ const shifts = [
 
 export default function DongThapPage() {
   return (
-    <div className="min-h-screen bg-[#fafafa]">
+    <div className="min-h-screen bg-[#fafafa] pb-32">
       <main className="mx-auto max-w-6xl p-4 pt-6 md:p-8 md:pt-10 pb-32">
         <Link
           href="/"
