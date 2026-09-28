@@ -469,6 +469,9 @@ export default function UngTuyenPage() {
                                 <SelectItem value="Ca Chiều: 15:00 - 19:00">
                                   Ca Chiều • 15:00 - 19:00 • 140.000 VNĐ/ca
                                 </SelectItem>
+                                <SelectItem value="Làm cả 2 ca (Sáng & Chiều)">
+                                  Làm cả 2 ca (Sáng & Chiều) • 280.000 VNĐ/ngày
+                                </SelectItem>
                               </>
                             ) : (
                               <>

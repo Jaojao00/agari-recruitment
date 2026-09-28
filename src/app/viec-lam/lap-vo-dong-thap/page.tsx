@@ -13,6 +13,7 @@ import { Button } from "@/components/ui/button";
 const shifts = [
   ["Sáng: 08:00 - 12:00", "140.000 VNĐ/ca"],
   ["Chiều: 15:00 - 19:00", "140.000 VNĐ/ca"],
+  ["Làm cả 2 ca (Sáng & Chiều)", "280.000 VNĐ/ngày"],
 ];
 
 export default function DongThapPage() {
