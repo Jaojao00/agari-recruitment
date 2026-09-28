@@ -148,6 +148,10 @@ export default function AdminTrackingPage() {
       statusFilter === "ALL" ||
       (item.status || "Chưa rõ") === statusFilter;
     return matchSearch && matchStatus;
+  }).sort((a, b) => {
+    if (a.status === "Đã nhận việc" && b.status !== "Đã nhận việc") return -1;
+    if (a.status !== "Đã nhận việc" && b.status === "Đã nhận việc") return 1;
+    return a.rowNumber - b.rowNumber;
   });
 
   const uniqueStatuses = Array.from(new Set(data.map(d => d.status || "Chưa rõ"))).filter(Boolean);
