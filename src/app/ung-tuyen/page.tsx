@@ -417,17 +417,25 @@ export default function UngTuyenPage() {
                             />
                           </SelectTrigger>
                           <SelectContent className="max-w-[calc(100vw-2rem)]">
-                            {locations.map((location) => (
-                              <SelectItem
-                                key={location.id}
-                                value={location.name}
-                                className="whitespace-normal py-2"
-                              >
-                                <span className="whitespace-normal break-words">
-                                  {location.name}
-                                </span>
-                              </SelectItem>
-                            ))}
+                            {jobId === "lap-vo-dong-thap" ? (
+                              ["71-DTP Cao Lanh 03 Hub", "71-DTP Lap Vo 02 Hub", "71-DTP Sa Dec Hub", "71-DTP Tan Binh Hub", "71-DTP Tan Thanh Hub"].map(loc => (
+                                <SelectItem key={loc} value={loc} className="whitespace-normal py-2">
+                                  <span className="whitespace-normal break-words">{loc}</span>
+                                </SelectItem>
+                              ))
+                            ) : (
+                              locations.map((location) => (
+                                <SelectItem
+                                  key={location.id}
+                                  value={location.name}
+                                  className="whitespace-normal py-2"
+                                >
+                                  <span className="whitespace-normal break-words">
+                                    {location.name}
+                                  </span>
+                                </SelectItem>
+                              ))
+                            )}
                           </SelectContent>
                         </Select>
                       </FormControl>
@@ -449,29 +457,42 @@ export default function UngTuyenPage() {
                         >
                           <FormControl>
                             <SelectTrigger className="h-12 w-full">
-                              <SelectValue placeholder={jobId === "agari-part-time" ? "Chọn ca đăng ký" : "Chọn ca cố định"} />
+                              <SelectValue placeholder={jobId === "spx-fulltime" ? "Chọn ca cố định" : "Chọn ca đăng ký"} />
                             </SelectTrigger>
                           </FormControl>
                           <SelectContent className="w-[min(30rem,calc(100vw-2rem))]">
-                            <SelectItem value="Ca 1: 06:00 - 15:00">
-                              Ca 1 · 06:00 - 15:00 · 250.000 VNĐ/ca
-                            </SelectItem>
-                            <SelectItem value="Ca 2: 13:00 - 22:00">
-                              Ca 2 · 13:00 - 22:00 · 250.000 VNĐ/ca
-                            </SelectItem>
-                            <SelectItem value="Ca 3: 22:00 - 06:00">
-                              Ca 3 · 22:00 - 06:00 · 300.000 VNĐ/ca
-                            </SelectItem>
-                            {jobId === "agari-part-time" ? (
+                            {jobId === "lap-vo-dong-thap" ? (
                               <>
-                                <SelectItem value="Ca 4: 18:00 - 22:00">
-                                  Ca 4 · 18:00 - 22:00 · 125.000 VNĐ/ca
+                                <SelectItem value="Ca Sáng: 08:00 - 12:00">
+                                  Ca Sáng • 08:00 - 12:00 • 140.000 VNĐ/ca
                                 </SelectItem>
-                                <SelectItem value="Ca 5: 06:00 - 11:00">
-                                  Ca 5 · 06:00 - 11:00 · 155.000 VNĐ/ca
+                                <SelectItem value="Ca Chiều: 15:00 - 19:00">
+                                  Ca Chiều • 15:00 - 19:00 • 140.000 VNĐ/ca
                                 </SelectItem>
                               </>
-                            ) : null}
+                            ) : (
+                              <>
+                                <SelectItem value="Ca 1: 06:00 - 15:00">
+                                  Ca 1 • 06:00 - 15:00 • 250.000 VNĐ/ca
+                                </SelectItem>
+                                <SelectItem value="Ca 2: 13:00 - 22:00">
+                                  Ca 2 • 13:00 - 22:00 • 250.000 VNĐ/ca
+                                </SelectItem>
+                                <SelectItem value="Ca 3: 22:00 - 06:00">
+                                  Ca 3 • 22:00 - 06:00 • 300.000 VNĐ/ca
+                                </SelectItem>
+                                {jobId === "agari-part-time" ? (
+                                  <>
+                                    <SelectItem value="Ca 4: 18:00 - 22:00">
+                                      Ca 4 • 18:00 - 22:00 • 125.000 VNĐ/ca
+                                    </SelectItem>
+                                    <SelectItem value="Ca 5: 06:00 - 11:00">
+                                      Ca 5 • 06:00 - 11:00 • 155.000 VNĐ/ca
+                                    </SelectItem>
+                                  </>
+                                ) : null}
+                              </>
+                            )}
                           </SelectContent>
                         </Select>
                         <FormMessage />
