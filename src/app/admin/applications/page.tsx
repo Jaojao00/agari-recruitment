@@ -23,10 +23,12 @@ import {
 import { Application, ApplicationStatus } from "@/lib/firebase/models";
 import { useDebounce } from "@/lib/utils"; // I'll need to create this hook
 import { Eye, EyeOff, Loader2, Search } from "lucide-react";
+import MeKongApplications from "./MeKongApplications";
 
 function ApplicationsContent() {
   const searchParams = useSearchParams();
   const jobIdFilter = searchParams.get("jobId");
+
   const [data, setData] = useState<Application[]>([]);
   const [loading, setLoading] = useState(true);
   const [search, setSearch] = useState("");
@@ -139,6 +141,10 @@ function ApplicationsContent() {
       setUpdatingStatus(null);
     }
   };
+
+  if (jobIdFilter === "lap-vo-dong-thap") {
+    return <MeKongApplications />;
+  }
 
   return (
     <div className="space-y-6 bg-white p-6 rounded-lg shadow-sm border border-gray-100">
