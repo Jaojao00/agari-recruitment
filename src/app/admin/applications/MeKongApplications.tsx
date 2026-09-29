@@ -1,6 +1,7 @@
 ﻿import React, { useState, useEffect, useCallback } from "react";
 import { Application, ApplicationStatus } from "@/lib/firebase/models";
 import { Loader2, Search, Edit } from "lucide-react";
+import Link from "next/link";
 import { Input } from "@/components/ui/input";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
@@ -127,7 +128,7 @@ export default function MeKongApplications() {
                           {maskPhone(item.phone)} <span className="font-medium">Nhấn để hiện</span>
                         </div>
                       </div>
-                      <Button variant="outline" size="sm" className="ml-auto text-xs h-7 px-2" onClick={() => alert("Chức năng xem CV đang phát triển")}>Xem CV</Button>
+                      <Link href={"/admin/applications/" + item.id}><Button variant="outline" size="sm" className="ml-auto text-xs h-7 px-2">Xem CV</Button></Link>
                     </div>
                   </TableCell>
                   <TableCell className="text-center text-sm">CV</TableCell>
@@ -156,7 +157,7 @@ export default function MeKongApplications() {
                     )}
                   </TableCell>
                   <TableCell className="text-center">
-                    <Button variant="ghost" size="icon" className="h-8 w-8"><Edit size={16} className="text-gray-500" /></Button>
+                    <Link href={"/admin/applications/" + item.id}><Button variant="ghost" size="icon" className="h-8 w-8"><Edit size={16} className="text-gray-500" /></Button></Link>
                   </TableCell>
                 </TableRow>
               ))}
