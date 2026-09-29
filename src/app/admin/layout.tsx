@@ -50,6 +50,12 @@ function AdminSidebar({ isOpen }: { isOpen: boolean }) {
       icon: <Users size={20} />,
       isSub: true,
     },
+    {
+      name: "Mục KV MeKong",
+      path: "/admin/applications?jobId=lap-vo-dong-thap",
+      icon: <Users size={20} />,
+      isSub: true,
+    },
     
     
     { name: "Theo dõi ứng viên", path: "/admin/tracking", icon: <UserCheck size={20} /> },
