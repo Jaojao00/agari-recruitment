@@ -16,7 +16,10 @@ export async function GET(request: Request) {
       results = results.filter((app) => app.jobId === jobId);
     }
 
-    if (status && status !== "ALL") {
+    if (status === "ACTIVE" || status === "") {
+      const hidden = ["PASSED", "HIRED", "WORKING", "FAILED", "EXPIRED", "CANCELLED"];
+      results = results.filter((app) => !hidden.includes(app.status || "NEW"));
+    } else if (status && status !== "ALL") {
       results = results.filter((app) => app.status === status);
     }
 

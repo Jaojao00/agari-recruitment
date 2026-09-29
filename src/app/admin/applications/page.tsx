@@ -31,7 +31,7 @@ function ApplicationsContent() {
   const [loading, setLoading] = useState(true);
   const [search, setSearch] = useState("");
   const debouncedSearch = useDebounce(search, 500);
-  const [statusFilter, setStatusFilter] = useState("");
+  const [statusFilter, setStatusFilter] = useState("ACTIVE");
   const [page, setPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
   const [total, setTotal] = useState(0);
@@ -124,11 +124,14 @@ function ApplicationsContent() {
         },
       );
       if (!response.ok) throw new Error("Không thể cập nhật trạng thái");
-      setData((current) =>
-        current.map((item) =>
+      setData((current) => {
+        if (statusFilter === "ACTIVE" && ["PASSED", "HIRED", "WORKING", "FAILED", "EXPIRED", "CANCELLED"].includes(status)) {
+          return current.filter((item) => item.id !== application.id);
+        }
+        return current.map((item) =>
           item.id === application.id ? { ...item, status } : item,
-        ),
-      );
+        );
+      });
     } catch (error) {
       console.error(error);
       await fetchApplications();
@@ -174,6 +177,7 @@ function ApplicationsContent() {
               <SelectValue placeholder="Tất cả trạng thái" />
             </SelectTrigger>
             <SelectContent>
+              <SelectItem value="ACTIVE">Đang mở (Cần xử lý)</SelectItem>
               <SelectItem value="ALL">Tất cả trạng thái</SelectItem>
               <SelectItem value="NEW">Đang xử lý</SelectItem>
               <SelectItem value="CONTACTED">Đã liên hệ</SelectItem>
