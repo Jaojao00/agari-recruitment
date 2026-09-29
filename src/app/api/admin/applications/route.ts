@@ -24,7 +24,9 @@ export async function GET(request: Request) {
     }
 
     results.sort((a, b) => {
-      return String(b.createdAt || "").localeCompare(String(a.createdAt || ""));
+      const timeA = a.updatedAt || a.createdAt || "";
+      const timeB = b.updatedAt || b.createdAt || "";
+      return String(timeB).localeCompare(String(timeA));
     });
 
     if (search) {
