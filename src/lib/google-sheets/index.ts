@@ -116,6 +116,12 @@ async function getJobSheetName(jobId?: string): Promise<string> {
     const sheet = titles.find((s) => s.gid === 1291225589);
     if (sheet) return sheet.title;
   }
+  
+  if (jobId === "lap-vo-dong-thap") {
+    const titles = await getSheetTitles();
+    const sheet = titles.find((s) => s.gid === 1565664528);
+    if (sheet) return sheet.title;
+  }
 
   return defaultSheetName;
 }
