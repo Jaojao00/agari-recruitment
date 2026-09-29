@@ -2,6 +2,7 @@
 import { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
+import { DatePicker } from "@/components/ui/date-picker";
 import {
   Select,
   SelectContent,
@@ -342,7 +343,7 @@ export default function AdminTrackingPage() {
                 </div>
                 <div>
                   <label className="text-xs font-bold text-slate-500 mb-1 block">Ngày nhận CV</label>
-                  <Input value={editingRow.cvDate} onChange={e => setEditingRow({...editingRow, cvDate: e.target.value})} />
+                  <DatePicker value={editingRow.cvDate || ""} onChange={(val) => setEditingRow({...editingRow, cvDate: val})} />
                 </div>
                 <div>
                   <label className="text-xs font-bold text-slate-500 mb-1 block">Kết quả sàng lọc</label>
@@ -351,7 +352,7 @@ export default function AdminTrackingPage() {
 
                 <div>
                   <label className="text-xs font-bold text-slate-500 mb-1 block">Ngày PV</label>
-                  <Input value={editingRow.interviewDate} onChange={e => setEditingRow({...editingRow, interviewDate: e.target.value})} />
+                  <DatePicker value={editingRow.interviewDate || ""} onChange={(val) => setEditingRow({...editingRow, interviewDate: val})} />
                 </div>
                 <div>
                   <label className="text-xs font-bold text-slate-500 mb-1 block">Kết quả PV</label>
@@ -359,16 +360,16 @@ export default function AdminTrackingPage() {
                 </div>
                 <div>
                   <label className="text-xs font-bold text-slate-500 mb-1 block">Ngày gửi offer</label>
-                  <Input value={editingRow.offerDate} onChange={e => setEditingRow({...editingRow, offerDate: e.target.value})} />
+                  <DatePicker value={editingRow.offerDate || ""} onChange={(val) => setEditingRow({...editingRow, offerDate: val})} />
                 </div>
 
                 <div>
                   <label className="text-xs font-bold text-slate-500 mb-1 block">Xác nhận nhận việc</label>
-                  <Input value={editingRow.offerConfirmed} onChange={e => setEditingRow({...editingRow, offerConfirmed: e.target.value})} />
+                  <DatePicker value={editingRow.offerConfirmed || ""} onChange={(val) => setEditingRow({...editingRow, offerConfirmed: val})} />
                 </div>
                 <div>
                   <label className="text-xs font-bold text-slate-500 mb-1 block">Ngày nhận việc</label>
-                  <Input value={editingRow.joinDate} onChange={e => setEditingRow({...editingRow, joinDate: e.target.value})} />
+                  <DatePicker value={editingRow.joinDate || ""} onChange={(val) => setEditingRow({...editingRow, joinDate: val})} />
                 </div>
                 <div>
                   <label className="text-xs font-bold text-slate-500 mb-1 block">Ca/Team</label>
