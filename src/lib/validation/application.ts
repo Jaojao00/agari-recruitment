@@ -51,7 +51,7 @@ export const applicationSchema = z.object({
     .trim()
     .min(1, { message: "Vui lòng chọn khu vực muốn ứng tuyển" }),
   education: z.enum(
-    ["9/12", "12/12", "Đã Tốt Nghiệp", "Khác"] as [string, ...string[]],
+    ["9/12", "12/12", "Đã Tốt Nghiệp", "Khác", ""] as [string, ...string[]],
     { message: "Vui lòng chọn trình độ học vấn" },
   ).optional(),
   preferredShift: z.enum(
@@ -59,6 +59,7 @@ export const applicationSchema = z.object({
       "Tôi Đã Từng làm việc dưới 1 tháng",
       "Tôi Đã Từng làm việc từ 1 tháng trở lên",
       "Tôi chưa từng làm việc liên quan đến vị trí ứng tuyển",
+      ""
     ] as [string, ...string[]],
     { message: "Vui lòng chọn kinh nghiệm làm việc" },
   ).optional(),
