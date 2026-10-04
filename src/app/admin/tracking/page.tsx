@@ -161,10 +161,18 @@ export default function AdminTrackingPage() {
     const matchSearch =
       item.fullName.toLowerCase().includes(search.toLowerCase()) ||
       item.phone.includes(search);
+    
     const matchStatus =
       statusFilter === "ALL" ||
+      (item.status || "Chua ro") === statusFilter ||
       (item.status || "Chưa rõ") === statusFilter;
-    return matchSearch && matchStatus;
+      
+    const matchDate = !dateFilter || [item.cvDate, item.interviewDate, item.offerDate, item.offerConfirmed, item.joinDate].includes(dateFilter);
+    const matchShift = shiftFilter === "ALL" || (item.team || "").toLowerCase().includes(shiftFilter.toLowerCase());
+    const itemGender = genderMap[item.phone] || "Chưa rõ";
+    const matchGender = genderFilter === "ALL" || itemGender.toLowerCase() === genderFilter.toLowerCase();
+    
+    return matchSearch && matchStatus && matchDate && matchShift && matchGender;
   }).sort((a, b) => {
     if (a.status === "Đã nhận việc" && b.status !== "Đã nhận việc") return -1;
     if (a.status !== "Đã nhận việc" && b.status === "Đã nhận việc") return 1;
