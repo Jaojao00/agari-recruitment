@@ -142,7 +142,7 @@ function ApplicationsContent() {
     }
   };
 
-  if (jobIdFilter === "lap-vo-dong-thap") {
+  if (jobIdFilter?.includes("lap-vo-dong-thap") || jobIdFilter?.includes("thot-not-can-tho")) {
     return <MeKongApplications />;
   }
 

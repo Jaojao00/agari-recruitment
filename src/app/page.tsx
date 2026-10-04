@@ -294,6 +294,56 @@ export default function HomePage() {
                 </div>
               </div>
             </article>
+
+            <article className="overflow-hidden rounded-2xl border border-gray-200 bg-white shadow-sm transition hover:-translate-y-0.5 hover:shadow-lg">
+              <div className="grid md:grid-cols-[200px_1fr] md:items-stretch">
+                <div className="flex min-h-32 md:min-h-full items-center justify-center bg-gradient-to-br from-[#d90012] to-[#ff2a3a] p-6 text-center text-white">
+                  <div>
+                    <p className="text-3xl font-black italic tracking-tight">AGARI</p>
+                    <p className="mt-2 text-xs font-bold uppercase tracking-[0.2em] text-yellow-300">Nhân sự kho</p>
+                    <div className="mx-auto mt-4 h-1 w-12 bg-yellow-400" />
+                  </div>
+                </div>
+                <div className="p-6 md:p-7 flex flex-col md:flex-row md:items-center gap-6 justify-between">
+                  <div className="space-y-4">
+                    <div>
+                      <p className="text-xs font-bold uppercase tracking-[0.16em] text-red-700">
+                        Nhân viên Full-time (BPO)
+                      </p>
+                      <h3 className="mt-1 text-xl font-bold text-gray-900 line-clamp-2">
+                        Nhân sự kho - Thốt Nốt, Cần Thơ
+                      </h3>
+                      <p className="mt-1 text-sm text-gray-500">
+                        78-CTO Co Do 02 Hub: Ấp Tân Lợi 1, Xã Thuận Hưng, Huyện Thốt Nốt, Cần Thơ.
+                      </p>
+                    </div>
+                    <div className="flex flex-wrap gap-2 text-sm flex-1">
+                      <span className="rounded-md bg-red-50 px-3 py-1.5 font-semibold text-red-700">
+                        250.000 VNĐ / Ngày
+                      </span>
+                      <span className="rounded-md bg-gray-100 px-3 py-1.5 text-gray-700">
+                        Giờ hành chính
+                      </span>
+                      <span className="rounded-md bg-gray-100 px-3 py-1.5 text-gray-700">
+                        Thưởng chuyên cần 750k
+                      </span>
+                    </div>
+                  </div>
+                  <div className="flex flex-col gap-3 sm:flex-row sm:items-center md:flex-col md:items-stretch lg:flex-row min-w-[200px]">
+                    <Link href="/viec-lam/thot-not-can-tho" className="flex-1">
+                      <Button variant="outline" className="w-full h-11 border-gray-300 text-gray-700 hover:bg-gray-50">
+                        Chi tiết
+                      </Button>
+                    </Link>
+                    <Link href="/ung-tuyen?job=thot-not-can-tho" className="flex-1">
+                      <Button className="w-full h-11 bg-[#d90012] text-white hover:bg-red-700">
+                        Ứng tuyển
+                      </Button>
+                    </Link>
+                  </div>
+                </div>
+              </div>
+            </article>
           </div>
         </div>
       </section>

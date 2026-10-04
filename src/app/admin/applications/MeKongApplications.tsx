@@ -40,7 +40,7 @@ export default function MeKongApplications() {
   const fetchApplications = useCallback(async () => {
     setLoading(true);
     try {
-      const res = await fetch(`/api/admin/applications?jobId=lap-vo-dong-thap&limit=1000&status=ALL`);
+      const res = await fetch(`/api/admin/applications?jobId=lap-vo-dong-thap,thot-not-can-tho&limit=1000&status=ALL`);
       const json = res.ok ? await res.json() : { data: [] };
       if (json.data) {
         setData(json.data);

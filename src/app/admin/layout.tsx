@@ -52,7 +52,7 @@ function AdminSidebar({ isOpen }: { isOpen: boolean }) {
     },
     {
       name: "Mục KV MeKong",
-      path: "/admin/applications?jobId=lap-vo-dong-thap",
+      path: "/admin/applications?jobId=lap-vo-dong-thap,thot-not-can-tho",
       icon: <Users size={20} />,
       isSub: true,
     },

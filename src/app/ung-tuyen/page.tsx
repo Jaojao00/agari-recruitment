@@ -54,6 +54,10 @@ const jobOptions = {
   "lap-vo-dong-thap": {
     title: "Nhân sự kho phân loại - Đồng Tháp",
     schedule: "Ca ngắn linh hoạt",
+  },
+  "thot-not-can-tho": {
+    title: "Nhân viên kho Full-time (BPO) - Thốt Nốt",
+    schedule: "09:00 - 18:00",
   }
 } as const;
 
@@ -417,7 +421,13 @@ export default function UngTuyenPage() {
                             />
                           </SelectTrigger>
                           <SelectContent className="max-w-[calc(100vw-2rem)]">
-                            {jobId === "lap-vo-dong-thap" ? (
+                            {jobId === "thot-not-can-tho" ? (
+                              ["78-CTO Co Do 02 Hub: Ấp Tân Lợi 1, Xã Thuận Hưng, Huyện Thốt Nốt, Cần Thơ."].map(loc => (
+                                <SelectItem key={loc} value={loc} className="whitespace-normal py-2">
+                                  <span className="whitespace-normal break-words">{loc}</span>
+                                </SelectItem>
+                              ))
+                            ) : jobId === "lap-vo-dong-thap" ? (
                               ["71-DTP Cao Lanh 03 Hub", "71-DTP Lap Vo 02 Hub", "71-DTP Sa Dec Hub", "71-DTP Tan Binh Hub", "71-DTP Tan Thanh Hub"].map(loc => (
                                 <SelectItem key={loc} value={loc} className="whitespace-normal py-2">
                                   <span className="whitespace-normal break-words">{loc}</span>
@@ -444,7 +454,7 @@ export default function UngTuyenPage() {
                   )}
                 />
 
-                {jobId === "spx-fulltime" || jobId === "agari-part-time" || jobId === "lap-vo-dong-thap" ? (
+                {jobId === "spx-fulltime" || jobId === "agari-part-time" || jobId === "lap-vo-dong-thap" || jobId === "thot-not-can-tho" ? (
                   <FormField
                     control={form.control}
                     name="workSchedule"
@@ -461,7 +471,13 @@ export default function UngTuyenPage() {
                             </SelectTrigger>
                           </FormControl>
                           <SelectContent className="w-[min(30rem,calc(100vw-2rem))]">
-                            {jobId === "lap-vo-dong-thap" ? (
+                            {jobId === "thot-not-can-tho" ? (
+                              <>
+                                <SelectItem value="09:00 - 18:00 (Giờ hành chính)">
+                                  09:00 - 18:00 (Giờ hành chính)
+                                </SelectItem>
+                              </>
+                            ) : jobId === "lap-vo-dong-thap" ? (
                               <>
                                 <SelectItem value="Ca Sáng: 08:00 - 12:00">
                                   Ca Sáng • 08:00 - 12:00 • 140.000 VNĐ/ca
@@ -504,7 +520,7 @@ export default function UngTuyenPage() {
                   />
                 ) : null}
 
-                {jobId !== "lap-vo-dong-thap" && (
+                {jobId !== "lap-vo-dong-thap" && jobId !== "thot-not-can-tho" && (
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-6 pt-4 border-t border-gray-100">
                   <FormField
                     control={form.control}

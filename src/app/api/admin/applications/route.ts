@@ -13,7 +13,8 @@ export async function GET(request: Request) {
     let results = await getApplicationsFromSheet();
 
     if (jobId) {
-      results = results.filter((app) => app.jobId === jobId);
+      const jobIds = jobId.split(",");
+      results = results.filter((app) => app.jobId && jobIds.includes(app.jobId));
     }
 
     if (status === "ACTIVE" || status === "") {
