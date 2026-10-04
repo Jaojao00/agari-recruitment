@@ -65,6 +65,10 @@ export default function AdminTrackingPage() {
   const [isAdding, setIsAdding] = useState(false);
   const [saving, setSaving] = useState(false);
   const [updatingRow, setUpdatingRow] = useState<number | null>(null);
+  const [dateFilter, setDateFilter] = useState("");
+  const [shiftFilter, setShiftFilter] = useState("ALL");
+  const [genderFilter, setGenderFilter] = useState("ALL");
+  const [genderMap, setGenderMap] = useState<Record<string, string>>({});
 
   const fetchTrackings = async () => {
     setLoading(true);
@@ -72,6 +76,18 @@ export default function AdminTrackingPage() {
       const res = await fetch("/api/admin/tracking");
       const json = await res.json();
       if (json.data) setData(json.data);
+      
+      const appRes = await fetch("/api/admin/applications?limit=5000&status=ALL");
+      const appJson = await appRes.json();
+      if (appJson.data) {
+        const map: Record<string, string> = {};
+        appJson.data.forEach((app: any) => {
+          if (app.phone && app.gender) {
+            map[app.phone] = app.gender;
+          }
+        });
+        setGenderMap(map);
+      }
     } catch (e) {
       console.error(e);
     }
@@ -187,10 +203,41 @@ export default function AdminTrackingPage() {
                 <SelectValue placeholder="Trạng thái" />
               </SelectTrigger>
               <SelectContent>
-                <SelectItem value="ALL">Tất cả</SelectItem>
+                <SelectItem value="ALL">Tất cả trạng thái</SelectItem>
                 {uniqueStatuses.map(st => (
                   <SelectItem key={st} value={st}>{st}</SelectItem>
                 ))}
+              </SelectContent>
+            </Select>
+
+            <div className="w-[160px]">
+              <div className="relative"><DatePicker value={dateFilter} onChange={(val) => setDateFilter(val)} placeholder="Lọc ngày" />{dateFilter && <button className="absolute right-2 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600" onClick={() => setDateFilter("")}>✕</button>}</div>
+            </div>
+
+            <Select value={shiftFilter} onValueChange={(val) => setShiftFilter(val || "ALL")}>
+              <SelectTrigger className="w-[130px] border-slate-200 rounded-xl">
+                <SelectValue placeholder="Ca làm việc" />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="ALL">Tất cả ca</SelectItem>
+                <SelectItem value="ca sáng">Ca Sáng</SelectItem>
+                <SelectItem value="ca chiều">Ca Chiều</SelectItem>
+                <SelectItem value="ca 1">Ca 1</SelectItem>
+                <SelectItem value="ca 2">Ca 2</SelectItem>
+                <SelectItem value="ca 3">Ca 3</SelectItem>
+                <SelectItem value="ca 4">Ca 4</SelectItem>
+                <SelectItem value="ca 5">Ca 5</SelectItem>
+              </SelectContent>
+            </Select>
+
+            <Select value={genderFilter} onValueChange={(val) => setGenderFilter(val || "ALL")}>
+              <SelectTrigger className="w-[110px] border-slate-200 rounded-xl">
+                <SelectValue placeholder="Giới tính" />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="ALL">Nam/Nữ</SelectItem>
+                <SelectItem value="Nam">Nam</SelectItem>
+                <SelectItem value="Nữ">Nữ</SelectItem>
               </SelectContent>
             </Select>
 
@@ -231,7 +278,8 @@ export default function AdminTrackingPage() {
               <TableHead className="font-bold text-slate-600 min-w-40">Xác nhận nhận việc</TableHead>
               <TableHead className="font-bold text-slate-600 min-w-32">Ngày nhận việc</TableHead>
               <TableHead className="font-bold text-slate-600 min-w-36">Ca/Team</TableHead>
-              <TableHead className="font-bold text-slate-600 min-w-[140px]">Trạng thái</TableHead>
+              <TableHead className="font-bold text-slate-600 min-w-24">Giới tính</TableHead>
+                <TableHead className="font-bold text-slate-600 min-w-[140px]">Trạng thái</TableHead>
               <TableHead className="font-bold text-slate-600 min-w-40">Ghi chú</TableHead>
               <TableHead className="font-bold text-slate-600 text-center sticky right-0 bg-slate-50 w-24">Thao tác</TableHead>
             </TableRow>
@@ -239,13 +287,13 @@ export default function AdminTrackingPage() {
           <TableBody>
             {loading ? (
               <TableRow>
-                <TableCell colSpan={15} className="h-64 text-center">
+                <TableCell colSpan={16} className="h-64 text-center">
                   <Loader2 className="h-8 w-8 animate-spin mx-auto text-slate-300" />
                 </TableCell>
               </TableRow>
             ) : filteredData.length === 0 ? (
               <TableRow>
-                <TableCell colSpan={15} className="h-64 text-center text-slate-500">
+                <TableCell colSpan={16} className="h-64 text-center text-slate-500">
                   <div className="flex flex-col items-center justify-center gap-2">
                     <UserCheck className="h-10 w-10 text-slate-200" />
                     <p>Chưa có dữ liệu theo dõi.</p>

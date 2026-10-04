@@ -13,11 +13,13 @@ import {
 export function DatePicker({
   value,
   onChange,
-  disabled
+  disabled,
+  placeholder
 }: {
   value: string;
   onChange: (value: string) => void;
   disabled?: boolean;
+  placeholder?: string;
 }) {
   let date: Date | undefined = undefined;
   if (value) {
@@ -49,7 +51,7 @@ export function DatePicker({
         disabled={disabled}
       >
         <CalendarIcon className="mr-2 h-4 w-4 text-gray-500" />
-        {date ? format(date, "dd/MM/yyyy") : <span>Chọn ngày...</span>}
+        {date ? format(date, "dd/MM/yyyy") : <span>{placeholder || "Chọn ngày..."}</span>}
       </PopoverTrigger>
       <PopoverContent className="w-auto p-0" align="start">
         <Calendar
