@@ -53,11 +53,11 @@ export default function SpxFulltimePage() {
           <div className="relative flex min-h-[470px] items-center px-6 py-10 md:min-h-[540px] md:px-12 md:py-16">
             <div className="max-w-3xl">
               <p className="mb-4 inline-flex rounded-full bg-yellow-400 px-3 py-1 text-xs font-black uppercase tracking-[0.18em] text-red-900 shadow-md">
-                Cơ hội việc làm chính thức
+                Cơ hội việc làm Full-time · BPO Cố Định
               </p>
               <h1 className="max-w-3xl text-4xl font-black uppercase leading-[1.05] tracking-tight drop-shadow-[0_2px_3px_rgba(0,0,0,0.65)] md:text-6xl">
                 Nhân viên kho SPX
-                <span className="mt-2 block text-yellow-300">Full-time</span>
+                <span className="mt-2 block text-yellow-300">Full-time · BPO Cố Định</span>
               </h1>
               <p className="mt-5 max-w-2xl text-base leading-7 text-white drop-shadow-[0_1px_2px_rgba(0,0,0,0.7)] md:text-lg">
                 Làm việc ổn định tại KCN Bình Minh, đầy đủ hợp đồng, bảo hiểm và
@@ -78,26 +78,26 @@ export default function SpxFulltimePage() {
         <section className="-mt-6 relative z-10 grid gap-4 px-2 md:grid-cols-3 md:px-8">
           <div className="rounded-2xl border border-red-100 bg-white p-5 shadow-lg">
             <p className="text-xs font-bold uppercase tracking-wide text-slate-500">
-              Thu nhập theo ca
+              Thu nhập thực tế
             </p>
             <p className="mt-2 text-2xl font-black text-red-700">
-              250.000 - 300.000
+              9.0M - 9.3M
             </p>
-            <p className="text-sm text-slate-500">VNĐ / ca</p>
+            <p className="text-sm text-slate-500">VNĐ / tháng (Chế độ mới)</p>
           </div>
           <div className="rounded-2xl border border-red-100 bg-white p-5 shadow-lg">
             <p className="text-xs font-bold uppercase tracking-wide text-slate-500">
-              Thưởng chuyên cần
+              Lương cơ bản
             </p>
-            <p className="mt-2 text-2xl font-black text-red-700">750.000</p>
+            <p className="mt-2 text-2xl font-black text-red-700">6.000.000</p>
             <p className="text-sm text-slate-500">VNĐ / tháng</p>
           </div>
           <div className="rounded-2xl border border-red-100 bg-white p-5 shadow-lg">
             <p className="text-xs font-bold uppercase tracking-wide text-slate-500">
-              Lịch trả lương
+              Lịch nhận lương
             </p>
             <p className="mt-2 text-2xl font-black text-red-700">
-              Ngày 05 & 20
+              07-10 & 23-25
             </p>
             <p className="text-sm text-slate-500">hàng tháng</p>
           </div>
@@ -105,6 +105,71 @@ export default function SpxFulltimePage() {
 
         <div className="mt-12 grid gap-8 lg:grid-cols-[1.4fr_0.8fr]">
           <div className="space-y-8">
+            {/* BẢNG CHẾ ĐỘ MỚI (THEO ẢNH 4) */}
+            <section className="overflow-hidden rounded-2xl border-2 border-yellow-400 bg-white shadow-lg">
+              <div className="flex items-center justify-between bg-yellow-400 px-6 py-4 text-slate-900">
+                <div className="flex items-center gap-2">
+                  <span className="text-2xl">🔥</span>
+                  <h2 className="text-xl md:text-2xl font-black uppercase tracking-wider text-black">
+                    CHẾ ĐỘ MỚI
+                  </h2>
+                </div>
+                <div className="text-right">
+                  <span className="rounded-lg bg-black px-3.5 py-1.5 text-base md:text-lg font-black text-yellow-300">
+                    6.000.000 VNĐ
+                  </span>
+                </div>
+              </div>
+
+              <div className="divide-y divide-slate-100 text-sm md:text-base">
+                <div className="flex items-center justify-between px-6 py-4 hover:bg-slate-50 transition">
+                  <div className="flex items-center gap-3">
+                    <div className="w-2.5 h-2.5 rounded-full bg-red-600"></div>
+                    <span className="font-bold text-slate-800">Nhận lương</span>
+                  </div>
+                  <span className="font-extrabold text-red-700 text-lg">
+                    Ngày 07 - 10
+                  </span>
+                </div>
+
+                <div className="flex items-center justify-between px-6 py-4 hover:bg-slate-50 transition">
+                  <div className="flex items-center gap-3">
+                    <div className="w-2.5 h-2.5 rounded-full bg-orange-500"></div>
+                    <span className="font-bold text-slate-800">Ứng lương</span>
+                  </div>
+                  <span className="font-extrabold text-orange-600 text-lg">
+                    Ngày 23 - 25
+                  </span>
+                </div>
+
+                <div className="flex items-center justify-between px-6 py-4 hover:bg-slate-50 transition">
+                  <div className="flex items-center gap-3">
+                    <div className="w-2.5 h-2.5 rounded-full bg-green-600"></div>
+                    <span className="font-bold text-slate-800">Nhận KPI + PC (Phụ cấp)</span>
+                  </div>
+                  <span className="font-extrabold text-green-700 text-lg">
+                    Ngày 23 - 25
+                  </span>
+                </div>
+
+                <div className="bg-red-50/80 px-6 py-5 flex flex-col sm:flex-row items-center justify-between gap-3 border-t-2 border-red-200">
+                  <div>
+                    <p className="text-xs font-bold uppercase tracking-wider text-red-800">
+                      Tổng thu nhập thực nhận dự kiến
+                    </p>
+                    <p className="text-xs text-slate-500">
+                      (Bao gồm Lương cơ bản + Ứng lương + KPI + Phụ cấp)
+                    </p>
+                  </div>
+                  <div className="text-right">
+                    <p className="text-2xl md:text-3xl font-black text-red-700">
+                      9.000.000 - 9.300.000 <span className="text-sm font-bold text-slate-700">VNĐ</span>
+                    </p>
+                  </div>
+                </div>
+              </div>
+            </section>
+
             <section className="rounded-2xl border border-slate-200 bg-white p-6 shadow-sm md:p-8">
               <div className="mb-6 flex items-center gap-3">
                 <div className="rounded-xl bg-red-50 p-3 text-red-700">
@@ -152,8 +217,9 @@ export default function SpxFulltimePage() {
               </div>
               <div className="grid gap-4 md:grid-cols-2">
                 {[
-                  "Lãnh lương đều đặn 2 tuần 1 lần, vào ngày 05 và 20 hàng tháng.",
-                  "Ký hợp đồng lao động, tham gia đầy đủ BHXH và BHYT.",
+                  "Lãnh lương và phụ cấp theo chế độ mới: Nhận lương ngày 07 - 10, ứng lương & nhận KPI + PC ngày 23 - 25 hàng tháng.",
+                  "Ký hợp đồng lao động, tham gia đầy đủ BHXH và BHYT theo quy định.",
+                  "Tổng thu nhập thực tế từ 9.000.000 - 9.300.000 VNĐ/tháng.",
                   "Có lương tháng 13 theo chính sách công ty.",
                   "Môi trường làm việc chuyên nghiệp, có đào tạo khi nhận việc.",
                 ].map((benefit) => (
@@ -244,7 +310,7 @@ export default function SpxFulltimePage() {
         <div className="mx-auto flex max-w-6xl items-center justify-between gap-4 px-1 md:px-6">
           <div className="hidden text-sm md:block">
             <span className="font-bold text-slate-900">
-              Nhân viên kho SPX Full-time
+              Nhân viên kho SPX Full-time · BPO Cố Định
             </span>
             <span className="ml-2 text-slate-500">
               KCN Bình Minh, Vĩnh Long

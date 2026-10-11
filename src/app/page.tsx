@@ -60,7 +60,7 @@ export default function HomePage() {
             <span className="text-yellow-300 block md:inline mt-2 md:mt-0">
               Nhân Viên Kho
             </span>{" "}
-            Chính Thức
+            Cố Định ( BPO )
           </h1>
           <p className="text-xl md:text-2xl font-medium mb-8 text-red-50">
             Đãi ngộ tốt - Thu nhập hấp dẫn - Môi trường ổn định
@@ -68,7 +68,7 @@ export default function HomePage() {
 
           <div className="bg-white text-red-700 rounded-full px-6 py-3 md:px-8 md:py-4 mb-10 shadow-lg border-4 border-yellow-300 transform -rotate-1">
             <p className="text-2xl md:text-4xl font-black">
-              7.400.000 - 11.000.000{" "}
+              8.400.000 - 11.300.000{" "}
               <span className="text-lg md:text-2xl text-gray-600">
                 VNĐ / THÁNG
               </span>
@@ -117,52 +117,6 @@ export default function HomePage() {
           </div>
 
           <div className="grid gap-4 grid-cols-1">
-            {/* Card 1: Ca xoay */}
-            <article className="overflow-hidden rounded-2xl border border-gray-200 bg-white shadow-sm transition hover:-translate-y-0.5 hover:shadow-lg">
-              <div className="grid md:grid-cols-[200px_1fr] md:items-stretch">
-                <div className="flex min-h-32 md:min-h-full items-center justify-center bg-[#d90012] p-6 text-center text-white">
-                  <div>
-                    <p className="text-3xl font-black italic tracking-tight">SPX</p>
-                    <p className="mt-2 text-xs font-bold uppercase tracking-[0.2em] text-yellow-300">Express</p>
-                    <div className="mx-auto mt-4 h-1 w-12 bg-yellow-400" />
-                  </div>
-                </div>
-                <div className="p-6 md:p-7 flex flex-col md:flex-row md:items-center gap-6 justify-between">
-                  <div className="space-y-4">
-                    <div>
-                      <p className="text-xs font-bold uppercase tracking-[0.16em] text-red-700">
-                        Nhân viên chính thức
-                      </p>
-                      <h3 className="mt-1 text-xl font-bold text-gray-900 line-clamp-2">
-                        Nhân viên kho - Ca xoay
-                      </h3>
-                      <p className="mt-1 text-sm text-gray-500">
-                        KCN Bình Minh, Vĩnh Long
-                      </p>
-                    </div>
-                    <div className="flex flex-wrap gap-2 text-sm flex-1">
-                      <span className="rounded-md bg-red-50 px-3 py-1.5 font-semibold text-red-700">
-                        8.5M - 10.5M VNĐ/tháng
-                      </span>
-                      <span className="rounded-md bg-gray-100 px-3 py-1.5 text-gray-700">
-                        Xoay ca
-                      </span>
-                      <span className="rounded-md bg-gray-100 px-3 py-1.5 text-gray-700">
-                        Đủ BHXH, BHYT
-                      </span>
-                    </div>
-                  </div>
-                  <div className="mt-4 md:mt-0 md:shrink-0 md:border-l md:border-gray-100 md:pl-6 flex items-center">
-                    <Link href="/viec-lam/agari-chinh-thuc" className="w-full">
-                      <Button className="w-full bg-red-700 font-bold text-white hover:bg-red-800 md:min-w-[160px]">
-                        XEM CHI TIẾT
-                      </Button>
-                    </Link>
-                  </div>
-                </div>
-              </div>
-            </article>
-
             {/* Card 2: Full-time */}
             <article className="overflow-hidden rounded-2xl border border-gray-200 bg-white shadow-sm transition hover:-translate-y-0.5 hover:shadow-lg">
               <div className="grid md:grid-cols-[200px_1fr] md:items-stretch">
@@ -177,7 +131,7 @@ export default function HomePage() {
                   <div className="space-y-4">
                     <div>
                       <p className="text-xs font-bold uppercase tracking-[0.16em] text-red-700">
-                        Full-time · Chính thức
+                        Full-time · BPO CỐ ĐỊNH
                       </p>
                       <h3 className="mt-1 text-xl font-bold text-gray-900">
                         Nhân viên kho SPX
@@ -188,13 +142,16 @@ export default function HomePage() {
                     </div>
                     <div className="flex flex-wrap gap-2 text-sm">
                       <span className="rounded-md bg-red-50 px-3 py-1.5 font-semibold text-red-700">
-                        250.000 - 300.000 VNĐ/ca
+                        9.0M - 9.3M VNĐ/tháng
+                      </span>
+                      <span className="rounded-md bg-gray-100 px-3 py-1.5 text-gray-700">
+                        250k - 300k/ca
                       </span>
                       <span className="rounded-md bg-gray-100 px-3 py-1.5 text-gray-700">
                         3 ca cố định
                       </span>
-                      <span className="rounded-md bg-gray-100 px-3 py-1.5 text-gray-700">
-                        Đủ BHXH, BHYT
+                      <span className="rounded-md bg-yellow-100 px-3 py-1.5 font-semibold text-yellow-800">
+                        Chế độ mới
                       </span>
                     </div>
                   </div>
@@ -367,7 +324,7 @@ export default function HomePage() {
               </CardHeader>
               <CardContent>
                 <div className="text-3xl font-bold text-gray-900">
-                  5.310.000
+                  6.000.000
                   <span className="text-sm font-normal text-gray-500 ml-1">
                     VNĐ
                   </span>
@@ -383,7 +340,7 @@ export default function HomePage() {
               </CardHeader>
               <CardContent>
                 <div className="text-3xl font-bold text-gray-900">
-                  1.310.000
+                  1.500.000
                   <span className="text-sm font-normal text-gray-500 ml-1">
                     VNĐ
                   </span>
@@ -399,7 +356,7 @@ export default function HomePage() {
               </CardHeader>
               <CardContent>
                 <div className="text-3xl font-bold text-gray-900">
-                  780.000
+                  900.000
                   <span className="text-sm font-normal text-gray-500 ml-1">
                     VNĐ
                   </span>
@@ -415,7 +372,7 @@ export default function HomePage() {
               </CardHeader>
               <CardContent>
                 <div className="text-3xl font-bold text-red-700">
-                  7.400.000
+                  8.400.000
                   <span className="text-sm font-normal text-red-600 ml-1">
                     VNĐ
                   </span>
@@ -477,7 +434,7 @@ export default function HomePage() {
             <div className="bg-white rounded-xl p-8 shadow-sm border border-gray-100">
               <ul className="space-y-4">
                 {[
-                  "Hợp đồng lao động chính thức.",
+                  "Hợp đồng lao động đầy đủ, chế độ BPO cố định.",
                   "Tham gia đầy đủ BHXH, BHYT.",
                   "12 ngày phép năm.",
                   "Thưởng các ngày Lễ/Tết trong năm.",

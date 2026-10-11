@@ -44,7 +44,7 @@ const jobOptions = {
     schedule: "Ca xoay theo lịch công ty",
   },
   "spx-fulltime": {
-    title: "Nhân viên kho SPX Full-time",
+    title: "Nhân viên kho SPX Full-time (BPO Cố định)",
     schedule: "Ca cố định: 06:00 - 15:00, 13:00 - 22:00 hoặc 22:00 - 06:00",
   },
   "agari-part-time": {
@@ -103,7 +103,7 @@ export default function UngTuyenPage() {
   const [locations, setLocations] = useState<Location[]>(defaultLocations);
   const [locationsLoading, setLocationsLoading] = useState(true);
   const [jobId, setJobId] = useState<keyof typeof jobOptions>(
-    "warehouse-rotating-shift",
+    "spx-fulltime",
   );
 
   useEffect(() => {
@@ -140,9 +140,9 @@ export default function UngTuyenPage() {
       preferredLocation: "",
       note: "",
       opsCode: "",
-      jobId: "warehouse-rotating-shift",
-      jobTitle: jobOptions["warehouse-rotating-shift"].title,
-      workSchedule: jobOptions["warehouse-rotating-shift"].schedule,
+      jobId: "spx-fulltime",
+      jobTitle: jobOptions["spx-fulltime"].title,
+      workSchedule: "",
     },
   });
 
