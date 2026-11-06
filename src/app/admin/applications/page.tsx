@@ -142,8 +142,12 @@ function ApplicationsContent() {
     }
   };
 
-  if (jobIdFilter?.includes("lap-vo-dong-thap") || jobIdFilter?.includes("thot-not-can-tho")) {
-    return <MeKongApplications />;
+  if (
+    jobIdFilter?.includes("lap-vo-dong-thap") ||
+    jobIdFilter?.includes("thot-not-can-tho") ||
+    jobIdFilter?.includes("hcm-")
+  ) {
+    return <MeKongApplications jobIdFilter={jobIdFilter} />;
   }
 
   return (

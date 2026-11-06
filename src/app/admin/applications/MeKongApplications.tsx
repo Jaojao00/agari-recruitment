@@ -1,4 +1,4 @@
-﻿import React, { useState, useEffect, useCallback } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import { Application, ApplicationStatus } from "@/lib/firebase/models";
 import { Loader2, Eye, EyeOff } from "lucide-react";
 import { Input } from "@/components/ui/input";
@@ -26,7 +26,7 @@ type TrackingRow = {
   note: string;
 };
 
-export default function MeKongApplications() {
+export default function MeKongApplications({ jobIdFilter = "lap-vo-dong-thap,thot-not-can-tho" }: { jobIdFilter?: string }) {
   const [data, setData] = useState<Application[]>([]);
   const [trackings, setTrackings] = useState<TrackingRow[]>([]);
   const [loading, setLoading] = useState(true);
@@ -40,7 +40,7 @@ export default function MeKongApplications() {
   const fetchApplications = useCallback(async () => {
     setLoading(true);
     try {
-      const res = await fetch(`/api/admin/applications?jobId=lap-vo-dong-thap,thot-not-can-tho&limit=1000&status=ALL`);
+      const res = await fetch(`/api/admin/applications?jobId=${encodeURIComponent(jobIdFilter)}&limit=1000&status=ALL`);
       const json = res.ok ? await res.json() : { data: [] };
       if (json.data) {
         setData(json.data);
@@ -56,7 +56,7 @@ export default function MeKongApplications() {
     } finally {
       setLoading(false);
     }
-  }, []);
+  }, [jobIdFilter]);
 
   const fetchTrackingsOnly = async () => {
     const trackRes = await fetch(`/api/admin/tracking`);

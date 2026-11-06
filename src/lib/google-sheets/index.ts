@@ -1,4 +1,4 @@
-﻿import { google } from "googleapis";
+import { google } from "googleapis";
 
 const SCOPES = ["https://www.googleapis.com/auth/spreadsheets"];
 
@@ -117,13 +117,96 @@ async function getJobSheetName(jobId?: string): Promise<string> {
     if (sheet) return sheet.title;
   }
   
-  if (jobId === "lap-vo-dong-thap") {
+  if (jobId === "lap-vo-dong-thap" || jobId === "thot-not-can-tho") {
     const titles = await getSheetTitles();
     const sheet = titles.find((s) => s.gid === 1565664528);
     if (sheet) return sheet.title;
   }
 
+  if (
+    jobId === "hcm-fulltime" ||
+    jobId === "hcm-binh-tan" ||
+    jobId === "hcm-tan-phu"
+  ) {
+    return await getOrCreateHcmSheetName();
+  }
+
   return defaultSheetName;
+}
+
+const HCM_SHEET_TITLE = "KHU VỰC TP.HCM";
+
+async function getOrCreateHcmSheetName(): Promise<string> {
+  const titles = await getSheetTitles();
+  const existing = titles.find(
+    (s) =>
+      s.title.trim().toUpperCase() === HCM_SHEET_TITLE ||
+      s.title.trim().toUpperCase() === "KV TP.HCM" ||
+      s.title.trim().toUpperCase() === "TP.HCM",
+  );
+  if (existing) return existing.title;
+
+  try {
+    const sheets = getSheetsClient();
+    const spreadsheetId = getSpreadsheetId();
+    const addRes = await sheets.spreadsheets.batchUpdate({
+      spreadsheetId,
+      requestBody: {
+        requests: [
+          {
+            addSheet: {
+              properties: {
+                title: HCM_SHEET_TITLE,
+              },
+            },
+          },
+        ],
+      },
+    });
+    const newSheetId =
+      addRes.data.replies?.[0]?.addSheet?.properties?.sheetId || 0;
+    const newTitle =
+      addRes.data.replies?.[0]?.addSheet?.properties?.title || HCM_SHEET_TITLE;
+
+    // Add standard headers to the newly created sheet
+    const headers = [
+      "Mã hồ sơ",
+      "Họ và tên",
+      "Ngày sinh",
+      "Số CCCD",
+      "Số điện thoại",
+      "Giới tính",
+      "Mã Ops",
+      "Khu vực ứng tuyển",
+      "Địa chỉ",
+      "Học vấn",
+      "Kinh nghiệm",
+      "Ngày có thể nhận việc",
+      "Ngày ứng tuyển",
+      "Trạng thái",
+      "Ghi chú ứng viên",
+      "Ghi chú Admin",
+      "Cập nhật lúc",
+      "Đồng bộ",
+      "Mã công việc",
+      "Tên công việc",
+      "Ca làm việc",
+      "Ngày trúng tuyển",
+      "Ngày hết hạn",
+    ];
+    await sheets.spreadsheets.values.update({
+      spreadsheetId,
+      range: `'${newTitle}'!A1:W1`,
+      valueInputOption: "USER_ENTERED",
+      requestBody: { values: [headers] },
+    });
+
+    sheetInfoCache = null; // Invalidate cache so subsequent reads see the new tab
+    return newTitle;
+  } catch (err) {
+    console.error("Failed to create HCM sheet tab:", err);
+    return await getDefaultSheetName();
+  }
 }
 
 function formatSheetDate(value: unknown) {
@@ -230,6 +313,12 @@ export async function getApplicationsFromSheet(): Promise<SheetApplication[]> {
 
   const ftSheet = titles.find((s) => s.gid === 1291225589);
   if (ftSheet) targetSheetNames.add(ftSheet.title);
+
+  const mkSheet = titles.find((s) => s.gid === 1565664528);
+  if (mkSheet) targetSheetNames.add(mkSheet.title);
+
+  const hcmSheetName = await getOrCreateHcmSheetName();
+  if (hcmSheetName) targetSheetNames.add(hcmSheetName);
 
   let allApplications: SheetApplication[] = [];
 

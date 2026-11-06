@@ -1,4 +1,4 @@
-﻿"use client";
+"use client";
 
 import { AuthProvider, useAuth } from "@/lib/auth/auth-context";
 import { useRouter, usePathname } from "next/navigation";
@@ -53,6 +53,12 @@ function AdminSidebar({ isOpen }: { isOpen: boolean }) {
     {
       name: "Mục KV MeKong",
       path: "/admin/applications?jobId=lap-vo-dong-thap,thot-not-can-tho",
+      icon: <Users size={20} />,
+      isSub: true,
+    },
+    {
+      name: "Mục KV TP.HCM",
+      path: "/admin/applications?jobId=hcm-fulltime,hcm-binh-tan,hcm-tan-phu",
       icon: <Users size={20} />,
       isSub: true,
     },

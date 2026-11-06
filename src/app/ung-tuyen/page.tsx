@@ -58,8 +58,50 @@ const jobOptions = {
   "thot-not-can-tho": {
     title: "Nhân viên kho Full-time (BPO) - Thốt Nốt",
     schedule: "09:00 - 18:00",
-  }
+  },
+  "hcm-fulltime": {
+    title: "Nhân viên chính thức kho SPX-Express - Khu vực TP.HCM",
+    schedule: "Xoay ca (Luân chuyển giữa 5 ca làm việc chính)",
+  },
+  "hcm-binh-tan": {
+    title: "Nhân viên chính thức kho SPX-Express - Quận Bình Tân (TP.HCM)",
+    schedule: "Xoay ca (Luân chuyển giữa 5 ca làm việc chính)",
+  },
+  "hcm-tan-phu": {
+    title: "Nhân viên chính thức kho SPX-Express - Quận Tân Phú (TP.HCM)",
+    schedule: "Xoay ca (Luân chuyển giữa 5 ca làm việc chính)",
+  },
 } as const;
+
+const hcmLocations = [
+  "Quận Bình Tân (Tuyển chính): 754/8 Tân Kỳ Tân Quý, P. Bình Hưng Hòa B, Q. Bình Tân",
+  "Quận Tân Phú (Tuyển chính): 549/32 Tân Kỳ Tân Quý, P. Bình Hưng Hòa B, Q. Bình Tân",
+  "50-HCM | Tan Phu/Tan Quy Hub - Quận Tân Phú",
+  "51-HCM | DS/Phu Dinh Hub - Phú Định (Quận 8)",
+  "51-HCM | Binh Chanh/Vinh Loc A Hub - Huyện Bình Chánh",
+  "52-HCM | SDD-01 Hub - Kho SDD-01",
+  "51-HCM | Tan Phu/Tan Son Nhi Hub - Quận Tân Phú",
+  "51-HCM | Tan Binh/Tan Son Hoa Hub - Quận Tân Bình",
+  "51-HCM | Tan Binh/Tan Son Nhat Hub - Quận Tân Bình",
+  "51-HCM | Binh Thanh/Phuong 12 Hub - Quận Bình Thạnh",
+  "51-HCM | D12/Le Van Khuong Hub - Quận 12",
+  "51-HCM | Hoc Mon/Thoi Tam Thon Hub - Huyện Hóc Môn",
+  "51-HCM | Nha Be/Phuoc Kien Hub - Huyện Nhà Bè",
+  "50-HCM | Can Gio Hub - Huyện Cần Giờ",
+  "50-HCM | Binh Chanh/Vinh Loc Hub - Huyện Bình Chánh",
+  "51-HCM | Binh Tan Binh Hung Hoa B Hub - Quận Bình Tân",
+  "54-HCM | FM 01 Hub - Trạm FM 01",
+  "51-HCM | D8/Pham The Hien Hub - Quận 8",
+  "50-HCM | Phu Nhuan/Phuong 4 Hub - Quận Phú Nhuận",
+];
+
+function isHcmJob(jobId: string) {
+  return (
+    jobId === "hcm-fulltime" ||
+    jobId === "hcm-binh-tan" ||
+    jobId === "hcm-tan-phu"
+  );
+}
 
 const defaultLocations: Location[] = [
   {
@@ -154,7 +196,17 @@ export default function UngTuyenPage() {
         setJobId(validJob);
         form.setValue("jobId", validJob);
         form.setValue("jobTitle", jobOptions[validJob].title);
-        form.setValue("workSchedule", "");
+        if (validJob === "hcm-binh-tan") {
+          form.setValue("preferredLocation", hcmLocations[0]);
+          form.setValue("workSchedule", "Xoay ca luân chuyển (5 ca làm việc chính)");
+        } else if (validJob === "hcm-tan-phu") {
+          form.setValue("preferredLocation", hcmLocations[1]);
+          form.setValue("workSchedule", "Xoay ca luân chuyển (5 ca làm việc chính)");
+        } else if (validJob === "hcm-fulltime") {
+          form.setValue("workSchedule", "Xoay ca luân chuyển (5 ca làm việc chính)");
+        } else {
+          form.setValue("workSchedule", "");
+        }
       }, 0);
       return () => window.clearTimeout(timer);
     }
@@ -222,9 +274,11 @@ export default function UngTuyenPage() {
               <p className="text-sm text-red-100">
                 {jobOptions[jobId].schedule}
               </p>
-              {(jobId === "warehouse-rotating-shift" || jobId === "spx-fulltime") && (
+              {(jobId === "warehouse-rotating-shift" || jobId === "spx-fulltime" || isHcmJob(jobId)) && (
                 <p className="text-sm italic text-yellow-100 border-t border-white/20 mt-2 pt-2">
-                  * Đối với các bạn nhân viên đã có mã nhân viên thì hãy điền vào nhé.
+                  {isHcmJob(jobId)
+                    ? "* Khu vực TP.HCM: Mang theo CCCD gắn chip khi tham gia phỏng vấn trực tiếp. Tối thiểu 23 công/tháng, nghỉ xoay tuần. (Nếu đã có mã Ops nhân viên vui lòng điền bên dưới)."
+                    : "* Đối với các bạn nhân viên đã có mã nhân viên thì hãy điền vào nhé."}
                 </p>
               )}
             </div>
@@ -319,7 +373,7 @@ export default function UngTuyenPage() {
                   />
                 </div>
 
-                <div className={`grid gap-6 ${(jobId === "warehouse-rotating-shift" || jobId === "spx-fulltime") ? "md:grid-cols-2" : ""}`}>
+                <div className={`grid gap-6 ${(jobId === "warehouse-rotating-shift" || jobId === "spx-fulltime" || isHcmJob(jobId)) ? "md:grid-cols-2" : ""}`}>
                   <FormField
                     control={form.control}
                     name="gender"
@@ -355,7 +409,7 @@ export default function UngTuyenPage() {
                     )}
                   />
 
-                  {(jobId === "warehouse-rotating-shift" || jobId === "spx-fulltime") && (
+                  {(jobId === "warehouse-rotating-shift" || jobId === "spx-fulltime" || isHcmJob(jobId)) && (
                     <FormField
                       control={form.control}
                       name="opsCode"
@@ -402,26 +456,64 @@ export default function UngTuyenPage() {
                     <FormItem>
                       <FormLabel className="flex items-center gap-1">
                         <MapPin size={14} className="text-red-600" />
-                        Khu vực muốn ứng tuyển *
+                        {isHcmJob(jobId)
+                          ? "Kho / Hub ứng tuyển tại TP.HCM *"
+                          : "Khu vực muốn ứng tuyển *"}
                       </FormLabel>
+                      {isHcmJob(jobId) && (
+                        <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 mb-2">
+                          <button
+                            type="button"
+                            onClick={() => field.onChange(hcmLocations[0])}
+                            className={`text-left p-2.5 rounded-lg border text-xs transition-all ${
+                              field.value === hcmLocations[0]
+                                ? "bg-red-50 border-red-600 text-red-900 font-semibold ring-1 ring-red-600"
+                                : "bg-gray-50 border-gray-200 text-gray-700 hover:border-red-300"
+                            }`}
+                          >
+                            <div className="font-bold text-red-700">1. Quận Bình Tân (Tuyển chính - SL: 5)</div>
+                            <div className="mt-0.5 text-[11px] text-gray-600">754/8 Tân Kỳ Tân Quý, P. Bình Hưng Hòa B</div>
+                          </button>
+                          <button
+                            type="button"
+                            onClick={() => field.onChange(hcmLocations[1])}
+                            className={`text-left p-2.5 rounded-lg border text-xs transition-all ${
+                              field.value === hcmLocations[1]
+                                ? "bg-red-50 border-red-600 text-red-900 font-semibold ring-1 ring-red-600"
+                                : "bg-gray-50 border-gray-200 text-gray-700 hover:border-red-300"
+                            }`}
+                          >
+                            <div className="font-bold text-red-700">2. Quận Tân Phú (Tuyển chính - SL: 1)</div>
+                            <div className="mt-0.5 text-[11px] text-gray-600">549/32 Tân Kỳ Tân Quý, P. Bình Hưng Hòa B</div>
+                          </button>
+                        </div>
+                      )}
                       <FormControl>
                         <Select
                           value={field.value}
                           onValueChange={field.onChange}
-                          disabled={locationsLoading}
+                          disabled={!isHcmJob(jobId) && locationsLoading}
                         >
                           <SelectTrigger className="h-auto min-h-12 w-full whitespace-normal">
                             <SelectValue
                               className="whitespace-normal break-words line-clamp-none"
                               placeholder={
-                                locationsLoading
+                                !isHcmJob(jobId) && locationsLoading
                                   ? "Đang tải danh sách khu vực..."
-                                  : "Chọn khu vực muốn ứng tuyển"
+                                  : isHcmJob(jobId)
+                                    ? "Chọn địa điểm phỏng vấn chính hoặc Hub SPX TP.HCM"
+                                    : "Chọn khu vực muốn ứng tuyển"
                               }
                             />
                           </SelectTrigger>
                           <SelectContent className="max-w-[calc(100vw-2rem)]">
-                            {jobId === "thot-not-can-tho" ? (
+                            {isHcmJob(jobId) ? (
+                              hcmLocations.map((loc) => (
+                                <SelectItem key={loc} value={loc} className="whitespace-normal py-2">
+                                  <span className="whitespace-normal break-words">{loc}</span>
+                                </SelectItem>
+                              ))
+                            ) : jobId === "thot-not-can-tho" ? (
                               ["78-CTO Co Do 02 Hub: Ấp Tân Lợi 1, Xã Thuận Hưng, Huyện Thốt Nốt, Cần Thơ."].map(loc => (
                                 <SelectItem key={loc} value={loc} className="whitespace-normal py-2">
                                   <span className="whitespace-normal break-words">{loc}</span>
@@ -454,24 +546,51 @@ export default function UngTuyenPage() {
                   )}
                 />
 
-                {jobId === "spx-fulltime" || jobId === "agari-part-time" || jobId === "lap-vo-dong-thap" || jobId === "thot-not-can-tho" ? (
+                {jobId === "spx-fulltime" || jobId === "agari-part-time" || jobId === "lap-vo-dong-thap" || jobId === "thot-not-can-tho" || isHcmJob(jobId) ? (
                   <FormField
                     control={form.control}
                     name="workSchedule"
                     render={({ field }) => (
                       <FormItem>
-                        <FormLabel>Ca muốn đăng ký *</FormLabel>
+                        <FormLabel>
+                          {isHcmJob(jobId)
+                            ? "Chế độ xoay ca / Khung ca đăng ký (TP.HCM) *"
+                            : "Ca muốn đăng ký *"}
+                        </FormLabel>
                         <Select
                           value={field.value}
                           onValueChange={field.onChange}
                         >
                           <FormControl>
                             <SelectTrigger className="h-12 w-full">
-                              <SelectValue placeholder={jobId === "spx-fulltime" ? "Chọn ca cố định" : "Chọn ca đăng ký"} />
+                              <SelectValue
+                                placeholder={
+                                  isHcmJob(jobId)
+                                    ? "Chọn chế độ xoay ca (TP.HCM)"
+                                    : jobId === "spx-fulltime"
+                                      ? "Chọn ca cố định"
+                                      : "Chọn ca đăng ký"
+                                }
+                              />
                             </SelectTrigger>
                           </FormControl>
                           <SelectContent className="w-[min(30rem,calc(100vw-2rem))]">
-                            {jobId === "thot-not-can-tho" ? (
+                            {isHcmJob(jobId) ? (
+                              <>
+                                <SelectItem value="Xoay ca luân chuyển (5 ca làm việc chính)">
+                                  Xoay ca luân chuyển (5 ca làm việc chính) • Theo phân công quản lý
+                                </SelectItem>
+                                <SelectItem value="Ca sáng sớm (Ca 1): 05:00 - 14:00">
+                                  Ca sáng sớm (Ca 1) • 05:00 - 14:00
+                                </SelectItem>
+                                <SelectItem value="Ca trưa - chiều (Ca 2 & 3): 11:00 - 20:00 & 12:00 - 21:00">
+                                  Ca trưa - chiều (Ca 2 & 3) • 11:00 - 20:00 & 12:00 - 21:00
+                                </SelectItem>
+                                <SelectItem value="Ca chiều - tối (Ca 4 & 5): 14:00 - 23:00 & 15:00 - 24:00">
+                                  Ca chiều - tối (Ca 4 & 5) • 14:00 - 23:00 & 15:00 - 24:00
+                                </SelectItem>
+                              </>
+                            ) : jobId === "thot-not-can-tho" ? (
                               <>
                                 <SelectItem value="09:00 - 18:00 (Giờ hành chính)">
                                   09:00 - 18:00 (Giờ hành chính)
