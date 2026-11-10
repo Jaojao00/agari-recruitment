@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { LiveRecruitmentStatsSection } from "@/components/social-proof/LiveRecruitmentProof";
 import type { HTMLAttributes } from "react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -125,6 +126,7 @@ export default function HomePage() {
           </div>
 
           <div className="grid gap-4 grid-cols-1">
+          <LiveRecruitmentStatsSection />
             {/* Card HCM 1: Quận Bình Tân, TP.HCM */}
             <article className="overflow-hidden rounded-2xl border border-gray-200 bg-white shadow-sm transition hover:-translate-y-0.5 hover:shadow-lg">
               <div className="grid md:grid-cols-[200px_1fr] md:items-stretch">
@@ -144,6 +146,9 @@ export default function HomePage() {
                       <h3 className="mt-1 text-xl font-bold text-gray-900">
                         Nhân viên chính thức kho SPX-Express (Quận Bình Tân)
                       </h3>
+                      <p className="mt-1 text-xs font-semibold text-emerald-700">
+                        🔥 Đã có 186+ ứng viên đăng ký • Đang ưu tiên phỏng vấn nhận việc ngay
+                      </p>
                       <p className="mt-1 text-sm text-gray-500">
                         754/8 Tân Kỳ Tân Quý, P. Bình Hưng Hòa B, Q. Bình Tân, TP.HCM (Cùng 19 Hub TP.HCM)
                       </p>
@@ -198,6 +203,9 @@ export default function HomePage() {
                       <h3 className="mt-1 text-xl font-bold text-gray-900">
                         Nhân viên chính thức kho SPX-Express (Quận Tân Phú)
                       </h3>
+                      <p className="mt-1 text-xs font-semibold text-emerald-700">
+                        🔥 Đã có 134+ ứng viên đăng ký • Đang ưu tiên phỏng vấn nhận việc ngay
+                      </p>
                       <p className="mt-1 text-sm text-gray-500">
                         549/32 Tân Kỳ Tân Quý, P. Bình Hưng Hòa B, Q. Bình Tân / Quận Tân Phú, TP.HCM
                       </p>

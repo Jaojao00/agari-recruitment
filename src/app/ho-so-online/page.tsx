@@ -17,6 +17,7 @@ import {
   Sparkles,
 } from "lucide-react";
 import { CANDIDATE_STORAGE_KEY } from "@/components/chat/CandidateChatWidget";
+import { LiveRecruitmentStatsSection } from "@/components/social-proof/LiveRecruitmentProof";
 
 interface CandidateProfileForm {
   profileId?: string;
@@ -408,6 +409,8 @@ export default function OnlineProfilePage() {
             </form>
           </div>
         </div>
+
+        <LiveRecruitmentStatsSection />
 
         {feedback && (
           <div
