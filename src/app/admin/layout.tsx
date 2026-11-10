@@ -2,15 +2,13 @@
 
 import { AuthProvider, useAuth } from "@/lib/auth/auth-context";
 import { useRouter, usePathname } from "next/navigation";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useCallback } from "react";
 import Link from "next/link";
 import {
   LayoutDashboard,
   Users,
-  FileX,
   FileSpreadsheet,
   LogOut,
-  Menu,
   MapPin,
   ClipboardList,
   Bell,
@@ -18,15 +16,28 @@ import {
   PanelLeftClose,
   PanelLeftOpen,
   UserCheck,
+  MessageSquare,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 
-function AdminSidebar({ isOpen }: { isOpen: boolean }) {
+function AdminSidebar({
+  isOpen,
+  unreadChatCount,
+}: {
+  isOpen: boolean;
+  unreadChatCount: number;
+}) {
   const pathname = usePathname();
   const { logout, user } = useAuth();
 
   const navItems = [
     { name: "Dashboard", path: "/admin", icon: <LayoutDashboard size={20} /> },
+    {
+      name: "Chat Online & Hồ sơ",
+      path: "/admin/chat",
+      icon: <MessageSquare size={20} />,
+      badge: unreadChatCount,
+    },
     {
       name: "Hồ sơ ứng tuyển (Tất cả)",
       path: "/admin/applications",
@@ -62,9 +73,11 @@ function AdminSidebar({ isOpen }: { isOpen: boolean }) {
       icon: <Users size={20} />,
       isSub: true,
     },
-    
-    
-    { name: "Theo dõi ứng viên", path: "/admin/tracking", icon: <UserCheck size={20} /> },
+    {
+      name: "Theo dõi ứng viên",
+      path: "/admin/tracking",
+      icon: <UserCheck size={20} />,
+    },
     {
       name: "Báo cáo",
       path: "/admin/reports",
@@ -83,32 +96,56 @@ function AdminSidebar({ isOpen }: { isOpen: boolean }) {
   ];
 
   return (
-    <div 
-      className={`bg-[#0F172A] text-slate-300 min-h-screen shrink-0 shadow-xl z-30 transition-all duration-300 overflow-hidden ${isOpen ? "w-72 fixed md:relative inset-y-0 left-0" : "w-0 hidden md:block md:w-0 md:relative"}`}
+    <div
+      className={`bg-[#0F172A] text-slate-300 min-h-screen shrink-0 shadow-xl z-30 transition-all duration-300 overflow-hidden ${
+        isOpen
+          ? "w-72 fixed md:relative inset-y-0 left-0"
+          : "w-0 hidden md:block md:w-0 md:relative"
+      }`}
     >
       <div className="w-72 flex flex-col h-full">
         <div className="h-16 flex items-center px-6 bg-[#D90000] text-white font-black text-xl tracking-wider uppercase shrink-0">
-          AGARI <span className="font-light ml-2 text-sm tracking-widest">ADMIN</span>
+          AGARI{" "}
+          <span className="font-light ml-2 text-sm tracking-widest">ADMIN</span>
         </div>
 
         <div className="flex-1 py-8 overflow-y-auto custom-scrollbar">
           <nav className="space-y-1.5 px-4">
             {navItems.map((item) => {
-              const isApplicationsPage = pathname.startsWith("/admin/applications");
+              const isApplicationsPage =
+                pathname.startsWith("/admin/applications");
               if (item.isSub && !isApplicationsPage) {
                 return null;
               }
-              const isExactPath = item.path.includes("?") ? false : pathname === item.path;
-              const isSubPath = item.path !== "/admin" && !item.path.includes("?") && pathname.startsWith(item.path);
+              const isExactPath = item.path.includes("?")
+                ? false
+                : pathname === item.path;
+              const isSubPath =
+                item.path !== "/admin" &&
+                !item.path.includes("?") &&
+                pathname.startsWith(item.path);
               const isActive = isExactPath || isSubPath;
-              
+
               return (
                 <Link key={item.name} href={item.path}>
                   <span
-                    className={`flex items-center gap-3 px-4 py-3 rounded-xl transition-all duration-200 font-medium whitespace-nowrap ${item.isSub ? "ml-8 text-sm py-2" : ""} ${isActive ? "bg-[#D90000] text-white shadow-lg shadow-red-900/50" : "text-slate-400 hover:bg-slate-800 hover:text-slate-100"}`}
+                    className={`flex items-center justify-between gap-3 px-4 py-3 rounded-xl transition-all duration-200 font-medium whitespace-nowrap ${
+                      item.isSub ? "ml-8 text-sm py-2" : ""
+                    } ${
+                      isActive
+                        ? "bg-[#D90000] text-white shadow-lg shadow-red-900/50"
+                        : "text-slate-400 hover:bg-slate-800 hover:text-slate-100"
+                    }`}
                   >
-                    {!item.isSub && item.icon}
-                    {item.name}
+                    <span className="flex items-center gap-3">
+                      {!item.isSub && item.icon}
+                      {item.name}
+                    </span>
+                    {typeof item.badge === "number" && item.badge > 0 && (
+                      <span className="min-w-5 h-5 px-1.5 rounded-full bg-yellow-400 text-red-950 font-black text-xs flex items-center justify-center">
+                        {item.badge}
+                      </span>
+                    )}
                   </span>
                 </Link>
               );
@@ -122,7 +159,10 @@ function AdminSidebar({ isOpen }: { isOpen: boolean }) {
               {user?.email?.charAt(0).toUpperCase()}
             </div>
             <div className="overflow-hidden">
-              <div className="text-sm font-semibold text-slate-200 truncate" title={user?.email || ""}>
+              <div
+                className="text-sm font-semibold text-slate-200 truncate"
+                title={user?.email || ""}
+              >
                 {user?.email}
               </div>
               <div className="text-xs text-slate-500">Quản trị viên</div>
@@ -141,34 +181,59 @@ function AdminSidebar({ isOpen }: { isOpen: boolean }) {
   );
 }
 
-function AdminHeader({ isSidebarOpen, toggleSidebar }: { isSidebarOpen: boolean, toggleSidebar: () => void }) {
+function AdminHeader({
+  isSidebarOpen,
+  toggleSidebar,
+  unreadChatCount,
+}: {
+  isSidebarOpen: boolean;
+  toggleSidebar: () => void;
+  unreadChatCount: number;
+}) {
   const { user } = useAuth();
   const [currentDate, setCurrentDate] = useState("");
 
   useEffect(() => {
     const now = new Date();
-    const days = ["Chủ nhật", "Thứ 2", "Thứ 3", "Thứ 4", "Thứ 5", "Thứ 6", "Thứ 7"];
+    const days = [
+      "Chủ nhật",
+      "Thứ 2",
+      "Thứ 3",
+      "Thứ 4",
+      "Thứ 5",
+      "Thứ 6",
+      "Thứ 7",
+    ];
     const day = days[now.getDay()];
     const dateStr = now.toLocaleDateString("vi-VN");
-    const timeStr = now.toLocaleTimeString("vi-VN", { hour: '2-digit', minute: '2-digit' });
+    const timeStr = now.toLocaleTimeString("vi-VN", {
+      hour: "2-digit",
+      minute: "2-digit",
+    });
     setCurrentDate(`${day}, ${dateStr} - ${timeStr}`);
   }, []);
 
   return (
     <header className="h-16 bg-gradient-to-r from-[#D90000] to-[#FF3B30] text-white flex items-center px-4 md:px-8 justify-between shrink-0 shadow-md relative z-10 transition-all duration-300">
       <div className="flex items-center gap-3 md:gap-6">
-        <Button 
-          variant="ghost" 
-          size="icon" 
+        <Button
+          variant="ghost"
+          size="icon"
           onClick={toggleSidebar}
           className="text-white hover:bg-white/20"
         >
-          {isSidebarOpen ? <PanelLeftClose size={24} /> : <PanelLeftOpen size={24} />}
+          {isSidebarOpen ? (
+            <PanelLeftClose size={24} />
+          ) : (
+            <PanelLeftOpen size={24} />
+          )}
         </Button>
         <div className="hidden md:flex flex-col">
           <div className="flex items-center gap-2">
             <Users size={18} className="opacity-90" />
-            <h2 className="font-bold text-lg tracking-wide">Hệ thống tuyển dụng AGARI</h2>
+            <h2 className="font-bold text-lg tracking-wide">
+              Hệ thống tuyển dụng AGARI
+            </h2>
           </div>
         </div>
         <div className="hidden lg:block h-6 w-px bg-white/30 mx-2"></div>
@@ -177,17 +242,43 @@ function AdminHeader({ isSidebarOpen, toggleSidebar }: { isSidebarOpen: boolean,
         </div>
       </div>
 
-      <div className="flex items-center gap-4 md:gap-6">
+      <div className="flex items-center gap-3 md:gap-5">
         <div className="hidden md:flex items-center gap-2 px-3 py-1.5 bg-black/15 rounded-lg border border-white/10">
           <CalendarIcon size={16} className="text-white/80" />
-          <span className="text-sm font-medium text-white/90">{currentDate}</span>
+          <span className="text-sm font-medium text-white/90">
+            {currentDate}
+          </span>
         </div>
-        
-        <div className="relative cursor-pointer hover:bg-white/10 p-2 rounded-full transition-colors">
+
+        <Link
+          href="/admin/chat"
+          title="Mở trang Chat trực tuyến với ứng viên"
+          className="relative flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-white/15 hover:bg-white/25 transition text-xs font-bold"
+        >
+          <MessageSquare size={17} />
+          <span className="hidden sm:inline">Chat Ứng viên</span>
+          {unreadChatCount > 0 && (
+            <span className="min-w-5 h-5 px-1 rounded-full bg-yellow-400 text-red-950 font-black text-[11px] flex items-center justify-center">
+              {unreadChatCount}
+            </span>
+          )}
+        </Link>
+
+        <Link
+          href="/admin/chat"
+          className="relative cursor-pointer hover:bg-white/10 p-2 rounded-full transition-colors"
+          title="Thông báo tin nhắn ứng viên"
+        >
           <Bell size={20} />
-          <span className="absolute top-1.5 right-1.5 w-2.5 h-2.5 bg-yellow-400 border-2 border-[#E51E1A] rounded-full"></span>
-        </div>
-        
+          {unreadChatCount > 0 ? (
+            <span className="absolute -top-0.5 -right-0.5 min-w-4 h-4 px-1 bg-yellow-400 text-red-950 font-black text-[10px] rounded-full flex items-center justify-center">
+              {unreadChatCount}
+            </span>
+          ) : (
+            <span className="absolute top-1.5 right-1.5 w-2.5 h-2.5 bg-yellow-400 border-2 border-[#E51E1A] rounded-full"></span>
+          )}
+        </Link>
+
         <div className="w-9 h-9 rounded-full bg-white text-[#D90000] flex items-center justify-center font-bold shadow-md ring-2 ring-white/20">
           {user?.email?.charAt(0).toUpperCase()}
         </div>
@@ -200,11 +291,34 @@ function AdminGuard({ children }: { children: React.ReactNode }) {
   const { user, loading } = useAuth();
   const router = useRouter();
   const pathname = usePathname();
-  
-  // State for sidebar toggle
-  const [isSidebarOpen, setIsSidebarOpen] = useState(true);
 
-  // Auto close sidebar on mobile navigation
+  const [isSidebarOpen, setIsSidebarOpen] = useState(true);
+  const [unreadChatCount, setUnreadChatCount] = useState(0);
+
+  const fetchUnreadSummary = useCallback(async () => {
+    if (!user || pathname === "/admin/login") return;
+    try {
+      const res = await fetch("/api/admin/chat?summaryOnly=true");
+      if (res.ok) {
+        const data = await res.json();
+        setUnreadChatCount(data.totalUnread || 0);
+      }
+    } catch {
+      // ignore
+    }
+  }, [user, pathname]);
+
+  useEffect(() => {
+    fetchUnreadSummary();
+    const interval = setInterval(fetchUnreadSummary, 6000);
+    const onRead = () => fetchUnreadSummary();
+    window.addEventListener("admin-chat-read", onRead);
+    return () => {
+      clearInterval(interval);
+      window.removeEventListener("admin-chat-read", onRead);
+    };
+  }, [fetchUnreadSummary]);
+
   useEffect(() => {
     if (window.innerWidth < 768) {
       setIsSidebarOpen(false);
@@ -241,25 +355,23 @@ function AdminGuard({ children }: { children: React.ReactNode }) {
 
   return (
     <div className="flex min-h-screen bg-[#F5F7FA] font-sans">
-      <AdminSidebar isOpen={isSidebarOpen} />
-      
-      {/* Overlay for mobile when sidebar is open */}
+      <AdminSidebar isOpen={isSidebarOpen} unreadChatCount={unreadChatCount} />
+
       {isSidebarOpen && (
-        <div 
-          className="fixed inset-0 bg-black/50 z-10 md:hidden" 
+        <div
+          className="fixed inset-0 bg-black/50 z-10 md:hidden"
           onClick={() => setIsSidebarOpen(false)}
         />
       )}
-      
+
       <div className="flex-1 flex flex-col min-w-0 h-screen overflow-hidden">
-        <AdminHeader 
-          isSidebarOpen={isSidebarOpen} 
-          toggleSidebar={() => setIsSidebarOpen(!isSidebarOpen)} 
+        <AdminHeader
+          isSidebarOpen={isSidebarOpen}
+          toggleSidebar={() => setIsSidebarOpen(!isSidebarOpen)}
+          unreadChatCount={unreadChatCount}
         />
         <main className="flex-1 overflow-auto p-4 md:p-8">
-          <div className="w-full">
-            {children}
-          </div>
+          <div className="w-full">{children}</div>
         </main>
       </div>
     </div>

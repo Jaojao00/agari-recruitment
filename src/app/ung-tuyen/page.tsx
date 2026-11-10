@@ -189,6 +189,34 @@ export default function UngTuyenPage() {
   });
 
   useEffect(() => {
+    // Tự động điền thông tin từ Hồ sơ Online đã lưu trên trình duyệt (nếu có)
+    try {
+      const savedRaw = window.localStorage.getItem("agari_candidate_profile");
+      if (savedRaw) {
+        const saved = JSON.parse(savedRaw);
+        if (saved.fullName) form.setValue("fullName", saved.fullName);
+        if (saved.phone) form.setValue("phone", saved.phone);
+        if (saved.cccd) form.setValue("cccd", saved.cccd);
+        if (saved.dateOfBirth) form.setValue("dateOfBirth", saved.dateOfBirth);
+        if (saved.gender === "Nam" || saved.gender === "Nữ") {
+          form.setValue("gender", saved.gender);
+        }
+        if (saved.opsCode) form.setValue("opsCode", saved.opsCode);
+        if (saved.permanentAddress) {
+          form.setValue("permanentAddress", saved.permanentAddress);
+        }
+        if (saved.education) form.setValue("education", saved.education);
+        if (saved.preferredShift) {
+          form.setValue("preferredShift", saved.preferredShift);
+        }
+        if (saved.availableStartDate) {
+          form.setValue("availableStartDate", saved.availableStartDate);
+        }
+      }
+    } catch {
+      // ignore
+    }
+
     const requestedJob = new URLSearchParams(window.location.search).get("job");
     if (requestedJob && requestedJob in jobOptions) {
       const validJob = requestedJob as keyof typeof jobOptions;
@@ -237,6 +265,16 @@ export default function UngTuyenPage() {
         throw new Error(result.error || "Có lỗi xảy ra. Vui lòng thử lại.");
       }
 
+      try {
+        window.localStorage.setItem(
+          "agari_candidate_profile",
+          JSON.stringify(payload),
+        );
+        window.dispatchEvent(new Event("agari-profile-updated"));
+      } catch {
+        // ignore
+      }
+
       // Redirect to success page with application ID
       router.push(`/thong-bao-thanh-cong?id=${result.applicationId}`);
     } catch (err: unknown) {
@@ -251,12 +289,18 @@ export default function UngTuyenPage() {
   return (
     <div className="min-h-screen bg-gray-50 py-8 px-4">
       <div className="max-w-2xl mx-auto">
-        <div className="mb-6 flex items-center">
+        <div className="mb-6 flex items-center justify-between gap-2">
           <Link
             href="/"
             className="text-red-700 flex items-center gap-2 hover:underline font-medium"
           >
             <ArrowLeft size={16} /> Về trang chủ
+          </Link>
+          <Link
+            href="/ho-so-online"
+            className="text-xs md:text-sm font-bold text-red-700 bg-red-50 hover:bg-red-100 border border-red-200 px-3.5 py-1.5 rounded-full transition"
+          >
+            ⚡ Hồ sơ Online & Tra cứu trạng thái
           </Link>
         </div>
 

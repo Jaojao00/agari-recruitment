@@ -3,12 +3,24 @@
 import { useSearchParams } from "next/navigation";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
-import { CheckCircle } from "lucide-react";
+import { CheckCircle, MessageCircle, FileText } from "lucide-react";
 import { Suspense } from "react";
 
 function SuccessContent() {
   const searchParams = useSearchParams();
   const applicationId = searchParams.get("id");
+
+  const handleOpenChat = () => {
+    window.dispatchEvent(
+      new CustomEvent("open-agari-chat", {
+        detail: {
+          prefill: applicationId
+            ? `Chào HR AGARI, mình vừa đăng ký ứng tuyển thành công với mã hồ sơ ${applicationId}, nhờ HR kiểm tra và xếp lịch phỏng vấn giúp mình nhé!`
+            : "",
+        },
+      }),
+    );
+  };
 
   return (
     <div className="bg-white p-8 md:p-12 rounded-2xl shadow-sm border border-gray-100 text-center max-w-md w-full">
@@ -33,25 +45,49 @@ function SuccessContent() {
         </div>
       )}
 
-      <p className="text-gray-600 mb-2">Thông tin của bạn đã được tiếp nhận.</p>
-      <p className="text-gray-600 mb-8 font-medium">
-        Nhân viên tuyển dụng sẽ liên hệ với bạn qua số điện thoại/Zalo.
+      <p className="text-gray-600 mb-2">
+        Hồ sơ của bạn đã được lưu trực tuyến trên hệ thống AGARI.
+      </p>
+      <p className="text-gray-600 mb-6 font-medium">
+        Bạn có thể nhắn tin trực tiếp với Nhà tuyển dụng ngay trên web để nhận lịch phỏng vấn sớm nhất!
       </p>
 
-      <a
-        href="https://zalo.me/g/sqjgbx906"
-        target="_blank"
-        rel="noopener noreferrer"
-        className="mb-3 flex h-12 w-full items-center justify-center rounded-full bg-blue-600 text-base font-bold text-white transition hover:bg-blue-700"
-      >
-        THAM GIA GROUP ZALO
-      </a>
+      <div className="space-y-3">
+        <button
+          type="button"
+          onClick={handleOpenChat}
+          className="flex h-12 w-full items-center justify-center gap-2 rounded-full bg-[#D90000] text-sm md:text-base font-bold text-white transition hover:bg-red-800 shadow-md"
+        >
+          <MessageCircle size={18} />
+          CHAT NGAY VỚI NHÀ TUYỂN DỤNG
+        </button>
 
-      <Link href="/">
-        <Button className="w-full h-12 text-lg font-bold bg-red-700 hover:bg-red-800 text-white rounded-full">
-          VỀ TRANG CHỦ
-        </Button>
-      </Link>
+        <Link
+          href="/ho-so-online"
+          className="flex h-12 w-full items-center justify-center gap-2 rounded-full bg-amber-100 text-amber-950 border border-amber-300 text-sm md:text-base font-bold transition hover:bg-amber-200"
+        >
+          <FileText size={18} />
+          QUẢN LÝ HỒ SƠ ONLINE & TRA CỨU
+        </Link>
+
+        <a
+          href="https://zalo.me/g/sqjgbx906"
+          target="_blank"
+          rel="noopener noreferrer"
+          className="flex h-12 w-full items-center justify-center rounded-full bg-blue-600 text-base font-bold text-white transition hover:bg-blue-700"
+        >
+          THAM GIA GROUP ZALO
+        </a>
+
+        <Link href="/" className="block pt-1">
+          <Button
+            variant="outline"
+            className="w-full h-12 text-base font-bold rounded-full"
+          >
+            VỀ TRANG CHỦ
+          </Button>
+        </Link>
+      </div>
     </div>
   );
 }

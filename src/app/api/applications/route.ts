@@ -7,6 +7,7 @@ import {
   addApplicationToSheet,
   getApplicationsFromSheet,
 } from "@/lib/google-sheets";
+import { upsertOnlineProfile } from "@/lib/google-sheets/chat-and-profiles";
 
 export async function POST(request: Request) {
   try {
@@ -19,13 +20,14 @@ export async function POST(request: Request) {
     const existingApplications = await getApplicationsFromSheet();
     const duplicate = existingApplications.find(
       (application) =>
-        application.cccd === validatedData.cccd ||
-        application.phone === validatedData.phone,
+        (application.cccd === validatedData.cccd ||
+          application.phone === validatedData.phone) &&
+        application.jobId === validatedData.jobId,
     );
     if (duplicate) {
       return NextResponse.json(
         {
-          error: `Hồ sơ của bạn đã tồn tại với mã ${duplicate.applicationId}.`,
+          error: `Hồ sơ của bạn cho vị trí này đã tồn tại với mã ${duplicate.applicationId}. Bạn có thể tra cứu hoặc ứng tuyển nhanh vị trí khác tại mục Hồ sơ Online.`,
         },
         { status: 400 },
       );
@@ -42,6 +44,26 @@ export async function POST(request: Request) {
       updatedAt: now,
     };
     await addApplicationToSheet(applicationData);
+
+    try {
+      await upsertOnlineProfile({
+        fullName: validatedData.fullName,
+        phone: validatedData.phone,
+        cccd: validatedData.cccd,
+        dateOfBirth: validatedData.dateOfBirth,
+        gender: validatedData.gender,
+        opsCode: validatedData.opsCode,
+        permanentAddress: validatedData.permanentAddress,
+        preferredLocation: validatedData.preferredLocation,
+        education: validatedData.education,
+        preferredShift: validatedData.preferredShift,
+        workSchedule: validatedData.workSchedule,
+        availableStartDate: validatedData.availableStartDate,
+        note: validatedData.note,
+      });
+    } catch (syncError) {
+      console.error("Failed to sync online profile:", syncError);
+    }
 
     return NextResponse.json(
       { success: true, applicationId: newAppId },

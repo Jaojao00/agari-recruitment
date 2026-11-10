@@ -16,7 +16,15 @@ export default function HomePage() {
       {/* HEADER */}
       <header className="bg-red-700 text-white sticky top-0 z-50 shadow-md">
         <div className="container mx-auto px-4 py-4 flex justify-between items-center">
-          <div className="text-2xl font-bold tracking-tight">AGARI</div>
+          <div className="flex items-center gap-3">
+            <div className="text-2xl font-bold tracking-tight">AGARI</div>
+            <Link
+              href="/ho-so-online"
+              className="inline-flex items-center gap-1 px-2.5 py-1 rounded-full bg-yellow-400 hover:bg-yellow-300 text-red-950 font-extrabold text-xs transition shadow-xs"
+            >
+              ⚡ Hồ sơ Online & Tra cứu
+            </Link>
+          </div>
           <nav className="hidden md:flex gap-6 text-sm font-medium">
             <Link href="#luong" className="hover:text-yellow-300 transition">
               Thu nhập
