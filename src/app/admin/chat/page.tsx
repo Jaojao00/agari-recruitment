@@ -165,7 +165,7 @@ export default function AdminChatPage() {
         const url = targetRoom
           ? `/api/admin/chat?roomId=${encodeURIComponent(targetRoom)}`
           : `/api/admin/chat`;
-        const res = await fetch(url);
+        const res = await fetch(url, { cache: "no-store" });
         if (res.ok) {
           const data = await res.json();
           const fetchedThreads: ChatThreadSummary[] = data.threads || [];
@@ -175,7 +175,21 @@ export default function AdminChatPage() {
             const firstRoom = fetchedThreads[0].roomId;
             setSelectedRoomId(firstRoom);
           } else if (data.activeRoom) {
-            setMessages(data.activeRoom.messages || []);
+            const incomingMsgs: ChatMessageItem[] =
+              data.activeRoom.messages || [];
+            setMessages((prev) => {
+              if (!isSilent || prev.length === 0) return incomingMsgs;
+              const map = new Map<string, ChatMessageItem>();
+              for (const m of prev) {
+                if (m.roomId === data.activeRoom.roomId) map.set(m.id, m);
+              }
+              for (const m of incomingMsgs) {
+                map.set(m.id, m);
+              }
+              return Array.from(map.values()).sort((a, b) =>
+                String(a.createdAt).localeCompare(String(b.createdAt)),
+              );
+            });
             setActiveProfile(data.activeRoom.profile || null);
             setActiveApps(data.activeRoom.applications || []);
             if (!editingProfile && data.activeRoom.profile) {

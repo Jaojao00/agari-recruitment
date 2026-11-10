@@ -38,8 +38,21 @@ function getSpreadsheetId() {
 
 export function normalizePhone(phone: string): string {
   const digits = String(phone || "").replace(/\D/g, "");
+  if (!digits) return "";
   if (digits.startsWith("84") && digits.length >= 11) {
     return "0" + digits.slice(2);
+  }
+  if (digits.length === 9 && !digits.startsWith("0")) {
+    return "0" + digits;
+  }
+  return digits;
+}
+
+export function normalizeCccd(cccd: string): string {
+  const digits = String(cccd || "").replace(/\D/g, "");
+  if (!digits) return "";
+  if (digits.length === 11 && !digits.startsWith("0")) {
+    return "0" + digits;
   }
   return digits;
 }
@@ -253,7 +266,7 @@ export async function getAllOnlineProfiles(
       profileId: row[0] || `PF-${idx + 2}`,
       fullName: row[1] || "",
       phone: normalizePhone(row[2] || ""),
-      cccd: String(row[3] || "").trim(),
+      cccd: normalizeCccd(row[3] || ""),
       dateOfBirth: row[4] || "",
       gender: row[5] || "Nam",
       opsCode: row[6] || "",
@@ -351,7 +364,7 @@ export async function upsertOnlineProfile(
     await sheets.spreadsheets.values.update({
       spreadsheetId,
       range: `'${PROFILES_SHEET_NAME}'!A${existing.rowNumber}:O${existing.rowNumber}`,
-      valueInputOption: "USER_ENTERED",
+      valueInputOption: "RAW",
       requestBody: { values: [rowValues] },
     });
   } else {
@@ -360,7 +373,7 @@ export async function upsertOnlineProfile(
     await sheets.spreadsheets.values.update({
       spreadsheetId,
       range: `'${PROFILES_SHEET_NAME}'!A${targetRow}:O${targetRow}`,
-      valueInputOption: "USER_ENTERED",
+      valueInputOption: "RAW",
       requestBody: { values: [rowValues] },
     });
   }
@@ -550,7 +563,7 @@ export async function appendChatMessage(input: {
   await sheets.spreadsheets.values.append({
     spreadsheetId,
     range: `'${CHAT_SHEET_NAME}'!A:L`,
-    valueInputOption: "USER_ENTERED",
+    valueInputOption: "RAW",
     insertDataOption: "INSERT_ROWS",
     requestBody: { values: [rowValues] },
   });

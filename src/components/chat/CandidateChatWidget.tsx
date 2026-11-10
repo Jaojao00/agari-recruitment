@@ -83,6 +83,39 @@ export default function CandidateChatWidget() {
 
   const isAdminRoute = pathname?.startsWith("/admin");
 
+  const sendingRef = useRef(false);
+
+  const getLocalMessagesKey = (phone: string) => `agari_chat_msgs_${phone}`;
+
+  const mergeMessageLists = useCallback(
+    (existing: ChatMessageItem[], incoming: ChatMessageItem[], phone: string) => {
+      const map = new Map<string, ChatMessageItem>();
+      for (const m of existing) {
+        if (!m.id.startsWith("TEMP-")) {
+          map.set(m.id, m);
+        }
+      }
+      for (const m of incoming) {
+        map.set(m.id, m);
+      }
+      const merged = Array.from(map.values()).sort((a, b) =>
+        String(a.createdAt).localeCompare(String(b.createdAt)),
+      );
+      try {
+        if (phone && merged.length > 0) {
+          localStorage.setItem(
+            getLocalMessagesKey(phone),
+            JSON.stringify(merged),
+          );
+        }
+      } catch {
+        // ignore storage quota
+      }
+      return merged;
+    },
+    [],
+  );
+
   const loadStoredCandidate = useCallback(() => {
     try {
       const raw = localStorage.getItem(CANDIDATE_STORAGE_KEY);
@@ -92,6 +125,17 @@ export default function CandidateChatWidget() {
           setCandidate(parsed);
           setTempName(parsed.fullName);
           setTempPhone(parsed.phone);
+          const cachedMsgs = localStorage.getItem(
+            getLocalMessagesKey(parsed.phone),
+          );
+          if (cachedMsgs) {
+            const parsedMsgs = JSON.parse(cachedMsgs) as ChatMessageItem[];
+            if (Array.isArray(parsedMsgs) && parsedMsgs.length > 0) {
+              setMessages((prev) =>
+                prev.length === 0 ? parsedMsgs : prev,
+              );
+            }
+          }
         }
       }
     } catch {
@@ -121,15 +165,19 @@ export default function CandidateChatWidget() {
 
   const fetchMessages = useCallback(
     async (showLoader = false) => {
-      if (!candidate?.phone || isAdminRoute) return;
+      if (!candidate?.phone || isAdminRoute || sendingRef.current) return;
       if (showLoader) setLoadingMessages(true);
       try {
         const res = await fetch(
           `/api/chat?roomId=${encodeURIComponent(candidate.phone)}&markRead=${isOpen ? "true" : "false"}`,
+          { cache: "no-store" },
         );
-        if (res.ok) {
+        if (res.ok && !sendingRef.current) {
           const data = await res.json();
-          setMessages(data.messages || []);
+          const incoming: ChatMessageItem[] = data.messages || [];
+          setMessages((prev) =>
+            mergeMessageLists(prev, incoming, candidate.phone),
+          );
           setUnreadCount(isOpen ? 0 : data.unreadCount || 0);
         }
       } catch {
@@ -138,7 +186,7 @@ export default function CandidateChatWidget() {
         if (showLoader) setLoadingMessages(false);
       }
     },
-    [candidate?.phone, isOpen, isAdminRoute],
+    [candidate?.phone, isOpen, isAdminRoute, mergeMessageLists],
   );
 
   useEffect(() => {
@@ -213,9 +261,10 @@ export default function CandidateChatWidget() {
 
   const handleSendMessage = async (textOverride?: string) => {
     const content = (textOverride ?? inputText).trim();
-    if (!content || !candidate || sending) return;
+    if (!content || !candidate || sending || sendingRef.current) return;
     if (!textOverride) setInputText("");
     setSending(true);
+    sendingRef.current = true;
 
     // Optimistic message
     const tempId = `TEMP-${Date.now()}`;
@@ -246,16 +295,18 @@ export default function CandidateChatWidget() {
         const data = await res.json();
         setMessages((prev) => {
           const withoutTemp = prev.filter((m) => m.id !== tempId);
-          const next = [...withoutTemp];
-          if (data.message) next.push(data.message);
-          if (data.botReply) next.push(data.botReply);
-          return next;
+          const added: ChatMessageItem[] = [];
+          if (data.message) added.push(data.message);
+          if (data.botReply) added.push(data.botReply);
+          return mergeMessageLists(withoutTemp, added, candidate.phone);
         });
       }
     } catch {
       // fallback refresh
+      sendingRef.current = false;
       await fetchMessages(false);
     } finally {
+      sendingRef.current = false;
       setSending(false);
     }
   };

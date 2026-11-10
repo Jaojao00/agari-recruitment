@@ -19,19 +19,22 @@ export async function GET(request: Request) {
       return NextResponse.json({ messages: [], unreadCount: 0 });
     }
 
-    if (markRead) {
+    const allMessages = await getAllChatMessages();
+    const roomMessages = allMessages.filter(
+      (m) => normalizePhone(m.roomId) === roomId,
+    );
+    const unreadMessages = roomMessages.filter(
+      (m) => m.sender !== "candidate" && !m.readByCandidate,
+    );
+
+    if (markRead && unreadMessages.length > 0) {
+      // Run non-blocking or mark read only when there are actually unread messages
       await markRoomMessagesRead(roomId, "candidate");
     }
 
-    const allMessages = await getAllChatMessages();
-    const roomMessages = allMessages.filter((m) => m.roomId === roomId);
-    const unreadCount = roomMessages.filter(
-      (m) => m.sender !== "candidate" && !m.readByCandidate,
-    ).length;
-
     return NextResponse.json({
       messages: roomMessages,
-      unreadCount,
+      unreadCount: markRead ? 0 : unreadMessages.length,
     });
   } catch (error) {
     console.error("GET /api/chat error:", error);
@@ -60,7 +63,7 @@ export async function POST(request: Request) {
 
     const allMessages = await getAllChatMessages();
     const existingCandidateMsgs = allMessages.filter(
-      (m) => m.roomId === candidatePhone && m.sender === "candidate",
+      (m) => normalizePhone(m.roomId) === candidatePhone && m.sender === "candidate",
     );
     const isFirstCandidateMessage = existingCandidateMsgs.length === 0;
 
@@ -99,7 +102,6 @@ export async function POST(request: Request) {
       }
     }
 
-    // Also lookup if candidate has existing applications to return context
     let applicationsCount = 0;
     try {
       const lookup = await lookupCandidateProfileAndApplications({
