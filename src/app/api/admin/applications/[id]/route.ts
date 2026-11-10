@@ -1,9 +1,11 @@
-﻿import { NextResponse } from "next/server";
+import { NextResponse } from "next/server";
 import {
   getApplicationsFromSheet,
   updateApplicationInSheet,
 } from "@/lib/google-sheets";
 import { addTrackingToSheet } from "@/lib/google-sheets/tracking";
+import { sendCandidateResultEmail } from "@/lib/email/mailer";
+import { lookupCandidateProfileAndApplications } from "@/lib/google-sheets/chat-and-profiles";
 
 type ApplicationRouteContext = {
   params: Promise<{ id: string }>;
@@ -53,6 +55,33 @@ export async function PATCH(
     else if (expiredAt) updateData.expiredAt = new Date(expiredAt);
 
     await updateApplicationInSheet(updateData);
+
+    // Send result email to candidate's Gmail when status is updated
+    if (status && status !== application.status) {
+      try {
+        let candidateEmail = application.email || "";
+        if (!candidateEmail && application.phone) {
+          const lookup = await lookupCandidateProfileAndApplications({
+            phone: application.phone,
+            cccd: application.cccd,
+          });
+          candidateEmail = lookup.profile?.email || "";
+        }
+        if (candidateEmail) {
+          await sendCandidateResultEmail({
+            candidateEmail,
+            candidateName: application.fullName || "Ứng viên",
+            candidatePhone: application.phone || "",
+            applicationId: application.applicationId,
+            jobTitle: application.jobTitle,
+            status,
+            adminNote: updateData.adminNote,
+          });
+        }
+      } catch (mailErr) {
+        console.error("Send status update email error:", mailErr);
+      }
+    }
 
     // If status changed to PASSED, add to Tracking Sheet
     if (status === "PASSED" && application.status !== "PASSED") {

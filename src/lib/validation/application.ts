@@ -39,6 +39,10 @@ export const applicationSchema = z.object({
     .regex(/(84|0[3|5|7|8|9])+([0-9]{8})\b/, {
       message: "Số điện thoại không hợp lệ",
     }),
+  email: z
+    .string()
+    .trim()
+    .email({ message: "Vui lòng nhập địa chỉ Gmail hợp lệ (VD: tenban@gmail.com)" }),
   gender: z.enum(["Nam", "Nữ"] as [string, ...string[]], {
     message: "Vui lòng chọn giới tính",
   }),
@@ -93,6 +97,7 @@ export function normalizeApplicationPayload(raw: unknown) {
     dateOfBirth: stringValue(source.dateOfBirth),
     cccd: stringValue(source.cccd).replace(/\s+/g, ""),
     phone: stringValue(source.phone).replace(/\s+/g, ""),
+    email: stringValue(source.email).toLowerCase(),
     gender: stringValue(source.gender),
     permanentAddress: stringValue(source.permanentAddress),
     preferredLocation: stringValue(source.preferredLocation ?? source.location),

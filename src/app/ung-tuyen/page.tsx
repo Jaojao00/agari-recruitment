@@ -178,6 +178,7 @@ export default function UngTuyenPage() {
       fullName: "",
       cccd: "",
       phone: "",
+      email: "",
       permanentAddress: "",
       preferredLocation: "",
       note: "",
@@ -196,6 +197,7 @@ export default function UngTuyenPage() {
         const saved = JSON.parse(savedRaw);
         if (saved.fullName) form.setValue("fullName", saved.fullName);
         if (saved.phone) form.setValue("phone", saved.phone);
+        if (saved.email) form.setValue("email", saved.email);
         if (saved.cccd) form.setValue("cccd", saved.cccd);
         if (saved.dateOfBirth) form.setValue("dateOfBirth", saved.dateOfBirth);
         if (saved.gender === "Nam" || saved.gender === "Nữ") {
@@ -416,6 +418,27 @@ export default function UngTuyenPage() {
                     )}
                   />
                 </div>
+
+                <FormField
+                  control={form.control}
+                  name="email"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>
+                        Địa chỉ Gmail (để nhận thông báo kết quả & lịch phỏng vấn) *
+                      </FormLabel>
+                      <FormControl>
+                        <Input
+                          type="email"
+                          placeholder="Ví dụ: tenban@gmail.com"
+                          {...field}
+                          className="h-12"
+                        />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
 
                 <div className={`grid gap-6 ${(jobId === "warehouse-rotating-shift" || jobId === "spx-fulltime" || isHcmJob(jobId)) ? "md:grid-cols-2" : ""}`}>
                   <FormField

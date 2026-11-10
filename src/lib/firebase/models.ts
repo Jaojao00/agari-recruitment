@@ -23,6 +23,7 @@ export interface Application {
   dateOfBirth: string; // YYYY-MM-DD
   cccd: string;
   phone: string;
+  email?: string;
   gender: "Nam" | "Nữ";
   opsCode?: string;
   preferredLocation?: string;

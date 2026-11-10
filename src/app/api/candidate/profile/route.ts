@@ -8,6 +8,7 @@ import {
   addApplicationToSheet,
   getApplicationsFromSheet,
 } from "@/lib/google-sheets";
+import { sendNewApplicationEmails } from "@/lib/email/mailer";
 
 export async function GET(request: Request) {
   try {
@@ -49,6 +50,7 @@ export async function POST(request: Request) {
     const profile = await upsertOnlineProfile({
       fullName,
       phone,
+      email: String(body.email || "").trim().toLowerCase(),
       cccd: String(body.cccd || "").trim(),
       dateOfBirth: String(body.dateOfBirth || "").trim(),
       gender: body.gender || "Nam",
@@ -108,6 +110,7 @@ export async function POST(request: Request) {
         dateOfBirth: profile.dateOfBirth,
         cccd: profile.cccd,
         phone: profile.phone,
+        email: profile.email || "",
         gender: profile.gender,
         opsCode: profile.opsCode,
         preferredLocation,
@@ -121,6 +124,27 @@ export async function POST(request: Request) {
         createdAt: now,
         updatedAt: now,
       });
+
+      try {
+        await sendNewApplicationEmails({
+          applicationId: newAppId,
+          fullName: profile.fullName,
+          phone: profile.phone,
+          email: profile.email,
+          cccd: profile.cccd,
+          dateOfBirth: profile.dateOfBirth,
+          gender: profile.gender,
+          opsCode: profile.opsCode,
+          jobTitle,
+          workSchedule,
+          preferredLocation,
+          permanentAddress: profile.permanentAddress,
+          availableStartDate: profile.availableStartDate,
+          note: profile.note,
+        });
+      } catch (mailErr) {
+        console.error("Quick apply email error:", mailErr);
+      }
 
       // Also drop a notification in their chat room so HR & Candidate both see the 1-Click application
       try {

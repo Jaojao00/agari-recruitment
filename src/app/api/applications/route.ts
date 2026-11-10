@@ -8,6 +8,7 @@ import {
   getApplicationsFromSheet,
 } from "@/lib/google-sheets";
 import { upsertOnlineProfile } from "@/lib/google-sheets/chat-and-profiles";
+import { sendNewApplicationEmails } from "@/lib/email/mailer";
 
 export async function POST(request: Request) {
   try {
@@ -49,6 +50,7 @@ export async function POST(request: Request) {
       await upsertOnlineProfile({
         fullName: validatedData.fullName,
         phone: validatedData.phone,
+        email: validatedData.email,
         cccd: validatedData.cccd,
         dateOfBirth: validatedData.dateOfBirth,
         gender: validatedData.gender,
@@ -63,6 +65,15 @@ export async function POST(request: Request) {
       });
     } catch (syncError) {
       console.error("Failed to sync online profile:", syncError);
+    }
+
+    try {
+      await sendNewApplicationEmails({
+        ...validatedData,
+        applicationId: newAppId,
+      });
+    } catch (mailError) {
+      console.error("Failed to send new application emails:", mailError);
     }
 
     return NextResponse.json(

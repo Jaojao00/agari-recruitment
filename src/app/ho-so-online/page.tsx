@@ -23,6 +23,7 @@ interface CandidateProfileForm {
   profileId?: string;
   fullName: string;
   phone: string;
+  email: string;
   cccd: string;
   dateOfBirth: string;
   gender: string;
@@ -132,6 +133,7 @@ export default function OnlineProfilePage() {
   const [form, setForm] = useState<CandidateProfileForm>({
     fullName: "",
     phone: "",
+    email: "",
     cccd: "",
     dateOfBirth: "",
     gender: "Nam",
@@ -165,6 +167,7 @@ export default function OnlineProfilePage() {
               profileId: p.profileId,
               fullName: p.fullName || "",
               phone: p.phone || "",
+              email: p.email || "",
               cccd: p.cccd || "",
               dateOfBirth: p.dateOfBirth || "",
               gender: p.gender || "Nam",
@@ -480,6 +483,20 @@ export default function OnlineProfilePage() {
                     className="w-full h-11 px-3.5 rounded-lg border border-gray-300 text-sm focus:outline-none focus:ring-2 focus:ring-red-600"
                   />
                 </div>
+              </div>
+
+              <div>
+                <label className="block text-xs font-bold text-gray-700 mb-1">
+                  Địa chỉ Gmail (để nhận thông báo kết quả & lịch phỏng vấn) *
+                </label>
+                <input
+                  type="email"
+                  required
+                  value={form.email}
+                  onChange={(e) => setForm({ ...form, email: e.target.value })}
+                  placeholder="Ví dụ: tenban@gmail.com"
+                  className="w-full h-11 px-3.5 rounded-lg border border-gray-300 text-sm focus:outline-none focus:ring-2 focus:ring-red-600"
+                />
               </div>
 
               <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">

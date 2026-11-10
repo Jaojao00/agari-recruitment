@@ -13,6 +13,7 @@ import {
   getApplicationsFromSheet,
   updateApplicationInSheet,
 } from "@/lib/google-sheets";
+import { sendCandidateResultEmail } from "@/lib/email/mailer";
 
 const STATUS_LABELS: Record<string, string> = {
   NEW: "Đang xử lý",
@@ -183,10 +184,15 @@ export async function POST(request: Request) {
         content = `📅 THƯ MỜI PHỎNG VẤN TRỰC TIẾP\n• Thời gian: ${metadata.interviewTime || "09:00"} ngày ${metadata.interviewDate || ""}\n• Địa điểm: ${metadata.interviewLocation || ""}\n• Giấy tờ cần mang: ${metadata.documents || "CCCD gắn chip bản gốc"}`;
       }
 
-      const allApps = await getApplicationsFromSheet();
+      const [allApps, profiles] = await Promise.all([
+        getApplicationsFromSheet(),
+        getAllOnlineProfiles(),
+      ]);
       const targetApp = metadata.applicationId
         ? allApps.find((a) => a.applicationId === metadata.applicationId)
         : allApps.find((a) => normalizePhone(a.phone || "") === roomId);
+      const profile = profiles.find((p) => p.phone === roomId);
+      const candidateEmail = targetApp?.email || profile?.email || "";
 
       if (targetApp) {
         await updateApplicationInSheet({
@@ -200,14 +206,34 @@ export async function POST(request: Request) {
         metadata.status = "INTERVIEW_SCHEDULED";
         metadata.statusLabel = "Lịch phỏng vấn";
       }
+
+      if (candidateEmail) {
+        await sendCandidateResultEmail({
+          candidateEmail,
+          candidateName,
+          candidatePhone: roomId,
+          applicationId: metadata.applicationId,
+          jobTitle: metadata.jobTitle,
+          status: "INTERVIEW_SCHEDULED",
+          interviewDate: metadata.interviewDate,
+          interviewTime: metadata.interviewTime,
+          interviewLocation: metadata.interviewLocation,
+          documents: metadata.documents,
+        }).catch((e) => console.error("Interview email error:", e));
+      }
     } else if (type === "status_update" && metadata?.status) {
       const statusLabel = STATUS_LABELS[metadata.status] || metadata.status;
       metadata.statusLabel = statusLabel;
 
-      const allApps = await getApplicationsFromSheet();
+      const [allApps, profiles] = await Promise.all([
+        getApplicationsFromSheet(),
+        getAllOnlineProfiles(),
+      ]);
       const targetApp = metadata.applicationId
         ? allApps.find((a) => a.applicationId === metadata.applicationId)
         : allApps.find((a) => normalizePhone(a.phone || "") === roomId);
+      const profile = profiles.find((p) => p.phone === roomId);
+      const candidateEmail = targetApp?.email || profile?.email || "";
 
       if (targetApp) {
         await updateApplicationInSheet({
@@ -217,6 +243,17 @@ export async function POST(request: Request) {
         });
         metadata.applicationId = targetApp.applicationId;
         metadata.jobTitle = targetApp.jobTitle;
+      }
+
+      if (candidateEmail) {
+        await sendCandidateResultEmail({
+          candidateEmail,
+          candidateName,
+          candidatePhone: roomId,
+          applicationId: metadata.applicationId,
+          jobTitle: metadata.jobTitle,
+          status: metadata.status,
+        }).catch((e) => console.error("Status email error:", e));
       }
 
       if (!content) {

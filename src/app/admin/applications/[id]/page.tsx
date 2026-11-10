@@ -204,6 +204,12 @@ export default function ApplicationDetailPage() {
               <span className="col-span-2 font-bold">{String(data.phone).startsWith("0") ? data.phone : "0" + data.phone}</span>
             </div>
             <div className="grid grid-cols-3 gap-2 py-2 border-b">
+              <span className="text-gray-500 font-medium">Gmail:</span>
+              <span className="col-span-2 font-medium text-blue-700 break-all">
+                {data.email || "Chưa cập nhật"}
+              </span>
+            </div>
+            <div className="grid grid-cols-3 gap-2 py-2 border-b">
               <span className="text-gray-500 font-medium">Giới tính:</span>
               <span className="col-span-2">{data.gender}</span>
             </div>
@@ -314,8 +320,18 @@ export default function ApplicationDetailPage() {
                 ) : (
                   <Save className="mr-2" size={16} />
                 )}
-                LƯU THAY ĐỔI
+                LƯU THAY ĐỔI & TỰ ĐỘNG BÁO KẾT QUẢ GMAIL
               </Button>
+              {data.email && (
+                <a
+                  href={`https://mail.google.com/mail/?view=cm&fs=1&to=${encodeURIComponent(data.email)}&su=${encodeURIComponent(`[AGARI - SPX Express] Thông báo kết quả hồ sơ ứng tuyển (${data.applicationId})`)}&body=${encodeURIComponent(`Xin chào ${data.fullName},\n\nBộ phận Tuyển dụng AGARI thông báo kết quả hồ sơ ứng tuyển của bạn:\n- Mã hồ sơ: ${data.applicationId}\n- Vị trí: ${data.jobTitle || "Nhân viên kho SPX"}\n- Khu vực: ${data.preferredLocation || ""}\n- Kết quả / Ghi chú: ${adminNote || status}\n\nTrân trọng,\nBộ phận Tuyển dụng AGARI (tainguyenhr.dev@gmail.com)`) }`}
+                  target="_blank"
+                  rel="noreferrer"
+                  className="block w-full text-center py-2.5 px-4 rounded-md border border-blue-200 bg-blue-50 hover:bg-blue-100 text-blue-800 text-xs font-bold transition"
+                >
+                  📧 Soạn & Gửi nhanh qua Gmail Web ({data.email})
+                </a>
+              )}
             </CardContent>
           </Card>
         </div>

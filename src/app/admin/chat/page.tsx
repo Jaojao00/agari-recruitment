@@ -28,6 +28,7 @@ interface OnlineProfile {
   profileId: string;
   fullName: string;
   phone: string;
+  email?: string;
   cccd: string;
   dateOfBirth: string;
   gender: string;
@@ -944,6 +945,23 @@ export default function AdminChatPage() {
                 </div>
                 <div>
                   <label className="font-bold text-slate-700 block mb-1">
+                    Gmail nhận kết quả
+                  </label>
+                  <Input
+                    type="email"
+                    value={profileDraft.email || ""}
+                    onChange={(e) =>
+                      setProfileDraft({
+                        ...profileDraft,
+                        email: e.target.value,
+                      })
+                    }
+                    placeholder="tenungvien@gmail.com"
+                    className="h-8 text-xs bg-white"
+                  />
+                </div>
+                <div>
+                  <label className="font-bold text-slate-700 block mb-1">
                     Địa chỉ
                   </label>
                   <Input
@@ -1043,6 +1061,12 @@ export default function AdminChatPage() {
                   </div>
                 </div>
                 <div className="pt-1 border-t border-slate-200/70 space-y-1">
+                  <p>
+                    <span className="text-slate-400">Gmail: </span>
+                    <span className="font-semibold text-blue-700 break-all">
+                      {activeProfile.email || "Chưa cập nhật"}
+                    </span>
+                  </p>
                   <p>
                     <span className="text-slate-400">Địa chỉ: </span>
                     <span className="font-medium text-slate-800">

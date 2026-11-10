@@ -35,6 +35,7 @@ type SheetApplicationFields = {
   dateOfBirth?: string;
   cccd?: string;
   phone?: string;
+  email?: string;
   gender?: string;
   preferredLocation?: string;
   permanentAddress?: string;
@@ -238,6 +239,7 @@ function applicationToRow(application: SheetApplicationFields) {
     application.workSchedule || "",
     formatSheetDate(application.hiredAt),
     formatSheetDate(application.expiredAt),
+    application.email || "",
   ];
 }
 
@@ -294,6 +296,7 @@ function rowToApplication(
     workSchedule: row[20] || "",
     hiredAt: row[21] || "",
     expiredAt: row[22] || "",
+    email: row[23] || "",
     googleSheetRow: rowNumber,
     googleSheetName: sheetName,
   };
@@ -325,7 +328,7 @@ export async function getApplicationsFromSheet(): Promise<SheetApplication[]> {
   for (const sheetTitle of targetSheetNames) {
     const response = await getSheetsClient().spreadsheets.values.get({
       spreadsheetId: getSpreadsheetId(),
-      range: `'${sheetTitle}'!A1:W`,
+      range: `'${sheetTitle}'!A1:X`,
     });
     const rows = response.data.values || [];
     const firstCell = String(rows[0]?.[0] ?? "")
@@ -360,7 +363,7 @@ export async function addApplicationToSheet(
   
   await getSheetsClient().spreadsheets.values.update({
     spreadsheetId: getSpreadsheetId(),
-    range: `'${sheetName}'!A${rowNumber}:W${rowNumber}`,
+    range: `'${sheetName}'!A${rowNumber}:X${rowNumber}`,
     valueInputOption: "USER_ENTERED",
     requestBody: { values: [applicationToRow(application)] },
   });
@@ -389,7 +392,7 @@ export async function updateApplicationInSheet(
   
   await getSheetsClient().spreadsheets.values.update({
     spreadsheetId: getSpreadsheetId(),
-    range: `'${sheetName}'!A${rowNumber}:W${rowNumber}`,
+    range: `'${sheetName}'!A${rowNumber}:X${rowNumber}`,
     valueInputOption: "USER_ENTERED",
     requestBody: { values: [applicationToRow(application)] },
   });

@@ -61,6 +61,7 @@ export interface OnlineCandidateProfile {
   profileId: string;
   fullName: string;
   phone: string;
+  email?: string;
   cccd: string;
   dateOfBirth: string;
   gender: "Nam" | "Nữ" | string;
@@ -257,7 +258,7 @@ export async function getAllOnlineProfiles(
 
   const res = await sheets.spreadsheets.values.get({
     spreadsheetId,
-    range: `'${PROFILES_SHEET_NAME}'!A2:O`,
+    range: `'${PROFILES_SHEET_NAME}'!A2:P`,
   });
 
   const rows = res.data.values || [];
@@ -280,6 +281,7 @@ export async function getAllOnlineProfiles(
       note: row[13] || "",
       createdAt: row[14] || new Date().toISOString(),
       updatedAt: row[14] || new Date().toISOString(),
+      email: String(row[15] || "").trim().toLowerCase(),
       rowNumber: idx + 2,
     }))
     .filter((p) => Boolean(p.phone || p.cccd));
@@ -313,6 +315,10 @@ export async function upsertOnlineProfile(
     profileId,
     fullName: input.fullName?.trim() || existing?.fullName || "",
     phone: normalizedPhone || existing?.phone || "",
+    email:
+      input.email !== undefined
+        ? input.email.trim().toLowerCase()
+        : existing?.email || "",
     cccd: input.cccd?.trim() || existing?.cccd || "",
     dateOfBirth: input.dateOfBirth || existing?.dateOfBirth || "",
     gender: input.gender || existing?.gender || "Nam",
@@ -355,6 +361,7 @@ export async function upsertOnlineProfile(
     merged.availableStartDate,
     merged.note || "",
     merged.updatedAt,
+    merged.email || "",
   ];
 
   const sheets = getSheetsClient();
@@ -363,7 +370,7 @@ export async function upsertOnlineProfile(
   if (existing?.rowNumber) {
     await sheets.spreadsheets.values.update({
       spreadsheetId,
-      range: `'${PROFILES_SHEET_NAME}'!A${existing.rowNumber}:O${existing.rowNumber}`,
+      range: `'${PROFILES_SHEET_NAME}'!A${existing.rowNumber}:P${existing.rowNumber}`,
       valueInputOption: "RAW",
       requestBody: { values: [rowValues] },
     });
@@ -372,7 +379,7 @@ export async function upsertOnlineProfile(
     merged.rowNumber = targetRow;
     await sheets.spreadsheets.values.update({
       spreadsheetId,
-      range: `'${PROFILES_SHEET_NAME}'!A${targetRow}:O${targetRow}`,
+      range: `'${PROFILES_SHEET_NAME}'!A${targetRow}:P${targetRow}`,
       valueInputOption: "RAW",
       requestBody: { values: [rowValues] },
     });
