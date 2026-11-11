@@ -302,57 +302,102 @@ function rowToApplication(
   };
 }
 
-export async function getApplicationsFromSheet(): Promise<SheetApplication[]> {
-  const defaultSheetName = await getDefaultSheetName();
-  const titles = await getSheetTitles();
+let applicationsCache: {
+  data: SheetApplication[];
+  expiresAt: number;
+} | null = null;
+const APPLICATIONS_CACHE_TTL_MS = 15_000;
 
-  const targetSheetNames = new Set<string>();
-  if (titles.some((s) => s.title === defaultSheetName)) {
-    targetSheetNames.add(defaultSheetName);
+export async function getApplicationsFromSheet(
+  forceRefresh = false,
+): Promise<SheetApplication[]> {
+  if (
+    !forceRefresh &&
+    applicationsCache &&
+    Date.now() < applicationsCache.expiresAt
+  ) {
+    return applicationsCache.data;
   }
 
-  const ptSheet = titles.find((s) => s.gid === 902668352);
-  if (ptSheet) targetSheetNames.add(ptSheet.title);
+  try {
+    const defaultSheetName = await getDefaultSheetName();
+    const titles = await getSheetTitles();
 
-  const ftSheet = titles.find((s) => s.gid === 1291225589);
-  if (ftSheet) targetSheetNames.add(ftSheet.title);
+    const targetSheetNames = new Set<string>();
+    if (titles.some((s) => s.title === defaultSheetName)) {
+      targetSheetNames.add(defaultSheetName);
+    }
 
-  const mkSheet = titles.find((s) => s.gid === 1565664528);
-  if (mkSheet) targetSheetNames.add(mkSheet.title);
+    const ptSheet = titles.find((s) => s.gid === 902668352);
+    if (ptSheet) targetSheetNames.add(ptSheet.title);
 
-  const hcmSheetName = await getOrCreateHcmSheetName();
-  if (hcmSheetName) targetSheetNames.add(hcmSheetName);
+    const ftSheet = titles.find((s) => s.gid === 1291225589);
+    if (ftSheet) targetSheetNames.add(ftSheet.title);
 
-  let allApplications: SheetApplication[] = [];
+    const mkSheet = titles.find((s) => s.gid === 1565664528);
+    if (mkSheet) targetSheetNames.add(mkSheet.title);
 
-  for (const sheetTitle of targetSheetNames) {
-    const response = await getSheetsClient().spreadsheets.values.get({
+    const hcmSheet = titles.find(
+      (s) =>
+        s.title.trim().toUpperCase() === HCM_SHEET_TITLE ||
+        s.title.trim().toUpperCase() === "KV TP.HCM" ||
+        s.title.trim().toUpperCase() === "TP.HCM",
+    );
+    if (hcmSheet) {
+      targetSheetNames.add(hcmSheet.title);
+    } else {
+      const hcmSheetName = await getOrCreateHcmSheetName();
+      if (hcmSheetName) targetSheetNames.add(hcmSheetName);
+    }
+
+    const sheetList = Array.from(targetSheetNames);
+    if (sheetList.length === 0) return [];
+
+    // Use a single batchGet API call instead of N separate values.get calls
+    const batchRes = await getSheetsClient().spreadsheets.values.batchGet({
       spreadsheetId: getSpreadsheetId(),
-      range: `'${sheetTitle}'!A1:X`,
+      ranges: sheetList.map((sheetTitle) => `'${sheetTitle}'!A1:X`),
     });
-    const rows = response.data.values || [];
-    const firstCell = String(rows[0]?.[0] ?? "")
-      .trim()
-      .toLowerCase();
-    const hasHeader =
-      firstCell === "mã hồ sơ" ||
-      firstCell === "applicationid" ||
-      firstCell === "application id";
-    const dataRows = hasHeader ? rows.slice(1) : rows;
-    const firstDataRowNumber = hasHeader ? 2 : 1;
 
-    const sheetApps = dataRows
-      .map((row, index) =>
-        rowToApplication(row, index + firstDataRowNumber, sheetTitle),
-      )
-      .filter((application) =>
-        /^AG-\d{4}-\d{6}$/i.test(application.applicationId),
-      );
+    const valueRanges = batchRes.data.valueRanges || [];
+    let allApplications: SheetApplication[] = [];
 
-    allApplications = allApplications.concat(sheetApps);
+    sheetList.forEach((sheetTitle, idx) => {
+      const rows = (valueRanges[idx]?.values as string[][] | undefined) || [];
+      const firstCell = String(rows[0]?.[0] ?? "")
+        .trim()
+        .toLowerCase();
+      const hasHeader =
+        firstCell === "mã hồ sơ" ||
+        firstCell === "applicationid" ||
+        firstCell === "application id";
+      const dataRows = hasHeader ? rows.slice(1) : rows;
+      const firstDataRowNumber = hasHeader ? 2 : 1;
+
+      const sheetApps = dataRows
+        .map((row, index) =>
+          rowToApplication(row, index + firstDataRowNumber, sheetTitle),
+        )
+        .filter((application) =>
+          /^AG-\d{4}-\d{6}$/i.test(application.applicationId),
+        );
+
+      allApplications = allApplications.concat(sheetApps);
+    });
+
+    applicationsCache = {
+      data: allApplications,
+      expiresAt: Date.now() + APPLICATIONS_CACHE_TTL_MS,
+    };
+
+    return allApplications;
+  } catch (error) {
+    console.error("getApplicationsFromSheet error (using fallback cache):", error);
+    if (applicationsCache) {
+      return applicationsCache.data;
+    }
+    return [];
   }
-
-  return allApplications;
 }
 
 export async function addApplicationToSheet(
@@ -377,6 +422,7 @@ export async function addApplicationToSheet(
     throw new Error("Google Sheets không xác nhận được hồ sơ vừa ghi");
   }
 
+  applicationsCache = null;
   return rowNumber;
 }
 
@@ -396,4 +442,6 @@ export async function updateApplicationInSheet(
     valueInputOption: "USER_ENTERED",
     requestBody: { values: [applicationToRow(application)] },
   });
+
+  applicationsCache = null;
 }

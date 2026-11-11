@@ -296,7 +296,9 @@ function AdminGuard({ children }: { children: React.ReactNode }) {
   const [unreadChatCount, setUnreadChatCount] = useState(0);
 
   const fetchUnreadSummary = useCallback(async () => {
-    if (!user || pathname === "/admin/login") return;
+    if (!user || pathname === "/admin/login" || pathname.startsWith("/admin/chat")) {
+      return;
+    }
     try {
       const res = await fetch("/api/admin/chat?summaryOnly=true");
       if (res.ok) {
@@ -310,12 +312,20 @@ function AdminGuard({ children }: { children: React.ReactNode }) {
 
   useEffect(() => {
     fetchUnreadSummary();
-    const interval = setInterval(fetchUnreadSummary, 6000);
+    const interval = setInterval(fetchUnreadSummary, 15000);
     const onRead = () => fetchUnreadSummary();
+    const onUnreadCount = (e: Event) => {
+      const customEvent = e as CustomEvent<number>;
+      if (typeof customEvent.detail === "number") {
+        setUnreadChatCount(customEvent.detail);
+      }
+    };
     window.addEventListener("admin-chat-read", onRead);
+    window.addEventListener("admin-chat-unread-count", onUnreadCount);
     return () => {
       clearInterval(interval);
       window.removeEventListener("admin-chat-read", onRead);
+      window.removeEventListener("admin-chat-unread-count", onUnreadCount);
     };
   }, [fetchUnreadSummary]);
 

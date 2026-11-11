@@ -243,7 +243,7 @@ let profilesCache: { data: OnlineCandidateProfile[]; expiresAt: number } | null 
   null;
 let messagesCache: { data: ChatMessage[]; expiresAt: number } | null = null;
 
-const CACHE_TTL_MS = 4000;
+const CACHE_TTL_MS = 8000;
 
 export async function getAllOnlineProfiles(
   forceRefresh = false,
@@ -252,45 +252,66 @@ export async function getAllOnlineProfiles(
     return profilesCache.data;
   }
 
-  await ensureChatAndProfileSheets();
   const sheets = getSheetsClient();
   const spreadsheetId = getSpreadsheetId();
 
-  const res = await sheets.spreadsheets.values.get({
-    spreadsheetId,
-    range: `'${PROFILES_SHEET_NAME}'!A2:P`,
-  });
+  try {
+    let res;
+    try {
+      res = await sheets.spreadsheets.values.get({
+        spreadsheetId,
+        range: `'${PROFILES_SHEET_NAME}'!A2:P`,
+      });
+    } catch (innerErr: unknown) {
+      const msg = innerErr instanceof Error ? innerErr.message : String(innerErr);
+      if (msg.includes("Unable to parse range")) {
+        await ensureChatAndProfileSheets();
+        res = await sheets.spreadsheets.values.get({
+          spreadsheetId,
+          range: `'${PROFILES_SHEET_NAME}'!A2:P`,
+        });
+      } else {
+        throw innerErr;
+      }
+    }
 
-  const rows = res.data.values || [];
-  const profiles: OnlineCandidateProfile[] = rows
-    .map((row, idx) => ({
-      profileId: row[0] || `PF-${idx + 2}`,
-      fullName: row[1] || "",
-      phone: normalizePhone(row[2] || ""),
-      cccd: normalizeCccd(row[3] || ""),
-      dateOfBirth: row[4] || "",
-      gender: row[5] || "Nam",
-      opsCode: row[6] || "",
-      permanentAddress: row[7] || "",
-      preferredLocation: row[8] || "",
-      education: row[9] || "12/12",
-      preferredShift:
-        row[10] || "Tôi chưa từng làm việc liên quan đến vị trí ứng tuyển",
-      workSchedule: row[11] || "",
-      availableStartDate: row[12] || "",
-      note: row[13] || "",
-      createdAt: row[14] || new Date().toISOString(),
-      updatedAt: row[14] || new Date().toISOString(),
-      email: String(row[15] || "").trim().toLowerCase(),
-      rowNumber: idx + 2,
-    }))
-    .filter((p) => Boolean(p.phone || p.cccd));
+    const rows = res.data.values || [];
+    const profiles: OnlineCandidateProfile[] = rows
+      .map((row, idx) => ({
+        profileId: row[0] || `PF-${idx + 2}`,
+        fullName: row[1] || "",
+        phone: normalizePhone(row[2] || ""),
+        cccd: normalizeCccd(row[3] || ""),
+        dateOfBirth: row[4] || "",
+        gender: row[5] || "Nam",
+        opsCode: row[6] || "",
+        permanentAddress: row[7] || "",
+        preferredLocation: row[8] || "",
+        education: row[9] || "12/12",
+        preferredShift:
+          row[10] || "Tôi chưa từng làm việc liên quan đến vị trí ứng tuyển",
+        workSchedule: row[11] || "",
+        availableStartDate: row[12] || "",
+        note: row[13] || "",
+        createdAt: row[14] || new Date().toISOString(),
+        updatedAt: row[14] || new Date().toISOString(),
+        email: String(row[15] || "").trim().toLowerCase(),
+        rowNumber: idx + 2,
+      }))
+      .filter((p) => Boolean(p.phone || p.cccd));
 
-  profilesCache = {
-    data: profiles,
-    expiresAt: Date.now() + CACHE_TTL_MS,
-  };
-  return profiles;
+    profilesCache = {
+      data: profiles,
+      expiresAt: Date.now() + CACHE_TTL_MS,
+    };
+    return profiles;
+  } catch (error) {
+    console.error("getAllOnlineProfiles error (using fallback cache):", error);
+    if (profilesCache) {
+      return profilesCache.data;
+    }
+    return [];
+  }
 }
 
 export async function upsertOnlineProfile(
@@ -471,50 +492,71 @@ export async function getAllChatMessages(
     return messagesCache.data;
   }
 
-  await ensureChatAndProfileSheets();
   const sheets = getSheetsClient();
   const spreadsheetId = getSpreadsheetId();
 
-  const res = await sheets.spreadsheets.values.get({
-    spreadsheetId,
-    range: `'${CHAT_SHEET_NAME}'!A2:L`,
-  });
-
-  const rows = res.data.values || [];
-  const messages: ChatMessage[] = rows
-    .map((row, index) => {
-      let metadata: ChatMessageMetadata | undefined;
-      if (row[8]) {
-        try {
-          metadata = JSON.parse(row[8]);
-        } catch {
-          metadata = undefined;
-        }
+  try {
+    let res;
+    try {
+      res = await sheets.spreadsheets.values.get({
+        spreadsheetId,
+        range: `'${CHAT_SHEET_NAME}'!A2:L`,
+      });
+    } catch (innerErr: unknown) {
+      const msg = innerErr instanceof Error ? innerErr.message : String(innerErr);
+      if (msg.includes("Unable to parse range")) {
+        await ensureChatAndProfileSheets();
+        res = await sheets.spreadsheets.values.get({
+          spreadsheetId,
+          range: `'${CHAT_SHEET_NAME}'!A2:L`,
+        });
+      } else {
+        throw innerErr;
       }
-      return {
-        id: row[0] || `MSG-${index + 2}`,
-        roomId: normalizePhone(row[1] || ""),
-        candidateName: row[2] || "Ứng viên",
-        candidatePhone: normalizePhone(row[3] || row[1] || ""),
-        sender: (row[4] as ChatSender) || "candidate",
-        senderName: row[5] || row[2] || "Ứng viên",
-        content: row[6] || "",
-        type: (row[7] as ChatMessageType) || "text",
-        metadata,
-        createdAt: row[9] || new Date().toISOString(),
-        readByAdmin: String(row[10] || "").toUpperCase() === "TRUE",
-        readByCandidate: String(row[11] || "").toUpperCase() === "TRUE",
-        rowNumber: index + 2,
-      };
-    })
-    .filter((m) => Boolean(m.roomId && m.content));
+    }
 
-  messagesCache = {
-    data: messages,
-    expiresAt: Date.now() + CACHE_TTL_MS,
-  };
+    const rows = res.data.values || [];
+    const messages: ChatMessage[] = rows
+      .map((row, index) => {
+        let metadata: ChatMessageMetadata | undefined;
+        if (row[8]) {
+          try {
+            metadata = JSON.parse(row[8]);
+          } catch {
+            metadata = undefined;
+          }
+        }
+        return {
+          id: row[0] || `MSG-${index + 2}`,
+          roomId: normalizePhone(row[1] || ""),
+          candidateName: row[2] || "Ứng viên",
+          candidatePhone: normalizePhone(row[3] || row[1] || ""),
+          sender: (row[4] as ChatSender) || "candidate",
+          senderName: row[5] || row[2] || "Ứng viên",
+          content: row[6] || "",
+          type: (row[7] as ChatMessageType) || "text",
+          metadata,
+          createdAt: row[9] || new Date().toISOString(),
+          readByAdmin: String(row[10] || "").toUpperCase() === "TRUE",
+          readByCandidate: String(row[11] || "").toUpperCase() === "TRUE",
+          rowNumber: index + 2,
+        };
+      })
+      .filter((m) => Boolean(m.roomId && m.content));
 
-  return messages;
+    messagesCache = {
+      data: messages,
+      expiresAt: Date.now() + CACHE_TTL_MS,
+    };
+
+    return messages;
+  } catch (error) {
+    console.error("getAllChatMessages error (using fallback cache):", error);
+    if (messagesCache) {
+      return messagesCache.data;
+    }
+    return [];
+  }
 }
 
 export async function appendChatMessage(input: {
@@ -527,7 +569,6 @@ export async function appendChatMessage(input: {
   type?: ChatMessageType;
   metadata?: ChatMessageMetadata;
 }): Promise<ChatMessage> {
-  await ensureChatAndProfileSheets();
   const existing = await getAllChatMessages();
   const normRoom = normalizePhone(input.roomId || input.candidatePhone);
   const nowIso = new Date().toISOString();
@@ -589,7 +630,7 @@ export async function markRoomMessagesRead(
   reader: "admin" | "candidate",
 ): Promise<void> {
   const normRoom = normalizePhone(roomId);
-  const messages = await getAllChatMessages(true);
+  const messages = await getAllChatMessages(false);
   const toUpdate = messages.filter(
     (m) =>
       m.roomId === normRoom &&
@@ -599,31 +640,35 @@ export async function markRoomMessagesRead(
 
   if (toUpdate.length === 0) return;
 
-  const sheets = getSheetsClient();
-  const spreadsheetId = getSpreadsheetId();
-  const colLetter = reader === "admin" ? "K" : "L";
+  try {
+    const sheets = getSheetsClient();
+    const spreadsheetId = getSpreadsheetId();
+    const colLetter = reader === "admin" ? "K" : "L";
 
-  await sheets.spreadsheets.values.batchUpdate({
-    spreadsheetId,
-    requestBody: {
-      valueInputOption: "USER_ENTERED",
-      data: toUpdate.map((m) => ({
-        range: `'${CHAT_SHEET_NAME}'!${colLetter}${m.rowNumber}`,
-        values: [["TRUE"]],
-      })),
-    },
-  });
+    await sheets.spreadsheets.values.batchUpdate({
+      spreadsheetId,
+      requestBody: {
+        valueInputOption: "USER_ENTERED",
+        data: toUpdate.map((m) => ({
+          range: `'${CHAT_SHEET_NAME}'!${colLetter}${m.rowNumber}`,
+          values: [["TRUE"]],
+        })),
+      },
+    });
 
-  // Update cache
-  messagesCache = {
-    data: messages.map((m) => {
-      if (m.roomId !== normRoom) return m;
-      return reader === "admin"
-        ? { ...m, readByAdmin: true }
-        : { ...m, readByCandidate: true };
-    }),
-    expiresAt: Date.now() + CACHE_TTL_MS,
-  };
+    // Update cache
+    messagesCache = {
+      data: messages.map((m) => {
+        if (m.roomId !== normRoom) return m;
+        return reader === "admin"
+          ? { ...m, readByAdmin: true }
+          : { ...m, readByCandidate: true };
+      }),
+      expiresAt: Date.now() + CACHE_TTL_MS,
+    };
+  } catch (error) {
+    console.error("markRoomMessagesRead non-fatal error:", error);
+  }
 }
 
 const STATUS_LABELS: Record<string, string> = {

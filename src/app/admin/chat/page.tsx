@@ -171,6 +171,13 @@ export default function AdminChatPage() {
           const data = await res.json();
           const fetchedThreads: ChatThreadSummary[] = data.threads || [];
           setThreads(fetchedThreads);
+          if (typeof data.totalUnread === "number") {
+            window.dispatchEvent(
+              new CustomEvent("admin-chat-unread-count", {
+                detail: data.totalUnread,
+              }),
+            );
+          }
 
           if (!targetRoom && fetchedThreads.length > 0) {
             const firstRoom = fetchedThreads[0].roomId;
@@ -214,7 +221,7 @@ export default function AdminChatPage() {
   useEffect(() => {
     const interval = setInterval(() => {
       fetchChatData(selectedRoomId, true);
-    }, 4000);
+    }, 6000);
     return () => clearInterval(interval);
   }, [selectedRoomId, fetchChatData]);
 

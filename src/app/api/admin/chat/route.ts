@@ -37,9 +37,13 @@ export async function GET(request: Request) {
     const summaryOnly = searchParams.get("summaryOnly") === "true";
 
     const [allMessages, profiles, allApps] = await Promise.all([
-      getAllChatMessages(),
-      summaryOnly ? Promise.resolve([]) : getAllOnlineProfiles(),
-      summaryOnly ? Promise.resolve([]) : getApplicationsFromSheet(),
+      getAllChatMessages().catch(() => []),
+      summaryOnly
+        ? Promise.resolve([])
+        : getAllOnlineProfiles().catch(() => []),
+      summaryOnly
+        ? Promise.resolve([])
+        : getApplicationsFromSheet().catch(() => []),
     ]);
 
     // Group messages by roomId
