@@ -29,16 +29,21 @@ export default function DongThapPage() {
 
         <section className="relative overflow-hidden rounded-[2rem] bg-gradient-to-br from-[#d90012] to-[#ff2a3a] p-8 text-white shadow-xl md:p-12">
           <div className="relative z-10">
-            <span className="mb-4 inline-block rounded-full bg-yellow-400 px-4 py-1.5 text-xs font-bold uppercase tracking-wider text-red-900">
-              Việc nhẹ lương tốt - Nhận việc ngay
-            </span>
+            <div className="mb-4 flex flex-wrap gap-2 items-center">
+              <span className="inline-block rounded-full bg-yellow-400 px-4 py-1.5 text-xs font-bold uppercase tracking-wider text-red-900">
+                Part-time • Linh hoạt
+              </span>
+              <span className="inline-block rounded-full bg-emerald-300 border border-emerald-400 px-4 py-1.5 text-xs font-black uppercase tracking-wider text-emerald-950">
+                ✅ ĐÃ TUYỂN ĐỦ SỐ LƯỢNG
+              </span>
+            </div>
             <h1 className="mb-4 text-4xl font-black leading-tight tracking-tight md:text-5xl lg:text-6xl">
               NHÂN SỰ KHO PHÂN LOẠI
               <br className="hidden md:block" />
               <span className="text-yellow-400"> ĐỒNG THÁP</span>
             </h1>
             <p className="max-w-2xl text-lg font-medium text-red-50 md:text-xl">
-              Công việc đơn giản, xoay ca linh hoạt 4 tiếng tự do lựa chọn. Ưu tiên đăng ký sớm.
+              ✅ Khu vực Đồng Tháp hiện đã tuyển đủ chỉ tiêu cho đợt tuyển dụng này và tạm ngưng nhận hồ sơ mới.
             </p>
           </div>
           <div className="absolute -right-20 -top-20 h-64 w-64 rounded-full border-[32px] border-white/10 blur-md"></div>
@@ -239,14 +244,14 @@ export default function DongThapPage() {
         <div className="mx-auto flex max-w-6xl items-center justify-between gap-4 px-1 md:px-6">
           <div className="hidden text-sm md:block">
             <span className="font-bold">Nhân sự kho phân loại</span>
-            <span className="ml-2 text-slate-500">Lấp Vò, Đồng Tháp</span>
+            <span className="ml-2 text-emerald-700 font-semibold">[Khu vực Đồng Tháp đã tuyển đủ]</span>
           </div>
           <Link
-            href="/ung-tuyen?job=lap-vo-dong-thap"
+            href="/viec-lam/tp-ho-chi-minh"
             className="ml-auto w-full md:w-auto"
           >
             <Button className="h-12 w-full bg-[#d90012] px-8 font-bold text-white hover:bg-red-800 md:w-auto">
-              ĐĂNG KÝ ĐI LÀM
+              XEM VỊ TRÍ TUYỂN DỤNG TP.HCM
             </Button>
           </Link>
         </div>

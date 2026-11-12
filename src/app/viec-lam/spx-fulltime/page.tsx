@@ -52,13 +52,21 @@ export default function SpxFulltimePage() {
         >
           <div className="relative flex min-h-[470px] items-center px-6 py-10 md:min-h-[540px] md:px-12 md:py-16">
             <div className="max-w-3xl">
-              <p className="mb-4 inline-flex rounded-full bg-yellow-400 px-3 py-1 text-xs font-black uppercase tracking-[0.18em] text-red-900 shadow-md">
-                Cơ hội việc làm Full-time · BPO Cố Định
-              </p>
+              <div className="mb-4 flex flex-wrap gap-2 items-center">
+                <span className="inline-flex rounded-full bg-yellow-400 px-3 py-1 text-xs font-black uppercase tracking-[0.18em] text-red-900 shadow-md">
+                  Cơ hội việc làm Full-time · BPO Cố Định
+                </span>
+                <span className="inline-flex rounded-full bg-amber-200 border border-amber-400 px-3 py-1 text-xs font-black uppercase text-amber-950 shadow-md">
+                  ⚠️ TẠM NGƯNG TUYỂN DỤNG (ĐÃ ĐỦ CHỈ TIÊU)
+                </span>
+              </div>
               <h1 className="max-w-3xl text-4xl font-black uppercase leading-[1.05] tracking-tight drop-shadow-[0_2px_3px_rgba(0,0,0,0.65)] md:text-6xl">
                 Nhân viên kho SPX
                 <span className="mt-2 block text-yellow-300">Full-time · BPO Cố Định</span>
               </h1>
+              <p className="mt-4 max-w-2xl text-base text-red-100 md:text-lg">
+                ⚠️ Thông báo: Hiện tại vị trí Full-time BPO tại kho SW SOC Vĩnh Long đã tuyển đủ chỉ tiêu và đang tạm ngưng nhận hồ sơ mới. Bạn có thể tham khảo vị trí Part-time tại Vĩnh Long hoặc ứng tuyển kho SPX tại TP.HCM.
+              </p>
               <p className="mt-5 max-w-2xl text-base leading-7 text-white drop-shadow-[0_1px_2px_rgba(0,0,0,0.7)] md:text-lg">
                 Làm việc ổn định tại KCN Bình Minh, đầy đủ hợp đồng, bảo hiểm và
                 chính sách đãi ngộ rõ ràng.
@@ -312,18 +320,25 @@ export default function SpxFulltimePage() {
             <span className="font-bold text-slate-900">
               Nhân viên kho SPX Full-time · BPO Cố Định
             </span>
-            <span className="ml-2 text-slate-500">
-              KCN Bình Minh, Vĩnh Long
+            <span className="ml-2 text-amber-700 font-semibold">
+              [Đã đủ chỉ tiêu - Tạm ngưng tuyển]
             </span>
           </div>
-          <Link
-            href="/ung-tuyen?job=spx-fulltime"
-            className="ml-auto w-full md:w-auto"
-          >
-            <Button className="h-12 w-full bg-[#d90012] px-8 font-bold text-white hover:bg-red-800 md:w-auto">
-              ỨNG TUYỂN NGAY
-            </Button>
-          </Link>
+          <div className="ml-auto flex items-center gap-3 w-full md:w-auto">
+            <Link href="/viec-lam/agari-part-time" className="w-full md:w-auto">
+              <Button variant="outline" className="h-12 w-full border-red-300 font-bold text-red-700 hover:bg-red-50 md:w-auto">
+                ỨNG TUYỂN PART-TIME
+              </Button>
+            </Link>
+            <Link
+              href="/viec-lam/tp-ho-chi-minh"
+              className="w-full md:w-auto"
+            >
+              <Button className="h-12 w-full bg-[#d90012] px-6 font-bold text-white hover:bg-red-800 md:w-auto">
+                ỨNG TUYỂN KHO TP.HCM
+              </Button>
+            </Link>
+          </div>
         </div>
       </div>
     </div>

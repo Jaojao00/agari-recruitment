@@ -27,16 +27,21 @@ export default function ThotNotCanThoPage() {
 
         <section className="relative overflow-hidden rounded-[2rem] bg-gradient-to-br from-[#d90012] to-[#ff2a3a] p-8 text-white shadow-xl md:p-12">
           <div className="relative z-10">
-            <span className="mb-4 inline-block rounded-full bg-yellow-400 px-4 py-1.5 text-xs font-bold uppercase tracking-wider text-red-900">
-              Việc nhẹ lương tốt - Nhận việc ngay
-            </span>
+            <div className="mb-4 flex flex-wrap gap-2 items-center">
+              <span className="inline-block rounded-full bg-yellow-400 px-4 py-1.5 text-xs font-bold uppercase tracking-wider text-red-900">
+                Nhân viên Full-time (BPO)
+              </span>
+              <span className="inline-block rounded-full bg-emerald-300 border border-emerald-400 px-4 py-1.5 text-xs font-black uppercase tracking-wider text-emerald-950">
+                ✅ ĐÃ TUYỂN ĐỦ SỐ LƯỢNG
+              </span>
+            </div>
             <h1 className="mb-4 text-4xl font-black leading-tight tracking-tight md:text-5xl lg:text-6xl">
               NHÂN VIÊN KHO FULL-TIME
               <br className="hidden md:block" />
               <span className="text-yellow-400"> THỐT NỐT, CẦN THƠ</span>
             </h1>
             <p className="max-w-2xl text-lg font-medium text-red-50 md:text-xl">
-              Công việc đơn giản, thu nhập hấp dẫn, môi trường làm việc chuyên nghiệp.
+              ✅ Khu vực Thốt Nốt, Cần Thơ hiện đã tuyển đủ chỉ tiêu cho đợt tuyển dụng này và tạm ngưng nhận hồ sơ mới.
             </p>
           </div>
           <div className="absolute -right-20 -top-20 h-64 w-64 rounded-full border-[32px] border-white/10 blur-md"></div>
@@ -201,9 +206,12 @@ export default function ThotNotCanThoPage() {
                 </div>
               </div>
               
-              <Link href="/ung-tuyen?job=thot-not-can-tho" className="block w-full">
+              <div className="p-3 rounded-lg bg-emerald-50 border border-emerald-200 text-xs text-emerald-900 font-bold mb-4">
+                ✅ Khu vực Thốt Nốt, Cần Thơ đã tuyển đủ số lượng chỉ tiêu cho đợt tuyển dụng này.
+              </div>
+              <Link href="/viec-lam/tp-ho-chi-minh" className="block w-full">
                 <Button className="h-12 w-full bg-[#D90000] text-sm font-bold uppercase tracking-wider text-white hover:bg-red-700">
-                  Đăng ký ứng tuyển ngay
+                  Xem vị trí tuyển dụng TP.HCM
                 </Button>
               </Link>
             </section>

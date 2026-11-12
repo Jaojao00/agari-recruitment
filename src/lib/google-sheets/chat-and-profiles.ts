@@ -714,6 +714,30 @@ export async function generateSmartAutoReply(params: {
     }
   }
 
+  // Check if asking about recruitment status or pause/closed locations
+  if (
+    text.includes("còn tuyển") ||
+    text.includes("hết tuyển") ||
+    text.includes("ngưng tuyển") ||
+    text.includes("đủ người") ||
+    text.includes("vĩnh long còn tuyển") ||
+    text.includes("đồng tháp còn tuyển") ||
+    text.includes("cần thơ còn tuyển") ||
+    text.includes("thốt nốt còn tuyển") ||
+    text.includes("bpo cố định còn tuyển")
+  ) {
+    return (
+      `📢 CẬP NHẬT TÌNH HÌNH TUYỂN DỤNG AGARI MỚI NHẤT:\n` +
+      `1️⃣ Khu vực TP.HCM: 🔥 ĐANG TUYỂN MẠNH nhân viên chính thức kho SPX Express (Quận Bình Tân & Quận Tân Phú + 19 Hub TP.HCM). Thu nhập 10.500.000 - 12.500.000đ/tháng, đóng đủ BHXH.\n` +
+      `2️⃣ Khu vực Vĩnh Long (Kho SW SOC - KCN Bình Minh):\n` +
+      `   • Vị trí Full-time · BPO Cố định: ⚠️ ĐÃ ĐỦ CHỈ TIÊU & TẠM NGƯNG TUYỂN DỤNG.\n` +
+      `   • Vị trí Part-time (Thời vụ): Vẫn đang nhận đăng ký theo tuần (125k - 300k/ca).\n` +
+      `3️⃣ Khu vực Cần Thơ (Thốt Nốt): ✅ ĐÃ TUYỂN ĐỦ SỐ LƯỢNG chỉ tiêu đợt này.\n` +
+      `4️⃣ Khu vực Đồng Tháp: ✅ ĐÃ TUYỂN ĐỦ SỐ LƯỢNG chỉ tiêu đợt này.\n\n` +
+      `👉 Bạn có thể đăng ký ca Part-time tại Vĩnh Long hoặc ứng tuyển kho SPX tại TP.HCM nhé!`
+    );
+  }
+
   // Check if asking about salary / income / benefits
   if (
     text.includes("mức lương") ||
@@ -723,11 +747,10 @@ export async function generateSmartAutoReply(params: {
   ) {
     return (
       `💰 Thông tin Mức lương & Đãi ngộ tại AGARI (SPX Express):\n` +
-      `1️⃣ Khu vực TP.HCM (Nhân viên Chính thức): 10.500.000 - 12.500.000đ/tháng (Định mức 10.400.000đ: Lương cơ bản 5.310.000đ + PC nhà ở/xăng 1.310.000đ + PC cơm 780.000đ + KPI 2.500.000đ + Hỗ trợ thử việc 500.000đ/tháng, đóng đủ BHXH).\n` +
-      `2️⃣ Khu vực Vĩnh Long - KCN Bình Minh: BPO Cố định 8.400.000 - 11.300.000đ/tháng (250k - 300k/ca) | Part-time: 125k - 300k/ca.\n` +
-      `3️⃣ Khu vực Cần Thơ (Thốt Nốt): 250.000đ/ngày + Thưởng chuyên cần 750.000đ/tháng (đủ 26 công).\n` +
-      `4️⃣ Khu vực Đồng Tháp: 140.000đ/ca (4 tiếng) - 280.000đ/ngày.\n\n` +
-      `Bạn đang quan tâm ứng tuyển khu vực nào để HR tư vấn chi tiết hơn ạ?`
+      `1️⃣ Khu vực TP.HCM (🔥 Đang tuyển chính thức): 10.500.000 - 12.500.000đ/tháng (Định mức 10.400.000đ: Lương cơ bản 5.310.000đ + PC nhà ở/xăng 1.310.000đ + PC cơm 780.000đ + KPI 2.500.000đ + Hỗ trợ thử việc 500.000đ/tháng, đóng đủ BHXH).\n` +
+      `2️⃣ Khu vực Vĩnh Long - KCN Bình Minh: Part-time: 125k - 300k/ca (Lưu ý: Vị trí BPO Cố định 8.4M - 11.3M hiện ĐÃ TẠM NGƯNG do đủ chỉ tiêu).\n` +
+      `3️⃣ Khu vực Cần Thơ (Thốt Nốt) & Đồng Tháp: ✅ ĐÃ TUYỂN ĐỦ CHỈ TIÊU đợt này.\n\n` +
+      `Bạn có muốn HR hỗ trợ đăng ký nhận việc tại khu vực TP.HCM hoặc Part-time Vĩnh Long không ạ?`
     );
   }
 
@@ -740,11 +763,10 @@ export async function generateSmartAutoReply(params: {
   ) {
     return (
       `⏰ Thời gian các ca làm việc tại Kho SPX Express:\n` +
-      `• TP.HCM (Xoay 5 ca, tối thiểu 23 công/tháng, nghỉ xoay tuần): Ca 1 (05:00-14:00) | Ca 2 & 3 (11:00-20:00 & 12:00-21:00) | Ca 4 & 5 (14:00-23:00 & 15:00-24:00).\n` +
-      `• Vĩnh Long (KCN Bình Minh): Ca 1 (06:00-15:00) | Ca 2 (13:00-22:00) | Ca 3 (22:00-06:00) | Ca Part-time 4h-5h.\n` +
-      `• Cần Thơ (Thốt Nốt): Ca hành chính cố định 09:00 - 18:00 (26 công/tháng, nghỉ 4 ngày).\n` +
-      `• Đồng Tháp: Ca sáng 08:00-12:00 | Ca chiều 15:00-19:00.\n\n` +
-      `Nhà tuyển dụng AGARI đã nhận được tin nhắn và sẽ hỗ trợ xếp lịch ca cho bạn ngay!`
+      `• TP.HCM (Đang tuyển chính thức - Xoay 5 ca, tối thiểu 23 công/tháng, nghỉ xoay tuần): Ca 1 (05:00-14:00) | Ca 2 & 3 (11:00-20:00 & 12:00-21:00) | Ca 4 & 5 (14:00-23:00 & 15:00-24:00).\n` +
+      `• Vĩnh Long (KCN Bình Minh): Ca Part-time linh hoạt 4h - 5h (Ca Full-time BPO cố định đang tạm ngưng do đã đủ số lượng).\n` +
+      `• Cần Thơ & Đồng Tháp: Đã tuyển đủ chỉ tiêu cho đợt này.\n\n` +
+      `Nhà tuyển dụng AGARI đã nhận được tin nhắn và sẽ hỗ trợ tư vấn ca làm việc phù hợp cho bạn ngay!`
     );
   }
 
@@ -756,13 +778,12 @@ export async function generateSmartAutoReply(params: {
     text.includes("kho nào")
   ) {
     return (
-      `📍 Địa điểm Phỏng vấn & Làm việc chính của AGARI:\n` +
-      `• TP.HCM - Quận Bình Tân: 754/8 Tân Kỳ Tân Quý, P. Bình Hưng Hòa B, Q. Bình Tân.\n` +
+      `📍 Địa điểm Phỏng vấn & Tiếp nhận hồ sơ chính thức của AGARI:\n` +
+      `• TP.HCM - Quận Bình Tân (Ưu tiên nhận việc ngay): 754/8 Tân Kỳ Tân Quý, P. Bình Hưng Hòa B, Q. Bình Tân.\n` +
       `• TP.HCM - Quận Tân Phú: 549/32 Tân Kỳ Tân Quý, P. Bình Hưng Hòa B, Q. Bình Tân (cùng 19 Hub SPX khắp các quận/huyện TP.HCM).\n` +
-      `• Vĩnh Long: SW SOC - KCN Bình Minh, Thị xã Bình Minh, Vĩnh Long.\n` +
-      `• Cần Thơ: 78-CTO Co Do 02 Hub - Ấp Tân Lợi 1, Xã Thuận Hưng, Huyện Thốt Nốt, Cần Thơ.\n` +
-      `• Đồng Tháp: Các Hub Cao Lãnh, Lấp Vò, Sa Đéc, Tân Bình, Tân Thành.\n\n` +
-      `Bạn muốn đăng ký làm tại Kho/Hub nào, hãy nhắn tên Quận/Khu vực để HR gửi lịch phỏng vấn nhé!`
+      `• Vĩnh Long (Kho SW SOC - KCN Bình Minh): Chỉ nhận vị trí Part-time (vị trí Full-time BPO tạm ngưng do đã tuyển đủ).\n` +
+      `• Cần Thơ & Đồng Tháp: Đã đủ số lượng phỏng vấn đợt này.\n\n` +
+      `Bạn muốn đăng ký làm tại Kho/Hub nào tại TP.HCM hoặc Part-time Vĩnh Long, hãy nhắn tên Quận/Khu vực để HR gửi lịch phỏng vấn nhé!`
     );
   }
 

@@ -69,14 +69,6 @@ const QUICK_APPLY_JOBS = [
     badge: "TP.HCM • Tuyển chính (SL: 1)",
   },
   {
-    jobId: "spx-fulltime",
-    title: "Nhân viên kho SPX Full-time (BPO Cố định)",
-    salary: "8.400.000 - 11.300.000 VNĐ/tháng",
-    location: "SW SOC - KCN BÌNH MINH VINH LONG",
-    schedule: "Ca 1: 06:00 - 15:00",
-    badge: "Vĩnh Long • BPO Cố định",
-  },
-  {
     jobId: "agari-part-time",
     title: "Nhân viên kho Part-time (Thời vụ)",
     salary: "125.000 - 300.000 VNĐ/ca",
@@ -85,13 +77,23 @@ const QUICK_APPLY_JOBS = [
     badge: "Vĩnh Long • Part-time",
   },
   {
+    jobId: "spx-fulltime",
+    title: "Nhân viên kho SPX Full-time (BPO Cố định)",
+    salary: "8.400.000 - 11.300.000 VNĐ/tháng",
+    location: "SW SOC - KCN BÌNH MINH VINH LONG",
+    schedule: "Ca 1: 06:00 - 15:00",
+    badge: "Vĩnh Long • Tạm ngưng tuyển",
+    isPaused: true,
+  },
+  {
     jobId: "thot-not-can-tho",
     title: "Nhân viên kho Full-time (BPO) - Thốt Nốt, Cần Thơ",
     salary: "250.000 VNĐ/ngày + Thưởng 750.000đ/tháng",
     location:
       "78-CTO Co Do 02 Hub: Ấp Tân Lợi 1, Xã Thuận Hưng, Huyện Thốt Nốt, Cần Thơ.",
     schedule: "09:00 - 18:00 (Giờ hành chính)",
-    badge: "KV Mekong • Cần Thơ",
+    badge: "Cần Thơ • Đã tuyển đủ",
+    isPaused: true,
   },
   {
     jobId: "lap-vo-dong-thap",
@@ -99,7 +101,8 @@ const QUICK_APPLY_JOBS = [
     salary: "140.000 VNĐ/ca (4h) - 280.000 VNĐ/ngày",
     location: "71-DTP Lap Vo 02 Hub",
     schedule: "Làm cả 2 ca (Sáng & Chiều)",
-    badge: "KV Mekong • Đồng Tháp",
+    badge: "Đồng Tháp • Đã tuyển đủ",
+    isPaused: true,
   },
 ];
 
@@ -782,15 +785,25 @@ export default function OnlineProfilePage() {
                       </h4>
                       <p className="text-xs text-gray-500">{job.location}</p>
                       <div className="pt-1 flex items-center justify-between gap-2">
-                        <Link
-                          href={`/ung-tuyen?job=${job.jobId}`}
-                          className="text-xs text-gray-500 hover:text-gray-800 underline"
-                        >
-                          Tùy chỉnh ca/Hub khác
-                        </Link>
+                        {job.isPaused ? (
+                          <span className="text-xs text-amber-800 font-medium">
+                            Tạm ngưng nhận hồ sơ
+                          </span>
+                        ) : (
+                          <Link
+                            href={`/ung-tuyen?job=${job.jobId}`}
+                            className="text-xs text-gray-500 hover:text-gray-800 underline"
+                          >
+                            Tùy chỉnh ca/Hub khác
+                          </Link>
+                        )}
                         {already ? (
                           <span className="inline-flex items-center gap-1 px-3 py-1.5 rounded-lg bg-emerald-50 text-emerald-700 font-bold text-xs">
                             <CheckCircle2 size={14} /> Đã nộp ({already.applicationId})
+                          </span>
+                        ) : job.isPaused ? (
+                          <span className="inline-flex items-center gap-1 px-3 py-1.5 rounded-lg bg-gray-100 text-gray-500 font-semibold text-xs border border-gray-200">
+                            Đã tạm dừng
                           </span>
                         ) : (
                           <button

@@ -44,20 +44,29 @@ const jobOptions = {
     schedule: "Ca xoay theo lịch công ty",
   },
   "spx-fulltime": {
-    title: "Nhân viên kho SPX Full-time (BPO Cố định)",
-    schedule: "Ca cố định: 06:00 - 15:00, 13:00 - 22:00 hoặc 22:00 - 06:00",
+    title: "Nhân viên kho SPX Full-time (BPO Cố định) - [TẠM NGƯNG TUYỂN DỤNG]",
+    schedule: "Tạm ngưng nhận hồ sơ (Đã đủ chỉ tiêu)",
+    isPaused: true,
+    pauseNotice:
+      "Vị trí Full-time BPO Cố định tại kho SW SOC Vĩnh Long hiện đã đủ chỉ tiêu và đang tạm ngưng nhận hồ sơ. Vui lòng chọn vị trí Part-time hoặc tuyển dụng tại TP.HCM.",
   },
   "agari-part-time": {
     title: "Nhân viên kho part-time",
     schedule: "Đăng ký lịch làm việc linh hoạt theo tuần",
   },
   "lap-vo-dong-thap": {
-    title: "Nhân sự kho phân loại - Đồng Tháp",
-    schedule: "Ca ngắn linh hoạt",
+    title: "Nhân sự kho phân loại - Đồng Tháp - [ĐÃ TUYỂN ĐỦ]",
+    schedule: "Đã tuyển đủ chỉ tiêu đợt này",
+    isPaused: true,
+    pauseNotice:
+      "Khu vực Đồng Tháp hiện đã tuyển đủ chỉ tiêu cho đợt tuyển dụng này.",
   },
   "thot-not-can-tho": {
-    title: "Nhân viên kho Full-time (BPO) - Thốt Nốt",
-    schedule: "09:00 - 18:00",
+    title: "Nhân viên kho Full-time (BPO) - Thốt Nốt - [ĐÃ TUYỂN ĐỦ]",
+    schedule: "Đã tuyển đủ chỉ tiêu đợt này",
+    isPaused: true,
+    pauseNotice:
+      "Khu vực Thốt Nốt, Cần Thơ hiện đã tuyển đủ chỉ tiêu cho đợt tuyển dụng này.",
   },
   "hcm-fulltime": {
     title: "Nhân viên chính thức kho SPX-Express - Khu vực TP.HCM",
@@ -244,6 +253,15 @@ export default function UngTuyenPage() {
   }, [form]);
 
   async function onSubmit(data: ApplicationFormValues) {
+    const currentJobConfig = jobOptions[jobId] as { isPaused?: boolean; pauseNotice?: string };
+    if (currentJobConfig?.isPaused) {
+      setError(
+        currentJobConfig.pauseNotice ||
+          "Vị trí này hiện đã đủ chỉ tiêu và đang tạm ngưng nhận hồ sơ. Vui lòng chọn vị trí khác.",
+      );
+      return;
+    }
+
     if (jobId !== "warehouse-rotating-shift" && !data.workSchedule) {
       setError("Vui lòng chọn ca cố định muốn đăng ký.");
       return;
@@ -320,6 +338,11 @@ export default function UngTuyenPage() {
               <p className="text-sm text-red-100">
                 {jobOptions[jobId].schedule}
               </p>
+              {"isPaused" in jobOptions[jobId] && (jobOptions[jobId] as { isPaused?: boolean; pauseNotice?: string }).isPaused && (
+                <div className="mt-3 p-3 rounded-lg bg-amber-400 text-slate-900 font-bold text-xs shadow-xs">
+                  ⚠️ {(jobOptions[jobId] as { pauseNotice?: string }).pauseNotice}
+                </div>
+              )}
               {(jobId === "warehouse-rotating-shift" || jobId === "spx-fulltime" || isHcmJob(jobId)) && (
                 <p className="text-sm italic text-yellow-100 border-t border-white/20 mt-2 pt-2">
                   {isHcmJob(jobId)
@@ -818,14 +841,19 @@ export default function UngTuyenPage() {
 
                 <Button
                   type="submit"
-                  className="w-full h-14 text-lg font-bold bg-red-700 hover:bg-red-800 text-white rounded-full mt-8"
-                  disabled={isSubmitting}
+                  className="w-full h-14 text-lg font-bold bg-red-700 hover:bg-red-800 text-white rounded-full mt-8 disabled:opacity-50 disabled:cursor-not-allowed"
+                  disabled={
+                    isSubmitting ||
+                    Boolean((jobOptions[jobId] as { isPaused?: boolean })?.isPaused)
+                  }
                 >
                   {isSubmitting ? (
                     <>
                       <Loader2 className="mr-2 h-5 w-5 animate-spin" />
                       ĐANG GỬI HỒ SƠ...
                     </>
+                  ) : (jobOptions[jobId] as { isPaused?: boolean })?.isPaused ? (
+                    "VỊ TRÍ NÀY ĐANG TẠM NGƯNG NHẬN HỒ SƠ"
                   ) : (
                     "GỬI HỒ SƠ ỨNG TUYỂN"
                   )}

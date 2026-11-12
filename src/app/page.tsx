@@ -241,47 +241,55 @@ export default function HomePage() {
               </div>
             </article>
 
-            {/* Card 2: Full-time */}
-            <article className="overflow-hidden rounded-2xl border border-gray-200 bg-white shadow-sm transition hover:-translate-y-0.5 hover:shadow-lg">
+            {/* Card 2: Full-time (TẠM NGƯNG TUYỂN DỤNG) */}
+            <article className="overflow-hidden rounded-2xl border border-gray-300 bg-gray-50/80 shadow-xs opacity-90 transition hover:shadow-md">
               <div className="grid md:grid-cols-[200px_1fr] md:items-stretch">
-                <div className="flex min-h-32 md:min-h-full items-center justify-center bg-[#d90012] p-6 text-center text-white">
+                <div className="flex min-h-32 md:min-h-full items-center justify-center bg-slate-600 p-6 text-center text-white">
                   <div>
                     <p className="text-3xl font-black italic tracking-tight">SPX</p>
-                    <p className="mt-2 text-xs font-bold uppercase tracking-[0.2em] text-yellow-300">Express</p>
-                    <div className="mx-auto mt-4 h-1 w-12 bg-yellow-400" />
+                    <p className="mt-2 text-xs font-bold uppercase tracking-[0.2em] text-gray-300">Express</p>
+                    <div className="mx-auto mt-4 h-1 w-12 bg-gray-400" />
                   </div>
                 </div>
                 <div className="p-6 md:p-7 flex flex-col md:flex-row md:items-center gap-6 justify-between">
                   <div className="space-y-4">
                     <div>
-                      <p className="text-xs font-bold uppercase tracking-[0.16em] text-red-700">
-                        Full-time · BPO CỐ ĐỊNH
-                      </p>
-                      <h3 className="mt-1 text-xl font-bold text-gray-900">
-                        Nhân viên kho SPX
+                      <div className="flex items-center gap-2 flex-wrap">
+                        <p className="text-xs font-bold uppercase tracking-[0.16em] text-slate-600">
+                          Full-time · BPO CỐ ĐỊNH
+                        </p>
+                        <span className="rounded-full bg-amber-100 border border-amber-300 px-2.5 py-0.5 text-[11px] font-black uppercase text-amber-900">
+                          Tạm ngưng tuyển
+                        </span>
+                      </div>
+                      <h3 className="mt-1 text-xl font-bold text-gray-800">
+                        Nhân viên kho SPX (Vĩnh Long - SW SOC)
                       </h3>
+                      <p className="mt-1 text-xs font-semibold text-amber-800">
+                        ⚠️ Hiện tại vị trí Full-time BPO tại kho SW SOC Vĩnh Long đã tuyển đủ chỉ tiêu và đang tạm ngưng nhận hồ sơ mới.
+                      </p>
                       <p className="mt-1 text-sm text-gray-500">
-                        KCN Bình Minh, Vĩnh Long
+                        KCN Bình Minh, Vĩnh Long (Ưu tiên nộp KV TP.HCM hoặc Part-time)
                       </p>
                     </div>
                     <div className="flex flex-wrap gap-2 text-sm">
-                      <span className="rounded-md bg-red-50 px-3 py-1.5 font-semibold text-red-700">
+                      <span className="rounded-md bg-gray-200 px-3 py-1.5 font-semibold text-gray-700">
                         9.0M - 9.3M VNĐ/tháng
                       </span>
-                      <span className="rounded-md bg-gray-100 px-3 py-1.5 text-gray-700">
+                      <span className="rounded-md bg-gray-200 px-3 py-1.5 text-gray-600">
                         250k - 300k/ca
                       </span>
-                      <span className="rounded-md bg-gray-100 px-3 py-1.5 text-gray-700">
+                      <span className="rounded-md bg-gray-200 px-3 py-1.5 text-gray-600">
                         3 ca cố định
                       </span>
-                      <span className="rounded-md bg-yellow-100 px-3 py-1.5 font-semibold text-yellow-800">
-                        Chế độ mới
+                      <span className="rounded-md bg-amber-100 px-3 py-1.5 font-semibold text-amber-800">
+                        Đang tạm ngưng nhận hồ sơ
                       </span>
                     </div>
                   </div>
-                  <div className="mt-4 md:mt-0 md:shrink-0 md:border-l md:border-gray-100 md:pl-6 flex items-center">
+                  <div className="mt-4 md:mt-0 md:shrink-0 md:border-l md:border-gray-200 md:pl-6 flex items-center">
                     <Link href="/viec-lam/spx-fulltime" className="w-full">
-                      <Button className="w-full bg-red-700 font-bold text-white hover:bg-red-800 md:min-w-[160px]">
+                      <Button variant="outline" className="w-full border-gray-300 font-bold text-gray-700 hover:bg-gray-100 md:min-w-[160px]">
                         XEM CHI TIẾT
                       </Button>
                     </Link>
@@ -333,41 +341,52 @@ export default function HomePage() {
               </div>
             </article>
 
-            {/* Card 4: Dong Thap Part-time */}
-            <article className="overflow-hidden rounded-2xl border border-gray-200 bg-white shadow-sm transition hover:-translate-y-0.5 hover:shadow-lg">
+            {/* Card 4: Dong Thap Part-time (ĐÃ TUYỂN ĐỦ) */}
+            <article className="overflow-hidden rounded-2xl border border-gray-300 bg-gray-50/80 shadow-xs opacity-90 transition hover:shadow-md">
               <div className="grid md:grid-cols-[200px_1fr] md:items-stretch">
-                <div className="flex min-h-32 md:min-h-full items-center justify-center bg-[#d90012] p-6 text-center text-white">
+                <div className="flex min-h-32 md:min-h-full items-center justify-center bg-slate-600 p-6 text-center text-white">
                   <div>
                     <p className="text-3xl font-black italic tracking-tight">SPX</p>
-                    <p className="mt-2 text-xs font-bold uppercase tracking-[0.2em] text-yellow-300">Express</p>
-                    <div className="mx-auto mt-4 h-1 w-12 bg-yellow-400" />
+                    <p className="mt-2 text-xs font-bold uppercase tracking-[0.2em] text-gray-300">Express</p>
+                    <div className="mx-auto mt-4 h-1 w-12 bg-gray-400" />
                   </div>
                 </div>
                 <div className="p-6 md:p-7 flex flex-col md:flex-row md:items-center gap-6 justify-between">
                   <div className="space-y-4">
                     <div>
-                      <p className="text-xs font-bold uppercase tracking-[0.16em] text-red-700">
-                        Part-time • Linh hoạt
-                      </p>
-                      <h3 className="mt-1 text-xl font-bold text-gray-900">
-                        Nhân sự kho phân loại
+                      <div className="flex items-center gap-2 flex-wrap">
+                        <p className="text-xs font-bold uppercase tracking-[0.16em] text-slate-600">
+                          Part-time • Linh hoạt
+                        </p>
+                        <span className="rounded-full bg-emerald-100 border border-emerald-300 px-2.5 py-0.5 text-[11px] font-black uppercase text-emerald-900">
+                          Đã tuyển đủ
+                        </span>
+                      </div>
+                      <h3 className="mt-1 text-xl font-bold text-gray-800">
+                        Nhân sự kho phân loại (Đồng Tháp)
                       </h3>
+                      <p className="mt-1 text-xs font-semibold text-emerald-800">
+                        ✅ Khu vực Đồng Tháp (Lấp Vò, Cao Lãnh, Sa Đéc,...) đã tuyển đủ nhân sự cho đợt này.
+                      </p>
                       <p className="mt-1 text-sm text-gray-500">
                         Lấp Vò, Đồng Tháp
                       </p>
                     </div>
                     <div className="flex flex-wrap gap-2 text-sm">
-                      <span className="rounded-md bg-red-50 px-3 py-1.5 font-semibold text-red-700">
+                      <span className="rounded-md bg-gray-200 px-3 py-1.5 font-semibold text-gray-700">
                         140.000 VNĐ/ca
                       </span>
-                      <span className="rounded-md bg-gray-100 px-3 py-1.5 text-gray-700">
+                      <span className="rounded-md bg-gray-200 px-3 py-1.5 text-gray-600">
                         4 tiếng tự do chọn ca
+                      </span>
+                      <span className="rounded-md bg-emerald-100 px-3 py-1.5 font-semibold text-emerald-800">
+                        Đã tuyển đủ số lượng
                       </span>
                     </div>
                   </div>
-                  <div className="mt-4 md:mt-0 md:shrink-0 md:border-l md:border-gray-100 md:pl-6 flex items-center">
+                  <div className="mt-4 md:mt-0 md:shrink-0 md:border-l md:border-gray-200 md:pl-6 flex items-center">
                     <Link href="/viec-lam/lap-vo-dong-thap" className="w-full">
-                      <Button className="w-full bg-red-700 font-bold text-white hover:bg-red-800 md:min-w-[160px]">
+                      <Button variant="outline" className="w-full border-gray-300 font-bold text-gray-700 hover:bg-gray-100 md:min-w-[160px]">
                         XEM CHI TIẾT
                       </Button>
                     </Link>
@@ -376,49 +395,53 @@ export default function HomePage() {
               </div>
             </article>
 
-            <article className="overflow-hidden rounded-2xl border border-gray-200 bg-white shadow-sm transition hover:-translate-y-0.5 hover:shadow-lg">
+            {/* Card 5: Thot Not Can Tho (ĐÃ TUYỂN ĐỦ) */}
+            <article className="overflow-hidden rounded-2xl border border-gray-300 bg-gray-50/80 shadow-xs opacity-90 transition hover:shadow-md">
               <div className="grid md:grid-cols-[200px_1fr] md:items-stretch">
-                <div className="flex min-h-32 md:min-h-full items-center justify-center bg-gradient-to-br from-[#d90012] to-[#ff2a3a] p-6 text-center text-white">
+                <div className="flex min-h-32 md:min-h-full items-center justify-center bg-slate-600 p-6 text-center text-white">
                   <div>
                     <p className="text-3xl font-black italic tracking-tight">AGARI</p>
-                    <p className="mt-2 text-xs font-bold uppercase tracking-[0.2em] text-yellow-300">Nhân sự kho</p>
-                    <div className="mx-auto mt-4 h-1 w-12 bg-yellow-400" />
+                    <p className="mt-2 text-xs font-bold uppercase tracking-[0.2em] text-gray-300">Nhân sự kho</p>
+                    <div className="mx-auto mt-4 h-1 w-12 bg-gray-400" />
                   </div>
                 </div>
                 <div className="p-6 md:p-7 flex flex-col md:flex-row md:items-center gap-6 justify-between">
                   <div className="space-y-4">
                     <div>
-                      <p className="text-xs font-bold uppercase tracking-[0.16em] text-red-700">
-                        Nhân viên Full-time (BPO)
-                      </p>
-                      <h3 className="mt-1 text-xl font-bold text-gray-900 line-clamp-2">
+                      <div className="flex items-center gap-2 flex-wrap">
+                        <p className="text-xs font-bold uppercase tracking-[0.16em] text-slate-600">
+                          Nhân viên Full-time (BPO)
+                        </p>
+                        <span className="rounded-full bg-emerald-100 border border-emerald-300 px-2.5 py-0.5 text-[11px] font-black uppercase text-emerald-900">
+                          Đã tuyển đủ
+                        </span>
+                      </div>
+                      <h3 className="mt-1 text-xl font-bold text-gray-800 line-clamp-2">
                         Nhân sự kho - Thốt Nốt, Cần Thơ
                       </h3>
+                      <p className="mt-1 text-xs font-semibold text-emerald-800">
+                        ✅ Khu vực Thốt Nốt, Cần Thơ đã tuyển đủ nhân sự cho đợt này.
+                      </p>
                       <p className="mt-1 text-sm text-gray-500">
                         78-CTO Co Do 02 Hub: Ấp Tân Lợi 1, Xã Thuận Hưng, Huyện Thốt Nốt, Cần Thơ.
                       </p>
                     </div>
                     <div className="flex flex-wrap gap-2 text-sm flex-1">
-                      <span className="rounded-md bg-red-50 px-3 py-1.5 font-semibold text-red-700">
+                      <span className="rounded-md bg-gray-200 px-3 py-1.5 font-semibold text-gray-700">
                         250.000 VNĐ / Ngày
                       </span>
-                      <span className="rounded-md bg-gray-100 px-3 py-1.5 text-gray-700">
+                      <span className="rounded-md bg-gray-200 px-3 py-1.5 text-gray-600">
                         Giờ hành chính
                       </span>
-                      <span className="rounded-md bg-gray-100 px-3 py-1.5 text-gray-700">
-                        Thưởng chuyên cần 750k
+                      <span className="rounded-md bg-emerald-100 px-3 py-1.5 font-semibold text-emerald-800">
+                        Đã tuyển đủ số lượng
                       </span>
                     </div>
                   </div>
                   <div className="flex flex-col gap-3 sm:flex-row sm:items-center md:flex-col md:items-stretch lg:flex-row min-w-[200px]">
                     <Link href="/viec-lam/thot-not-can-tho" className="flex-1">
-                      <Button variant="outline" className="w-full h-11 border-gray-300 text-gray-700 hover:bg-gray-50">
+                      <Button variant="outline" className="w-full h-11 border-gray-300 text-gray-700 hover:bg-gray-100">
                         Chi tiết
-                      </Button>
-                    </Link>
-                    <Link href="/ung-tuyen?job=thot-not-can-tho" className="flex-1">
-                      <Button className="w-full h-11 bg-[#d90012] text-white hover:bg-red-700">
-                        Ứng tuyển
                       </Button>
                     </Link>
                   </div>
