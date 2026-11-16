@@ -55,11 +55,8 @@ const jobOptions = {
     schedule: "Đăng ký lịch làm việc linh hoạt theo tuần",
   },
   "lap-vo-dong-thap": {
-    title: "Nhân sự kho phân loại - Đồng Tháp - [ĐÃ TUYỂN ĐỦ]",
-    schedule: "Đã tuyển đủ chỉ tiêu đợt này",
-    isPaused: true,
-    pauseNotice:
-      "Khu vực Đồng Tháp hiện đã tuyển đủ chỉ tiêu cho đợt tuyển dụng này.",
+    title: "Nhân sự kho phân loại - Cao Lãnh 03, Đồng Tháp",
+    schedule: "Ca ngày: 08:00 - 17:00 (250.000 VNĐ / Ca)",
   },
   "thot-not-can-tho": {
     title: "Nhân viên kho Full-time (BPO) - Thốt Nốt - [ĐÃ TUYỂN ĐỦ]",
@@ -610,7 +607,13 @@ export default function UngTuyenPage() {
                                 </SelectItem>
                               ))
                             ) : jobId === "lap-vo-dong-thap" ? (
-                              ["71-DTP Cao Lanh 03 Hub", "71-DTP Lap Vo 02 Hub", "71-DTP Sa Dec Hub", "71-DTP Tan Binh Hub", "71-DTP Tan Thanh Hub"].map(loc => (
+                              [
+                                "71-DTP Cao Lanh 03 Hub: 444 Phạm Hữu Lầu, Phường Cao Lãnh (Phường 6), Tỉnh Đồng Tháp",
+                                "71-DTP Lap Vo 02 Hub",
+                                "71-DTP Sa Dec Hub",
+                                "71-DTP Tan Binh Hub",
+                                "71-DTP Tan Thanh Hub",
+                              ].map((loc) => (
                                 <SelectItem key={loc} value={loc} className="whitespace-normal py-2">
                                   <span className="whitespace-normal break-words">{loc}</span>
                                 </SelectItem>
@@ -688,14 +691,8 @@ export default function UngTuyenPage() {
                               </>
                             ) : jobId === "lap-vo-dong-thap" ? (
                               <>
-                                <SelectItem value="Ca Sáng: 08:00 - 12:00">
-                                  Ca Sáng • 08:00 - 12:00 • 140.000 VNĐ/ca
-                                </SelectItem>
-                                <SelectItem value="Ca Chiều: 15:00 - 19:00">
-                                  Ca Chiều • 15:00 - 19:00 • 140.000 VNĐ/ca
-                                </SelectItem>
-                                <SelectItem value="Làm cả 2 ca (Sáng & Chiều)">
-                                  Làm cả 2 ca (Sáng & Chiều) • 280.000 VNĐ/ngày
+                                <SelectItem value="08:00 - 17:00 (250.000 VNĐ / Ca)">
+                                  08:00 - 17:00 • 250.000 VNĐ / Ca (Cố định ban ngày)
                                 </SelectItem>
                               </>
                             ) : (

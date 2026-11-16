@@ -11,9 +11,7 @@ import {
 import { Button } from "@/components/ui/button";
 
 const shifts = [
-  ["Sáng: 08:00 - 12:00", "140.000 VNĐ/ca"],
-  ["Chiều: 15:00 - 19:00", "140.000 VNĐ/ca"],
-  ["Làm cả 2 ca (Sáng & Chiều)", "280.000 VNĐ/ngày"],
+  ["Ca ngày: 08:00 - 17:00", "250.000 VNĐ / Ca"],
 ];
 
 export default function DongThapPage() {
@@ -31,19 +29,19 @@ export default function DongThapPage() {
           <div className="relative z-10">
             <div className="mb-4 flex flex-wrap gap-2 items-center">
               <span className="inline-block rounded-full bg-yellow-400 px-4 py-1.5 text-xs font-bold uppercase tracking-wider text-red-900">
-                Part-time • Linh hoạt
+                Lương tuần uy tín • Nhận việc ngay
               </span>
-              <span className="inline-block rounded-full bg-emerald-300 border border-emerald-400 px-4 py-1.5 text-xs font-black uppercase tracking-wider text-emerald-950">
-                ✅ ĐÃ TUYỂN ĐỦ SỐ LƯỢNG
+              <span className="inline-block rounded-full bg-emerald-400 border border-emerald-500 px-4 py-1.5 text-xs font-black uppercase tracking-wider text-emerald-950">
+                🔥 ĐANG TUYỂN GẤP - CAO LÃNH 03
               </span>
             </div>
             <h1 className="mb-4 text-4xl font-black leading-tight tracking-tight md:text-5xl lg:text-6xl">
               NHÂN SỰ KHO PHÂN LOẠI
               <br className="hidden md:block" />
-              <span className="text-yellow-400"> ĐỒNG THÁP</span>
+              <span className="text-yellow-400"> CAO LÃNH, ĐỒNG THÁP</span>
             </h1>
             <p className="max-w-2xl text-lg font-medium text-red-50 md:text-xl">
-              ✅ Khu vực Đồng Tháp hiện đã tuyển đủ chỉ tiêu cho đợt tuyển dụng này và tạm ngưng nhận hồ sơ mới.
+              🚨 Tuyển gấp nhân sự kho phân loại tại 71-DTP Cao Lãnh 03 Hub! Công việc ổn định, thu nhập 250k/ca (08:00 - 17:00), nhận lương đều đặn vào Thứ 6 hàng tuần.
             </p>
           </div>
           <div className="absolute -right-20 -top-20 h-64 w-64 rounded-full border-[32px] border-white/10 blur-md"></div>
@@ -51,10 +49,13 @@ export default function DongThapPage() {
 
           <div className="relative z-10 mt-10 flex flex-wrap gap-4 text-sm font-semibold">
             <span className="flex items-center rounded-full bg-white/20 px-4 py-2 backdrop-blur-sm">
-              <MapPin size={18} className="mr-2" /> Lấp Vò, Đồng Tháp
+              <MapPin size={18} className="mr-2" /> 71-DTP Cao Lãnh 03 Hub, Đồng Tháp
             </span>
             <span className="flex items-center rounded-full bg-white/20 px-4 py-2 backdrop-blur-sm">
-              <Clock3 size={18} className="mr-2" /> Lương tuần rất uy tín
+              <Clock3 size={18} className="mr-2" /> Ca làm việc: 08:00 – 17:00
+            </span>
+            <span className="flex items-center rounded-full bg-white/20 px-4 py-2 backdrop-blur-sm">
+              <Gift size={18} className="mr-2" /> Lương tuần chuyển khoản Thứ 6
             </span>
           </div>
         </section>
@@ -65,23 +66,23 @@ export default function DongThapPage() {
               Thu nhập theo ca
             </p>
             <p className="mt-2 text-3xl font-black text-red-700">
-              140.000
+              250.000
             </p>
-            <p className="text-sm text-slate-500">VNĐ / ca</p>
+            <p className="text-sm text-slate-500">VNĐ / Ca (08:00 - 17:00)</p>
           </div>
           <div className="rounded-2xl border border-red-100 bg-white p-5 shadow-lg">
             <p className="text-xs font-bold uppercase tracking-wide text-slate-500">
               Lịch làm việc
             </p>
-            <p className="mt-2 text-2xl font-black text-red-700">Ca ngắn 4 tiếng</p>
-            <p className="text-sm text-slate-500">Tự do lựa chọn ca sáng/chiều</p>
+            <p className="mt-2 text-2xl font-black text-red-700">08:00 – 17:00</p>
+            <p className="text-sm text-slate-500">Cố định ban ngày</p>
           </div>
           <div className="rounded-2xl border border-red-100 bg-white p-5 shadow-lg">
             <p className="text-xs font-bold uppercase tracking-wide text-slate-500">
-              Trả lương
+              Chế độ trả lương
             </p>
             <p className="mt-2 text-2xl font-black text-red-700">Thứ 6</p>
-            <p className="text-sm text-slate-500">của tuần kế tiếp</p>
+            <p className="text-sm text-slate-500">Hàng tuần qua tài khoản</p>
           </div>
         </section>
 
@@ -97,20 +98,25 @@ export default function DongThapPage() {
                     Thời gian & mức lương
                   </p>
                   <h2 className="text-2xl font-bold">
-                    Các ca làm việc linh hoạt
+                    Khung ca làm việc tuyển dụng
                   </h2>
                 </div>
               </div>
-              <div className="grid gap-3 md:grid-cols-2">
+              <div className="grid gap-3 md:grid-cols-1">
                 {shifts.map(([time, pay]) => (
                   <div
                     key={time}
-                    className="flex flex-col gap-2 rounded-xl border border-red-100 bg-red-50 p-4"
+                    className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 rounded-xl border border-red-100 bg-red-50 p-5"
                   >
-                    <span className="text-sm font-semibold text-slate-700">
-                      Ca {time}
-                    </span>
-                    <span className="whitespace-nowrap font-black text-red-700">
+                    <div>
+                      <span className="text-base font-bold text-slate-900 block">
+                        {time}
+                      </span>
+                      <span className="text-xs text-slate-600">
+                        Nghỉ trưa theo quy định kho, hỗ trợ quét mã và phân loại
+                      </span>
+                    </div>
+                    <span className="whitespace-nowrap font-black text-xl text-red-700">
                       {pay}
                     </span>
                   </div>
@@ -143,7 +149,7 @@ export default function DongThapPage() {
                     className="mt-1 shrink-0 text-green-600"
                     size={18}
                   />
-                  Nhận lương đều đặn chuyển khoản vào Thứ 6 tuần kế tiếp.
+                  Nhận lương đều đặn chuyển khoản vào Thứ 6 tuần kế tiếp qua tài khoản.
                 </p>
               </div>
             </section>
@@ -166,7 +172,7 @@ export default function DongThapPage() {
                     className="mt-1 shrink-0 text-red-600"
                     size={18}
                   />
-                  Hỗ trợ bốc xếp, lên/xuống hàng hóa nhẹ nhàng.
+                  Hỗ trợ lên/xuống hàng hóa nhẹ nhàng khi xe tải về kho.
                 </li>
                 <li className="flex gap-3">
                   <CheckCircle2
@@ -187,7 +193,7 @@ export default function DongThapPage() {
                     className="mt-1 shrink-0 text-red-600"
                     size={18}
                   />
-                  Công việc đơn giản, không yêu cầu kinh nghiệm, vào làm sẽ được hướng dẫn tận tình.
+                  Công việc đơn giản, không yêu cầu kinh nghiệm, vào làm sẽ được quản lý hướng dẫn công việc từ A-Z.
                 </li>
               </ul>
             </section>
@@ -200,8 +206,15 @@ export default function DongThapPage() {
                 <h2 className="text-xl font-bold">Yêu cầu đơn giản</h2>
               </div>
               <ul className="space-y-4 text-sm leading-6 text-slate-200">
-                <li>Nam/Nữ, độ tuổi từ 18 - 35 tuổi, sức khỏe tốt.</li>
-                <li>Bắt buộc: Có CCCD gốc - VNeID MỨC 2.</li>
+                <li className="text-yellow-300 font-bold">
+                  🎯 Ưu tiên tuyển Nam (Tạm thời ngưng nhận nữ đợt này).
+                </li>
+                <li>
+                  Độ tuổi: Dưới 38 tuổi (từ 18 đến 35 - dưới 38 tuổi), sức khỏe tốt, trung thực, siêng năng.
+                </li>
+                <li className="font-bold text-red-400">
+                  Bắt buộc: Có CCCD gốc - VNeID MỨC 2.
+                </li>
               </ul>
             </section>
             
@@ -210,28 +223,15 @@ export default function DongThapPage() {
                 <MapPin className="text-red-700" />
                 <h2 className="text-xl font-bold">Địa điểm làm việc</h2>
               </div>
-              <ul className="text-sm leading-6 text-slate-600 font-semibold space-y-2 mb-4">
-                <li className="flex gap-2 items-start"><MapPin size={16} className="mt-1 shrink-0 text-slate-400" /> 71-DTP Cao Lanh 03 Hub</li>
-                <li className="flex gap-2 items-start"><MapPin size={16} className="mt-1 shrink-0 text-slate-400" /> 71-DTP Lap Vo 02 Hub</li>
-                <li className="flex gap-2 items-start"><MapPin size={16} className="mt-1 shrink-0 text-slate-400" /> 71-DTP Sa Dec Hub</li>
-                <li className="flex gap-2 items-start"><MapPin size={16} className="mt-1 shrink-0 text-slate-400" /> 71-DTP Tan Binh Hub</li>
-                <li className="flex gap-2 items-start"><MapPin size={16} className="mt-1 shrink-0 text-slate-400" /> 71-DTP Tan Thanh Hub</li>
-              </ul>
-              <p className="text-sm leading-6 text-slate-600 mt-1 pt-4 border-t border-red-100">
-                <span className="font-semibold block mb-1">Ví dụ tại Lấp Vò:</span>
-                Ấp Tân Trong, Xã Tân Mỹ, Huyện Lấp Vò, Đồng Tháp.
-              </p>
-              <p className="text-sm leading-6 text-slate-500 mt-2">
-                Tọa độ Map: 10.408401, 105.650308
-              </p>
-              <a
-                className="mt-4 block text-sm font-semibold text-red-700 hover:underline"
-                href="https://maps.google.com/?q=10.408401,105.650308"
-                target="_blank"
-                rel="noreferrer"
-              >
-                Mở Google Map tìm đường (Lấp Vò)
-              </a>
+              <div className="p-3 bg-white rounded-xl border border-red-200 mb-4">
+                <p className="font-bold text-red-700 text-sm">
+                  📍 71-DTP Cao Lanh 03 Hub (Đang tuyển chính)
+                </p>
+                <p className="text-xs text-slate-700 mt-1">
+                  444 Phạm Hữu Lầu, Phường Cao Lãnh (Phường 6), Tỉnh Đồng Tháp.
+                </p>
+              </div>
+
               <div className="mt-5 pt-5 border-t border-red-200 flex items-center gap-2 text-sm font-bold text-red-700">
                 <Phone size={17} /> Nhắn tin Zalo: 0586.482.344 (Gặp Tài)
               </div>
@@ -243,15 +243,15 @@ export default function DongThapPage() {
       <div className="fixed inset-x-0 bottom-0 z-50 border-t border-red-100 bg-white/95 p-3 shadow-[0_-8px_24px_rgba(0,0,0,0.08)] backdrop-blur md:p-4">
         <div className="mx-auto flex max-w-6xl items-center justify-between gap-4 px-1 md:px-6">
           <div className="hidden text-sm md:block">
-            <span className="font-bold">Nhân sự kho phân loại</span>
-            <span className="ml-2 text-emerald-700 font-semibold">[Khu vực Đồng Tháp đã tuyển đủ]</span>
+            <span className="font-bold text-slate-900">Nhân sự kho phân loại (Cao Lãnh 03)</span>
+            <span className="ml-2 text-red-600 font-bold">250.000 VNĐ / Ca (08:00 – 17:00)</span>
           </div>
           <Link
-            href="/viec-lam/tp-ho-chi-minh"
+            href="/ung-tuyen?job=lap-vo-dong-thap"
             className="ml-auto w-full md:w-auto"
           >
             <Button className="h-12 w-full bg-[#d90012] px-8 font-bold text-white hover:bg-red-800 md:w-auto">
-              XEM VỊ TRÍ TUYỂN DỤNG TP.HCM
+              ỨNG TUYỂN NGAY (ĐI LÀM NGAY)
             </Button>
           </Link>
         </div>

@@ -714,6 +714,52 @@ export async function generateSmartAutoReply(params: {
     }
   }
 
+  // 1. Phản hồi hoặc hỗ trợ lọc thông tin theo tiêu chí tuyển dụng (Khu vực, Giới tính, Năm sinh / Tuổi)
+  const asksLocation =
+    text.includes("khu vực") ||
+    text.includes("ở đâu") ||
+    text.includes("kho nào") ||
+    text.includes("hub nào") ||
+    text.includes("tỉnh nào");
+  const asksGender =
+    text.includes("nam hay nữ") ||
+    text.includes("tuyển nữ") ||
+    text.includes("tuyển nam") ||
+    text.includes("nữ làm được") ||
+    text.includes("giới tính");
+  const asksAge =
+    text.includes("bao nhiêu tuổi") ||
+    text.includes("sinh năm") ||
+    text.includes("độ tuổi") ||
+    text.includes("tuổi tác") ||
+    text.includes("giới hạn tuổi");
+
+  if (asksLocation || asksGender || asksAge) {
+    let specificAnswer = "";
+    if (asksGender) {
+      specificAnswer += `\n⚠️ VỀ GIỚI TÍNH: Đối với vị trí tại Cao Lãnh 03 (Đồng Tháp), kho ƯU TIÊN TUYỂN NAM và TẠM THỜI NGƯNG NHẬN NỮ trong đợt này. (Tại khu vực TP.HCM vẫn tiếp nhận cả Nam & Nữ).\n`;
+    }
+    if (asksAge) {
+      specificAnswer += `\n⚠️ VỀ ĐỘ TUỔI / NĂM SINH: Kho tuyển ứng viên DƯỚI 38 TUỔI (từ 18 đến dưới 38 tuổi, sức khỏe tốt, có CCCD gốc và VNeID mức 2).\n`;
+    }
+    if (asksLocation) {
+      specificAnswer += `\n📍 CÁC KHU VỰC ĐANG MỞ TUYỂN CHÍNH:\n` +
+        `• Đồng Tháp: 71-DTP Cao Lãnh 03 Hub (444 Phạm Hữu Lầu, P. Cao Lãnh, Đồng Tháp) - Ca 08:00 - 17:00 (250k/ca, lương tuần Thứ 6).\n` +
+        `• TP.HCM: Kho SPX Quận Bình Tân & Quận Tân Phú (+19 Hub TP.HCM) - Thu nhập 10.5M - 12.5M/tháng.\n` +
+        `• Vĩnh Long: SW SOC Bình Minh (Chỉ tuyển Part-time, Full-time tạm ngưng).\n` +
+        `• Cần Thơ (Thốt Nốt): Đã đủ chỉ tiêu.\n`;
+    }
+
+    return (
+      `Xin chào ${params.candidateName}! Để hỗ trợ xếp lịch phỏng vấn và nhận việc nhanh nhất, bạn vui lòng cho HR biết:\n` +
+      `1️⃣ Bạn muốn ứng tuyển ở KHU VỰC nào? (Cao Lãnh 03 Đồng Tháp / TP.HCM / Vĩnh Long)?\n` +
+      `2️⃣ Bạn là NAM hay NỮ? (Lưu ý: Khu vực Cao Lãnh 03 hiện tạm thời ngưng nhận Nữ, ưu tiên tuyển Nam).\n` +
+      `3️⃣ Bạn SINH NĂM MẤY? (Yêu cầu độ tuổi dưới 38 tuổi, có CCCD gốc và VNeID mức 2).\n` +
+      specificAnswer +
+      `\nBạn hãy gửi 3 thông tin trên hoặc liên hệ Zalo: 0586.482.344 (Gặp Tài) để nhận lịch đi làm ngay nhé!`
+    );
+  }
+
   // Check if asking about recruitment status or pause/closed locations
   if (
     text.includes("còn tuyển") ||
@@ -722,19 +768,20 @@ export async function generateSmartAutoReply(params: {
     text.includes("đủ người") ||
     text.includes("vĩnh long còn tuyển") ||
     text.includes("đồng tháp còn tuyển") ||
+    text.includes("cao lãnh còn tuyển") ||
     text.includes("cần thơ còn tuyển") ||
     text.includes("thốt nốt còn tuyển") ||
     text.includes("bpo cố định còn tuyển")
   ) {
     return (
       `📢 CẬP NHẬT TÌNH HÌNH TUYỂN DỤNG AGARI MỚI NHẤT:\n` +
-      `1️⃣ Khu vực TP.HCM: 🔥 ĐANG TUYỂN MẠNH nhân viên chính thức kho SPX Express (Quận Bình Tân & Quận Tân Phú + 19 Hub TP.HCM). Thu nhập 10.500.000 - 12.500.000đ/tháng, đóng đủ BHXH.\n` +
-      `2️⃣ Khu vực Vĩnh Long (Kho SW SOC - KCN Bình Minh):\n` +
-      `   • Vị trí Full-time · BPO Cố định: ⚠️ ĐÃ ĐỦ CHỈ TIÊU & TẠM NGƯNG TUYỂN DỤNG.\n` +
+      `1️⃣ Khu vực ĐỒNG THÁP (🔥 MỚI MỞ LẠI): Tuyển gấp nhân sự kho phân loại tại 71-DTP Cao Lãnh 03 Hub (444 Phạm Hữu Lầu, P. Cao Lãnh). Ca làm việc: 08:00 – 17:00 (Thu nhập 250.000 VNĐ / Ca, nhận lương tuần vào Thứ 6). Yêu cầu: Tuyển NAM, độ tuổi dưới 38 tuổi.\n` +
+      `2️⃣ Khu vực TP.HCM: 🔥 ĐANG TUYỂN MẠNH nhân viên chính thức kho SPX Express (Quận Bình Tân & Quận Tân Phú + 19 Hub TP.HCM). Thu nhập 10.500.000 - 12.500.000đ/tháng, đóng đủ BHXH.\n` +
+      `3️⃣ Khu vực Vĩnh Long (Kho SW SOC - KCN Bình Minh):\n` +
       `   • Vị trí Part-time (Thời vụ): Vẫn đang nhận đăng ký theo tuần (125k - 300k/ca).\n` +
-      `3️⃣ Khu vực Cần Thơ (Thốt Nốt): ✅ ĐÃ TUYỂN ĐỦ SỐ LƯỢNG chỉ tiêu đợt này.\n` +
-      `4️⃣ Khu vực Đồng Tháp: ✅ ĐÃ TUYỂN ĐỦ SỐ LƯỢNG chỉ tiêu đợt này.\n\n` +
-      `👉 Bạn có thể đăng ký ca Part-time tại Vĩnh Long hoặc ứng tuyển kho SPX tại TP.HCM nhé!`
+      `   • Vị trí Full-time · BPO Cố định: ⚠️ Đã đủ chỉ tiêu & tạm ngưng tuyển.\n` +
+      `4️⃣ Khu vực Cần Thơ (Thốt Nốt): ✅ Đã tuyển đủ chỉ tiêu đợt này.\n\n` +
+      `👉 Để đăng ký, bạn vui lòng nhắn: Khu vực ứng tuyển, Giới tính (Nam/Nữ) và Năm sinh để HR hỗ trợ ngay nhé!`
     );
   }
 
@@ -743,14 +790,16 @@ export async function generateSmartAutoReply(params: {
     text.includes("mức lương") ||
     text.includes("thu nhập") ||
     text.includes("phụ cấp") ||
-    text.includes("lương bao nhiêu")
+    text.includes("lương bao nhiêu") ||
+    text.includes("lương tuần")
   ) {
     return (
       `💰 Thông tin Mức lương & Đãi ngộ tại AGARI (SPX Express):\n` +
-      `1️⃣ Khu vực TP.HCM (🔥 Đang tuyển chính thức): 10.500.000 - 12.500.000đ/tháng (Định mức 10.400.000đ: Lương cơ bản 5.310.000đ + PC nhà ở/xăng 1.310.000đ + PC cơm 780.000đ + KPI 2.500.000đ + Hỗ trợ thử việc 500.000đ/tháng, đóng đủ BHXH).\n` +
-      `2️⃣ Khu vực Vĩnh Long - KCN Bình Minh: Part-time: 125k - 300k/ca (Lưu ý: Vị trí BPO Cố định 8.4M - 11.3M hiện ĐÃ TẠM NGƯNG do đủ chỉ tiêu).\n` +
-      `3️⃣ Khu vực Cần Thơ (Thốt Nốt) & Đồng Tháp: ✅ ĐÃ TUYỂN ĐỦ CHỈ TIÊU đợt này.\n\n` +
-      `Bạn có muốn HR hỗ trợ đăng ký nhận việc tại khu vực TP.HCM hoặc Part-time Vĩnh Long không ạ?`
+      `1️⃣ Khu vực Đồng Tháp (Cao Lãnh 03 Hub): 250.000 VNĐ / Ca (08:00 – 17:00). Nhận lương tuần đều đặn vào Thứ 6 tuần kế tiếp qua tài khoản.\n` +
+      `2️⃣ Khu vực TP.HCM (🔥 Tuyển chính thức): 10.500.000 - 12.500.000đ/tháng (Định mức 10.400.000đ: Lương cơ bản 5.310.000đ + PC nhà ở/xăng 1.310.000đ + PC cơm 780.000đ + KPI 2.500.000đ + Hỗ trợ thử việc 500.000đ/tháng, đóng đủ BHXH).\n` +
+      `3️⃣ Khu vực Vĩnh Long - KCN Bình Minh: Part-time: 125k - 300k/ca (Vị trí BPO Cố định hiện tạm ngưng do đủ chỉ tiêu).\n` +
+      `4️⃣ Khu vực Cần Thơ (Thốt Nốt): ✅ Đã tuyển đủ chỉ tiêu đợt này.\n\n` +
+      `Bạn quan tâm ứng tuyển khu vực nào để HR gửi lịch phỏng vấn ạ?`
     );
   }
 
@@ -763,9 +812,10 @@ export async function generateSmartAutoReply(params: {
   ) {
     return (
       `⏰ Thời gian các ca làm việc tại Kho SPX Express:\n` +
-      `• TP.HCM (Đang tuyển chính thức - Xoay 5 ca, tối thiểu 23 công/tháng, nghỉ xoay tuần): Ca 1 (05:00-14:00) | Ca 2 & 3 (11:00-20:00 & 12:00-21:00) | Ca 4 & 5 (14:00-23:00 & 15:00-24:00).\n` +
-      `• Vĩnh Long (KCN Bình Minh): Ca Part-time linh hoạt 4h - 5h (Ca Full-time BPO cố định đang tạm ngưng do đã đủ số lượng).\n` +
-      `• Cần Thơ & Đồng Tháp: Đã tuyển đủ chỉ tiêu cho đợt này.\n\n` +
+      `• Đồng Tháp (Cao Lãnh 03 Hub): Ca ngày cố định 08:00 – 17:00 (250.000đ/ca, lương tuần Thứ 6).\n` +
+      `• TP.HCM (Xoay 5 ca, tối thiểu 23 công/tháng, nghỉ xoay tuần): Ca 1 (05:00-14:00) | Ca 2 & 3 (11:00-20:00 & 12:00-21:00) | Ca 4 & 5 (14:00-23:00 & 15:00-24:00).\n` +
+      `• Vĩnh Long (KCN Bình Minh): Ca Part-time linh hoạt 4h - 5h.\n` +
+      `• Cần Thơ (Thốt Nốt): Đã tuyển đủ chỉ tiêu.\n\n` +
       `Nhà tuyển dụng AGARI đã nhận được tin nhắn và sẽ hỗ trợ tư vấn ca làm việc phù hợp cho bạn ngay!`
     );
   }
@@ -778,12 +828,12 @@ export async function generateSmartAutoReply(params: {
     text.includes("kho nào")
   ) {
     return (
-      `📍 Địa điểm Phỏng vấn & Tiếp nhận hồ sơ chính thức của AGARI:\n` +
-      `• TP.HCM - Quận Bình Tân (Ưu tiên nhận việc ngay): 754/8 Tân Kỳ Tân Quý, P. Bình Hưng Hòa B, Q. Bình Tân.\n` +
+      `📍 Địa điểm Tiếp nhận & Phỏng vấn chính của AGARI:\n` +
+      `• Đồng Tháp: 71-DTP Cao Lãnh 03 Hub - 444 Phạm Hữu Lầu, Phường Cao Lãnh (Phường 6), Tỉnh Đồng Tháp.\n` +
+      `• TP.HCM - Quận Bình Tân: 754/8 Tân Kỳ Tân Quý, P. Bình Hưng Hòa B, Q. Bình Tân.\n` +
       `• TP.HCM - Quận Tân Phú: 549/32 Tân Kỳ Tân Quý, P. Bình Hưng Hòa B, Q. Bình Tân (cùng 19 Hub SPX khắp các quận/huyện TP.HCM).\n` +
-      `• Vĩnh Long (Kho SW SOC - KCN Bình Minh): Chỉ nhận vị trí Part-time (vị trí Full-time BPO tạm ngưng do đã tuyển đủ).\n` +
-      `• Cần Thơ & Đồng Tháp: Đã đủ số lượng phỏng vấn đợt này.\n\n` +
-      `Bạn muốn đăng ký làm tại Kho/Hub nào tại TP.HCM hoặc Part-time Vĩnh Long, hãy nhắn tên Quận/Khu vực để HR gửi lịch phỏng vấn nhé!`
+      `• Vĩnh Long: SW SOC - KCN Bình Minh (nhận Part-time).\n\n` +
+      `Bạn muốn đăng ký làm tại Kho nào, vui lòng cho HR biết: Khu vực mong muốn, Giới tính (Nam/Nữ) và Năm sinh nhé!`
     );
   }
 

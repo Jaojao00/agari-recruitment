@@ -97,12 +97,11 @@ const QUICK_APPLY_JOBS = [
   },
   {
     jobId: "lap-vo-dong-thap",
-    title: "Nhân viên kho Thời vụ - Khu vực Đồng Tháp",
-    salary: "140.000 VNĐ/ca (4h) - 280.000 VNĐ/ngày",
-    location: "71-DTP Lap Vo 02 Hub",
-    schedule: "Làm cả 2 ca (Sáng & Chiều)",
-    badge: "Đồng Tháp • Đã tuyển đủ",
-    isPaused: true,
+    title: "Nhân viên kho phân loại - Cao Lãnh 03, Đồng Tháp",
+    salary: "250.000 VNĐ / Ca",
+    location: "71-DTP Cao Lanh 03 Hub (444 Phạm Hữu Lầu)",
+    schedule: "08:00 - 17:00 (250.000 VNĐ / Ca)",
+    badge: "Đồng Tháp • Tuyển Nam < 38 tuổi",
   },
 ];
 
