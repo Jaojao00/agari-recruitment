@@ -82,8 +82,7 @@ const QUICK_APPLY_JOBS = [
     salary: "9.280.000 VNĐ/tháng (Định mức)",
     location: "SW SOC - KCN BÌNH MINH VINH LONG",
     schedule: "Xoay ca theo yêu cầu công ty",
-    badge: "Vĩnh Long • BPO Xoay ca (Tạm ngưng)",
-    isPaused: true,
+    badge: "Vĩnh Long • BPO Xoay ca",
   },
   {
     jobId: "thot-not-can-tho",

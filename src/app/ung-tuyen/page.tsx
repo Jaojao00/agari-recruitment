@@ -44,11 +44,8 @@ const jobOptions = {
     schedule: "Ca xoay theo lịch công ty",
   },
   "spx-fulltime": {
-    title: "Nhân viên kho SPX Full-time (BPO Xoay ca) - [TẠM NGƯNG TUYỂN DỤNG]",
-    schedule: "Xoay ca theo yêu cầu công ty (Tạm ngưng nhận hồ sơ)",
-    isPaused: true,
-    pauseNotice:
-      "Vị trí Full-time BPO Xoay ca tại kho SW SOC Vĩnh Long hiện đã đủ chỉ tiêu và đang tạm ngưng nhận hồ sơ. Vui lòng chọn vị trí Part-time, Cao Lãnh 03 (Đồng Tháp) hoặc tuyển dụng tại TP.HCM.",
+    title: "Nhân viên kho SPX Full-time (BPO Xoay ca)",
+    schedule: "Xoay ca theo yêu cầu công ty (Ca 1 / Ca 2 / Ca 3)",
   },
   "agari-part-time": {
     title: "Nhân viên kho part-time",
@@ -241,6 +238,7 @@ export default function UngTuyenPage() {
         } else if (validJob === "hcm-fulltime") {
           form.setValue("workSchedule", "Xoay ca luân chuyển (5 ca làm việc chính)");
         } else if (validJob === "spx-fulltime") {
+          form.setValue("preferredLocation", "SW SOC - KCN BÌNH MINH VINH LONG");
           form.setValue("workSchedule", "Xoay ca theo yêu cầu công ty");
         } else {
           form.setValue("workSchedule", "");

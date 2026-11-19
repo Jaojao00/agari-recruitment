@@ -241,56 +241,61 @@ export default function HomePage() {
               </div>
             </article>
 
-            {/* Card 2: Full-time (TẠM NGƯNG TUYỂN DỤNG) */}
-            <article className="overflow-hidden rounded-2xl border border-gray-300 bg-gray-50/80 shadow-xs opacity-90 transition hover:shadow-md">
+            {/* Card 2: Full-time (ĐANG TUYỂN DỤNG - BPO XOAY CA) */}
+            <article className="overflow-hidden rounded-2xl border border-gray-200 bg-white shadow-sm transition hover:-translate-y-0.5 hover:shadow-lg">
               <div className="grid md:grid-cols-[200px_1fr] md:items-stretch">
-                <div className="flex min-h-32 md:min-h-full items-center justify-center bg-slate-600 p-6 text-center text-white">
+                <div className="flex min-h-32 md:min-h-full items-center justify-center bg-[#d90012] p-6 text-center text-white">
                   <div>
                     <p className="text-3xl font-black italic tracking-tight">SPX</p>
-                    <p className="mt-2 text-xs font-bold uppercase tracking-[0.2em] text-gray-300">Express</p>
-                    <div className="mx-auto mt-4 h-1 w-12 bg-gray-400" />
+                    <p className="mt-2 text-xs font-bold uppercase tracking-[0.2em] text-yellow-300">Express</p>
+                    <div className="mx-auto mt-4 h-1 w-12 bg-yellow-400" />
                   </div>
                 </div>
                 <div className="p-6 md:p-7 flex flex-col md:flex-row md:items-center gap-6 justify-between">
                   <div className="space-y-4">
                     <div>
                       <div className="flex items-center gap-2 flex-wrap">
-                        <p className="text-xs font-bold uppercase tracking-[0.16em] text-slate-600">
+                        <p className="text-xs font-bold uppercase tracking-[0.16em] text-red-700">
                           Full-time · BPO XOAY CA
                         </p>
-                        <span className="rounded-full bg-amber-100 border border-amber-300 px-2.5 py-0.5 text-[11px] font-black uppercase text-amber-900">
-                          Tạm ngưng tuyển
+                        <span className="rounded-full bg-red-100 border border-red-300 px-2.5 py-0.5 text-[11px] font-black uppercase text-red-800 animate-pulse">
+                          🔥 Đang mở tuyển lại
                         </span>
                       </div>
-                      <h3 className="mt-1 text-xl font-bold text-gray-800">
+                      <h3 className="mt-1 text-xl font-bold text-gray-900">
                         Nhân viên kho SPX (Vĩnh Long - SW SOC)
                       </h3>
-                      <p className="mt-1 text-xs font-semibold text-amber-800">
-                        ⚠️ Hiện tại vị trí Full-time BPO Xoay ca tại kho SW SOC Vĩnh Long đã tuyển đủ chỉ tiêu và đang tạm ngưng nhận hồ sơ mới.
+                      <p className="mt-1 text-xs font-semibold text-emerald-700">
+                        ⚡ Chế độ mới SW SOC: Lương CB 6.000.000đ + Cơm 780.000đ + KPI đến 2.500.000đ • Xoay ca theo yêu cầu công ty
                       </p>
                       <p className="mt-1 text-sm text-gray-500">
-                        KCN Bình Minh, Vĩnh Long (Ưu tiên nộp KV TP.HCM, Cao Lãnh 03 hoặc Part-time)
+                        Lô 01, kho số A01, KCN Bình Minh, Vĩnh Long
                       </p>
                     </div>
                     <div className="flex flex-wrap gap-2 text-sm">
-                      <span className="rounded-md bg-gray-200 px-3 py-1.5 font-semibold text-gray-700">
+                      <span className="rounded-md bg-red-50 px-3 py-1.5 font-semibold text-red-700">
                         9.280.000 VNĐ/tháng (Định mức)
                       </span>
-                      <span className="rounded-md bg-gray-200 px-3 py-1.5 text-gray-600">
+                      <span className="rounded-md bg-gray-100 px-3 py-1.5 text-gray-700">
                         Lương CB 6.000.000đ
                       </span>
-                      <span className="rounded-md bg-gray-200 px-3 py-1.5 text-gray-600">
+                      <span className="rounded-md bg-gray-100 px-3 py-1.5 text-gray-700">
                         Xoay ca theo yêu cầu cty
                       </span>
-                      <span className="rounded-md bg-amber-100 px-3 py-1.5 font-semibold text-amber-800">
-                        Đang tạm ngưng nhận hồ sơ
+                      <span className="rounded-md bg-yellow-100 px-3 py-1.5 font-semibold text-yellow-800">
+                        Tăng ca & PC đêm rõ ràng
                       </span>
                     </div>
                   </div>
-                  <div className="mt-4 md:mt-0 md:shrink-0 md:border-l md:border-gray-200 md:pl-6 flex items-center">
+                  <div className="mt-4 md:mt-0 md:shrink-0 md:border-l md:border-gray-100 md:pl-6 flex flex-col sm:flex-row md:flex-col lg:flex-row gap-3 items-center">
                     <Link href="/viec-lam/spx-fulltime" className="w-full">
-                      <Button variant="outline" className="w-full border-gray-300 font-bold text-gray-700 hover:bg-gray-100 md:min-w-[160px]">
+                      <Button variant="outline" className="w-full border-gray-300 font-bold text-gray-700 hover:bg-gray-50 md:min-w-[130px]">
                         XEM CHI TIẾT
+                      </Button>
+                    </Link>
+                    <Link href="/ung-tuyen?job=spx-fulltime" className="w-full">
+                      <Button className="w-full bg-red-700 font-bold text-white hover:bg-red-800 md:min-w-[130px]">
+                        ỨNG TUYỂN
                       </Button>
                     </Link>
                   </div>
