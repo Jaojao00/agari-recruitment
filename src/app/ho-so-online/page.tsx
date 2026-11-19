@@ -78,11 +78,11 @@ const QUICK_APPLY_JOBS = [
   },
   {
     jobId: "spx-fulltime",
-    title: "Nhân viên kho SPX Full-time (BPO Cố định)",
-    salary: "8.400.000 - 11.300.000 VNĐ/tháng",
+    title: "Nhân viên kho SPX Full-time (BPO Xoay ca)",
+    salary: "9.280.000 VNĐ/tháng (Định mức)",
     location: "SW SOC - KCN BÌNH MINH VINH LONG",
-    schedule: "Ca 1: 06:00 - 15:00",
-    badge: "Vĩnh Long • Tạm ngưng tuyển",
+    schedule: "Xoay ca theo yêu cầu công ty",
+    badge: "Vĩnh Long • BPO Xoay ca (Tạm ngưng)",
     isPaused: true,
   },
   {

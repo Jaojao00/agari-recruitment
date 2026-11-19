@@ -779,7 +779,7 @@ export async function generateSmartAutoReply(params: {
       `2️⃣ Khu vực TP.HCM: 🔥 ĐANG TUYỂN MẠNH nhân viên chính thức kho SPX Express (Quận Bình Tân & Quận Tân Phú + 19 Hub TP.HCM). Thu nhập 10.500.000 - 12.500.000đ/tháng, đóng đủ BHXH.\n` +
       `3️⃣ Khu vực Vĩnh Long (Kho SW SOC - KCN Bình Minh):\n` +
       `   • Vị trí Part-time (Thời vụ): Vẫn đang nhận đăng ký theo tuần (125k - 300k/ca).\n` +
-      `   • Vị trí Full-time · BPO Cố định: ⚠️ Đã đủ chỉ tiêu & tạm ngưng tuyển.\n` +
+      `   • Vị trí Full-time · BPO Xoay ca (Định mức 9.280.000đ: Lương CB 6tr + Cơm 780k + KPI đến 2.5tr, xoay ca theo yêu cầu cty): ⚠️ Đã đủ chỉ tiêu & tạm ngưng tuyển.\n` +
       `4️⃣ Khu vực Cần Thơ (Thốt Nốt): ✅ Đã tuyển đủ chỉ tiêu đợt này.\n\n` +
       `👉 Để đăng ký, bạn vui lòng nhắn: Khu vực ứng tuyển, Giới tính (Nam/Nữ) và Năm sinh để HR hỗ trợ ngay nhé!`
     );

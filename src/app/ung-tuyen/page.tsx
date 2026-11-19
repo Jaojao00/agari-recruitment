@@ -44,11 +44,11 @@ const jobOptions = {
     schedule: "Ca xoay theo lịch công ty",
   },
   "spx-fulltime": {
-    title: "Nhân viên kho SPX Full-time (BPO Cố định) - [TẠM NGƯNG TUYỂN DỤNG]",
-    schedule: "Tạm ngưng nhận hồ sơ (Đã đủ chỉ tiêu)",
+    title: "Nhân viên kho SPX Full-time (BPO Xoay ca) - [TẠM NGƯNG TUYỂN DỤNG]",
+    schedule: "Xoay ca theo yêu cầu công ty (Tạm ngưng nhận hồ sơ)",
     isPaused: true,
     pauseNotice:
-      "Vị trí Full-time BPO Cố định tại kho SW SOC Vĩnh Long hiện đã đủ chỉ tiêu và đang tạm ngưng nhận hồ sơ. Vui lòng chọn vị trí Part-time hoặc tuyển dụng tại TP.HCM.",
+      "Vị trí Full-time BPO Xoay ca tại kho SW SOC Vĩnh Long hiện đã đủ chỉ tiêu và đang tạm ngưng nhận hồ sơ. Vui lòng chọn vị trí Part-time, Cao Lãnh 03 (Đồng Tháp) hoặc tuyển dụng tại TP.HCM.",
   },
   "agari-part-time": {
     title: "Nhân viên kho part-time",
@@ -191,7 +191,7 @@ export default function UngTuyenPage() {
       opsCode: "",
       jobId: "spx-fulltime",
       jobTitle: jobOptions["spx-fulltime"].title,
-      workSchedule: "",
+      workSchedule: "Xoay ca theo yêu cầu công ty",
     },
   });
 
@@ -240,6 +240,8 @@ export default function UngTuyenPage() {
           form.setValue("workSchedule", "Xoay ca luân chuyển (5 ca làm việc chính)");
         } else if (validJob === "hcm-fulltime") {
           form.setValue("workSchedule", "Xoay ca luân chuyển (5 ca làm việc chính)");
+        } else if (validJob === "spx-fulltime") {
+          form.setValue("workSchedule", "Xoay ca theo yêu cầu công ty");
         } else {
           form.setValue("workSchedule", "");
         }
@@ -260,7 +262,7 @@ export default function UngTuyenPage() {
     }
 
     if (jobId !== "warehouse-rotating-shift" && !data.workSchedule) {
-      setError("Vui lòng chọn ca cố định muốn đăng ký.");
+      setError("Vui lòng chọn ca làm việc muốn đăng ký.");
       return;
     }
     setIsSubmitting(true);
@@ -648,7 +650,9 @@ export default function UngTuyenPage() {
                         <FormLabel>
                           {isHcmJob(jobId)
                             ? "Chế độ xoay ca / Khung ca đăng ký (TP.HCM) *"
-                            : "Ca muốn đăng ký *"}
+                            : jobId === "spx-fulltime"
+                              ? "Chế độ ca làm việc *"
+                              : "Ca muốn đăng ký *"}
                         </FormLabel>
                         <Select
                           value={field.value}
@@ -661,7 +665,7 @@ export default function UngTuyenPage() {
                                   isHcmJob(jobId)
                                     ? "Chọn chế độ xoay ca (TP.HCM)"
                                     : jobId === "spx-fulltime"
-                                      ? "Chọn ca cố định"
+                                      ? "Chọn chế độ xoay ca"
                                       : "Chọn ca đăng ký"
                                 }
                               />
@@ -681,6 +685,12 @@ export default function UngTuyenPage() {
                                 </SelectItem>
                                 <SelectItem value="Ca chiều - tối (Ca 4 & 5): 14:00 - 23:00 & 15:00 - 24:00">
                                   Ca chiều - tối (Ca 4 & 5) • 14:00 - 23:00 & 15:00 - 24:00
+                                </SelectItem>
+                              </>
+                            ) : jobId === "spx-fulltime" ? (
+                              <>
+                                <SelectItem value="Xoay ca theo yêu cầu công ty">
+                                  Xoay ca theo yêu cầu công ty (Ca 1: 06:00-15:00 / Ca 2: 13:00-22:00 / Ca 3: 22:00-06:00)
                                 </SelectItem>
                               </>
                             ) : jobId === "thot-not-can-tho" ? (

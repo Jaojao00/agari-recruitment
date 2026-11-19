@@ -256,7 +256,7 @@ export default function HomePage() {
                     <div>
                       <div className="flex items-center gap-2 flex-wrap">
                         <p className="text-xs font-bold uppercase tracking-[0.16em] text-slate-600">
-                          Full-time · BPO CỐ ĐỊNH
+                          Full-time · BPO XOAY CA
                         </p>
                         <span className="rounded-full bg-amber-100 border border-amber-300 px-2.5 py-0.5 text-[11px] font-black uppercase text-amber-900">
                           Tạm ngưng tuyển
@@ -266,21 +266,21 @@ export default function HomePage() {
                         Nhân viên kho SPX (Vĩnh Long - SW SOC)
                       </h3>
                       <p className="mt-1 text-xs font-semibold text-amber-800">
-                        ⚠️ Hiện tại vị trí Full-time BPO tại kho SW SOC Vĩnh Long đã tuyển đủ chỉ tiêu và đang tạm ngưng nhận hồ sơ mới.
+                        ⚠️ Hiện tại vị trí Full-time BPO Xoay ca tại kho SW SOC Vĩnh Long đã tuyển đủ chỉ tiêu và đang tạm ngưng nhận hồ sơ mới.
                       </p>
                       <p className="mt-1 text-sm text-gray-500">
-                        KCN Bình Minh, Vĩnh Long (Ưu tiên nộp KV TP.HCM hoặc Part-time)
+                        KCN Bình Minh, Vĩnh Long (Ưu tiên nộp KV TP.HCM, Cao Lãnh 03 hoặc Part-time)
                       </p>
                     </div>
                     <div className="flex flex-wrap gap-2 text-sm">
                       <span className="rounded-md bg-gray-200 px-3 py-1.5 font-semibold text-gray-700">
-                        9.0M - 9.3M VNĐ/tháng
+                        9.280.000 VNĐ/tháng (Định mức)
                       </span>
                       <span className="rounded-md bg-gray-200 px-3 py-1.5 text-gray-600">
-                        250k - 300k/ca
+                        Lương CB 6.000.000đ
                       </span>
                       <span className="rounded-md bg-gray-200 px-3 py-1.5 text-gray-600">
-                        3 ca cố định
+                        Xoay ca theo yêu cầu cty
                       </span>
                       <span className="rounded-md bg-amber-100 px-3 py-1.5 font-semibold text-amber-800">
                         Đang tạm ngưng nhận hồ sơ
