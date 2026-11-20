@@ -294,9 +294,11 @@ export default function MeKongApplications({ jobIdFilter = "lap-vo-dong-thap,tho
                       </Select>
                     </TableCell>
                     <TableCell className="text-right">
-                      <Button variant="ghost" size="sm" className="text-blue-600 hover:text-blue-800" onClick={() => openTrackingUpdate(app)}>
-                        <Eye size={16} className="mr-1" /> Cập nhật
-                      </Button>
+                      <Link href={`/admin/applications/${encodeURIComponent(app.id || "")}`}>
+                        <Button variant="ghost" size="sm" className="text-blue-600 hover:text-blue-800">
+                          <Eye size={16} className="mr-1" /> Chi tiết
+                        </Button>
+                      </Link>
                     </TableCell>
                   </TableRow>
                 ))}
