@@ -45,7 +45,7 @@ function AdminSidebar({
     },
     {
       name: "Mục S-BPO",
-      path: "/admin/applications?jobId=warehouse-rotating-shift",
+      path: "/admin/applications?jobId=warehouse-rotating-shift,soc-trang",
       icon: <Users size={20} />,
       isSub: true,
     },

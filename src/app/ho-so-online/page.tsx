@@ -85,6 +85,15 @@ const QUICK_APPLY_JOBS: Array<{
     badge: "Vĩnh Long • Part-time",
   },
   {
+    jobId: "soc-trang",
+    title: "Nhân viên kho SPX-Express (S-BPO) – Sóc Trăng",
+    salary: "10.500.000 - 12.500.000 VNĐ/tháng",
+    location:
+      "06 Nam Kỳ Khởi Nghĩa, Phường Sóc Trăng, Thành phố Cần Thơ, Sóc Trăng.",
+    schedule: "08:00 - 17:00 | 10:00 - 19:00",
+    badge: "Sóc Trăng • S-BPO Chính thức",
+  },
+  {
     jobId: "spx-fulltime",
     title: "Nhân viên kho SPX Full-time (BPO Xoay ca)",
     salary: "9.280.000 VNĐ/tháng (Định mức)",

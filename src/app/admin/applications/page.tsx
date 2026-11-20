@@ -46,6 +46,7 @@ function ApplicationsContent() {
         jobIdFilter.includes("thot-not-can-tho") ||
         jobIdFilter.includes("hcm-") ||
         jobIdFilter.includes("warehouse-rotating-shift") ||
+        jobIdFilter.includes("soc-trang") ||
         jobIdFilter.includes("spx-fulltime") ||
         jobIdFilter.includes("agari-part-time")),
   );

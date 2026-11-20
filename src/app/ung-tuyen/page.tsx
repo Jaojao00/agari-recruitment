@@ -77,6 +77,10 @@ const jobOptions = {
     title: "Nhân viên chính thức kho SPX-Express - Quận Tân Phú (TP.HCM)",
     schedule: "Xoay ca (Luân chuyển giữa 5 ca làm việc chính)",
   },
+  "soc-trang": {
+    title: "Nhân viên kho SPX-Express (S-BPO) – Khu vực Sóc Trăng",
+    schedule: "08:00 - 17:00 | 10:00 - 19:00",
+  },
 } as const;
 
 const hcmLocations = [
@@ -243,6 +247,12 @@ export default function UngTuyenPage() {
         } else if (validJob === "spx-fulltime") {
           form.setValue("preferredLocation", "SW SOC - KCN BÌNH MINH VINH LONG");
           form.setValue("workSchedule", "Xoay ca theo yêu cầu công ty");
+        } else if (validJob === "soc-trang") {
+          form.setValue(
+            "preferredLocation",
+            "06 Nam Kỳ Khởi Nghĩa, Phường Sóc Trăng, Thành phố Cần Thơ, Sóc Trăng.",
+          );
+          form.setValue("workSchedule", "08:00 - 17:00");
         } else {
           form.setValue("workSchedule", "");
         }
@@ -609,6 +619,14 @@ export default function UngTuyenPage() {
                                   <span className="whitespace-normal break-words">{loc}</span>
                                 </SelectItem>
                               ))
+                            ) : jobId === "soc-trang" ? (
+                              [
+                                "06 Nam Kỳ Khởi Nghĩa, Phường Sóc Trăng, Thành phố Cần Thơ, Sóc Trăng.",
+                              ].map((loc) => (
+                                <SelectItem key={loc} value={loc} className="whitespace-normal py-2">
+                                  <span className="whitespace-normal break-words">{loc}</span>
+                                </SelectItem>
+                              ))
                             ) : jobId === "lap-vo-dong-thap" ? (
                               [
                                 "71-DTP Cao Lanh 03 Hub: 444 Phạm Hữu Lầu, Phường Cao Lãnh (Phường 6), Tỉnh Đồng Tháp",
@@ -642,7 +660,7 @@ export default function UngTuyenPage() {
                   )}
                 />
 
-                {jobId === "spx-fulltime" || jobId === "agari-part-time" || jobId === "lap-vo-dong-thap" || jobId === "thot-not-can-tho" || isHcmJob(jobId) ? (
+                {jobId === "spx-fulltime" || jobId === "agari-part-time" || jobId === "lap-vo-dong-thap" || jobId === "thot-not-can-tho" || jobId === "soc-trang" || isHcmJob(jobId) ? (
                   <FormField
                     control={form.control}
                     name="workSchedule"
@@ -686,6 +704,18 @@ export default function UngTuyenPage() {
                                 </SelectItem>
                                 <SelectItem value="Ca chiều - tối (Ca 4 & 5): 14:00 - 23:00 & 15:00 - 24:00">
                                   Ca chiều - tối (Ca 4 & 5) • 14:00 - 23:00 & 15:00 - 24:00
+                                </SelectItem>
+                              </>
+                            ) : jobId === "soc-trang" ? (
+                              <>
+                                <SelectItem value="08:00 - 17:00">
+                                  Ca 1 • 08:00 - 17:00
+                                </SelectItem>
+                                <SelectItem value="10:00 - 19:00">
+                                  Ca 2 • 10:00 - 19:00
+                                </SelectItem>
+                                <SelectItem value="Linh hoạt cả 2 ca (08:00 - 17:00 / 10:00 - 19:00)">
+                                  Linh hoạt cả 2 ca (08:00 - 17:00 / 10:00 - 19:00)
                                 </SelectItem>
                               </>
                             ) : jobId === "spx-fulltime" ? (

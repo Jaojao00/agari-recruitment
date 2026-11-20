@@ -346,6 +346,68 @@ export default function HomePage() {
               </div>
             </article>
 
+            {/* Card Sóc Trăng (S-BPO - ĐANG TUYỂN GẤP) */}
+            <article className="overflow-hidden rounded-2xl border border-gray-200 bg-white shadow-sm transition hover:-translate-y-0.5 hover:shadow-lg">
+              <div className="grid md:grid-cols-[200px_1fr] md:items-stretch">
+                <div className="flex min-h-32 md:min-h-full items-center justify-center bg-[#d90012] p-6 text-center text-white">
+                  <div>
+                    <p className="text-3xl font-black italic tracking-tight">SPX</p>
+                    <p className="mt-2 text-xs font-bold uppercase tracking-[0.2em] text-yellow-300">Express</p>
+                    <div className="mx-auto mt-4 h-1 w-12 bg-yellow-400" />
+                  </div>
+                </div>
+                <div className="p-6 md:p-7 flex flex-col md:flex-row md:items-center gap-6 justify-between">
+                  <div className="space-y-4">
+                    <div>
+                      <div className="flex items-center gap-2 flex-wrap">
+                        <p className="text-xs font-bold uppercase tracking-[0.16em] text-red-700">
+                          Nhân viên chính thức (S-BPO) · Khu vực Sóc Trăng
+                        </p>
+                        <span className="rounded-full bg-red-100 border border-red-300 px-2.5 py-0.5 text-[11px] font-black uppercase text-red-800 animate-pulse">
+                          🔥 Tuyển gấp - Đi làm ngay
+                        </span>
+                      </div>
+                      <h3 className="mt-1 text-xl font-bold text-gray-900">
+                        Nhân viên kho SPX-Express (S-BPO) – Sóc Trăng
+                      </h3>
+                      <p className="mt-1 text-xs font-semibold text-emerald-700">
+                        ⚡ Ký HĐLĐ chính thức, đóng BHXH đầy đủ • Ca 08:00 - 17:00 | 10:00 - 19:00
+                      </p>
+                      <p className="mt-1 text-sm text-gray-500">
+                        06 Nam Kỳ Khởi Nghĩa, Phường Sóc Trăng, Thành phố Cần Thơ, Sóc Trăng
+                      </p>
+                    </div>
+                    <div className="flex flex-wrap gap-2 text-sm">
+                      <span className="rounded-md bg-red-50 px-3 py-1.5 font-semibold text-red-700">
+                        10.5M - 12.5M VNĐ/tháng
+                      </span>
+                      <span className="rounded-md bg-gray-100 px-3 py-1.5 text-gray-700">
+                        08:00 - 17:00 | 10:00 - 19:00
+                      </span>
+                      <span className="rounded-md bg-gray-100 px-3 py-1.5 text-gray-700">
+                        Đóng BHXH đầy đủ
+                      </span>
+                      <span className="rounded-md bg-yellow-100 px-3 py-1.5 font-semibold text-yellow-800">
+                        Định mức 10.4M/tháng
+                      </span>
+                    </div>
+                  </div>
+                  <div className="mt-4 md:mt-0 md:shrink-0 md:border-l md:border-gray-100 md:pl-6 flex flex-col sm:flex-row md:flex-col lg:flex-row gap-3 items-center">
+                    <Link href="/viec-lam/soc-trang" className="w-full">
+                      <Button variant="outline" className="w-full border-gray-300 font-bold text-gray-700 hover:bg-gray-50 md:min-w-[130px]">
+                        XEM CHI TIẾT
+                      </Button>
+                    </Link>
+                    <Link href="/ung-tuyen?job=soc-trang" className="w-full">
+                      <Button className="w-full bg-red-700 font-bold text-white hover:bg-red-800 md:min-w-[130px]">
+                        ỨNG TUYỂN
+                      </Button>
+                    </Link>
+                  </div>
+                </div>
+              </div>
+            </article>
+
             {/* Card 4 (Đồng Tháp - Cao Lãnh 03) & Card 5 (Thốt Nốt - Cần Thơ) đã ẩn do đã tuyển đủ số lượng */}
           </div>
         </div>
