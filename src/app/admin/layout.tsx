@@ -51,7 +51,7 @@ function AdminSidebar({
     },
     {
       name: "Mục Full-time",
-      path: "/admin/applications?jobId=spx-fulltime",
+      path: "/admin/applications?jobId=spx-fulltime,long-thoi-can-tho",
       icon: <Users size={20} />,
       isSub: true,
     },
@@ -63,7 +63,7 @@ function AdminSidebar({
     },
     {
       name: "Mục KV MeKong",
-      path: "/admin/applications?jobId=lap-vo-dong-thap,thot-not-can-tho",
+      path: "/admin/applications?jobId=lap-vo-dong-thap,thot-not-can-tho,long-thoi-can-tho",
       icon: <Users size={20} />,
       isSub: true,
     },

@@ -745,14 +745,15 @@ export async function generateSmartAutoReply(params: {
     if (asksLocation) {
       specificAnswer += `\n📍 CÁC KHU VỰC ĐANG MỞ TUYỂN CHÍNH:\n` +
         `• Sóc Trăng (S-BPO): 06 Nam Kỳ Khởi Nghĩa, P. Sóc Trăng - Thu nhập 10.5M - 12.5M/tháng (Ca 08:00-17:00 | 10:00-19:00).\n` +
+        `• Cần Thơ (Long Thới / P. Thới Long): Full-time BPO Xoay ca định mức 9.28tr/tháng (Ca 08:00-17:00 | 09:00-18:00 | 10:00-19:00).\n` +
         `• TP.HCM: Kho SPX Quận Bình Tân & Quận Tân Phú (+19 Hub TP.HCM) - Thu nhập 10.5M - 12.5M/tháng.\n` +
         `• Vĩnh Long: SW SOC Bình Minh (Đang mở tuyển Full-time BPO Xoay ca định mức 9.28tr/tháng & Part-time).\n` +
-        `• Đồng Tháp (Cao Lãnh 03) & Cần Thơ (Thốt Nốt): ✅ Đã tuyển đủ chỉ tiêu đợt này.\n`;
+        `• Đồng Tháp (Cao Lãnh 03) & Thốt Nốt (Cần Thơ): ✅ Đã tuyển đủ chỉ tiêu đợt này.\n`;
     }
 
     return (
       `Xin chào ${params.candidateName}! Để hỗ trợ xếp lịch phỏng vấn và nhận việc nhanh nhất, bạn vui lòng cho HR biết:\n` +
-      `1️⃣ Bạn muốn ứng tuyển ở KHU VỰC nào? (Sóc Trăng / TP.HCM / Vĩnh Long)?\n` +
+      `1️⃣ Bạn muốn ứng tuyển ở KHU VỰC nào? (Sóc Trăng / Cần Thơ - Long Thới / TP.HCM / Vĩnh Long)?\n` +
       `2️⃣ Bạn là NAM hay NỮ?\n` +
       `3️⃣ Bạn SINH NĂM MẤY? (Yêu cầu độ tuổi từ 18 - 35 tuổi, có CCCD gốc và VNeID mức 2).\n` +
       specificAnswer +
@@ -767,6 +768,8 @@ export async function generateSmartAutoReply(params: {
     text.includes("ngưng tuyển") ||
     text.includes("đủ người") ||
     text.includes("sóc trăng") ||
+    text.includes("long thới") ||
+    text.includes("thới long") ||
     text.includes("vĩnh long còn tuyển") ||
     text.includes("đồng tháp còn tuyển") ||
     text.includes("cao lãnh còn tuyển") ||
@@ -776,13 +779,12 @@ export async function generateSmartAutoReply(params: {
   ) {
     return (
       `📢 CẬP NHẬT TÌNH HÌNH TUYỂN DỤNG AGARI MỚI NHẤT:\n` +
-      `1️⃣ Khu vực SÓC TRĂNG (🔥 TUYỂN GẤP S-BPO): 06 Nam Kỳ Khởi Nghĩa, P. Sóc Trăng. Thu nhập 10.500.000 - 12.500.000đ/tháng (Định mức 10.4tr: Lương CB 5.31tr + Nhà ở/Xăng 1.31tr + Cơm 780k + KPI 2.5tr), đóng đủ BHXH. Ca làm việc: 08:00 - 17:00 | 10:00 - 19:00.\n` +
-      `2️⃣ Khu vực TP.HCM: 🔥 ĐANG TUYỂN MẠNH nhân viên chính thức kho SPX Express (Quận Bình Tân & Quận Tân Phú + 19 Hub TP.HCM). Thu nhập 10.500.000 - 12.500.000đ/tháng, đóng đủ BHXH.\n` +
-      `3️⃣ Khu vực Vĩnh Long (Kho SW SOC - KCN Bình Minh):\n` +
-      `   • Vị trí Full-time · BPO Xoay ca (🔥 ĐANG MỞ TUYỂN LẠI): Định mức 9.280.000đ/tháng (Lương CB 6tr + Cơm 780k + KPI đến 2.5tr + Tăng ca/PC đêm), xoay ca theo yêu cầu công ty.\n` +
-      `   • Vị trí Part-time (Thời vụ): Vẫn đang nhận đăng ký theo tuần (125k - 300k/ca).\n` +
-      `4️⃣ Khu vực Đồng Tháp (Cao Lãnh 03) & Cần Thơ (Thốt Nốt): ✅ ĐÃ TUYỂN ĐỦ SỐ LƯỢNG chỉ tiêu đợt này.\n\n` +
-      `👉 Để đăng ký, bạn vui lòng nhắn: Khu vực ứng tuyển (Sóc Trăng / TP.HCM / Vĩnh Long), Giới tính (Nam/Nữ) và Năm sinh để HR hỗ trợ ngay nhé!`
+      `1️⃣ Khu vực SÓC TRĂNG (🔥 TUYỂN GẤP S-BPO): 06 Nam Kỳ Khởi Nghĩa, P. Sóc Trăng. Thu nhập 10.500.000 - 12.500.000đ/tháng (Định mức 10.4tr), đóng đủ BHXH. Ca: 08:00 - 17:00 | 10:00 - 19:00.\n` +
+      `2️⃣ Khu vực CẦN THƠ – LONG THỚI (🔥 MỞ TUYỂN LẠI BPO XOAY CA): QL91, KV Tân Lợi 1, P. Thới Long, Cần Thơ. Định mức 9.280.000đ/tháng (Lương CB 6tr + Cơm 780k + KPI đến 2.5tr + BHXH & Tháng 13). Ca: 08:00-17:00 | 09:00-18:00 | 10:00-19:00.\n` +
+      `3️⃣ Khu vực TP.HCM: 🔥 ĐANG TUYỂN MẠNH nhân viên chính thức kho SPX Express (Quận Bình Tân & Quận Tân Phú + 19 Hub TP.HCM). Thu nhập 10.500.000 - 12.500.000đ/tháng, đóng đủ BHXH.\n` +
+      `4️⃣ Khu vực Vĩnh Long (Kho SW SOC - KCN Bình Minh): Full-time BPO Xoay ca (Định mức 9.28tr/tháng) & Part-time (125k - 300k/ca).\n` +
+      `5️⃣ Khu vực Đồng Tháp (Cao Lãnh 03) & Thốt Nốt: ✅ ĐÃ TUYỂN ĐỦ SỐ LƯỢNG chỉ tiêu đợt này.\n\n` +
+      `👉 Để đăng ký, bạn vui lòng nhắn: Khu vực ứng tuyển, Giới tính (Nam/Nữ) và Năm sinh để HR hỗ trợ ngay nhé!`
     );
   }
 
@@ -796,10 +798,10 @@ export async function generateSmartAutoReply(params: {
   ) {
     return (
       `💰 Thông tin Mức lương & Đãi ngộ tại AGARI (SPX Express):\n` +
-      `1️⃣ Khu vực Sóc Trăng (🔥 S-BPO Chính thức): 10.500.000 - 12.500.000đ/tháng (Định mức 10.400.000đ: Lương CB 5.310.000đ + PC nhà ở/xăng 1.310.000đ + PC cơm 780.000đ + KPI 2.500.000đ, đóng đủ BHXH).\n` +
-      `2️⃣ Khu vực TP.HCM (🔥 Tuyển chính thức): 10.500.000 - 12.500.000đ/tháng (Định mức 10.400.000đ: Lương cơ bản 5.310.000đ + PC nhà ở/xăng 1.310.000đ + PC cơm 780.000đ + KPI 2.500.000đ + Hỗ trợ thử việc 500.000đ/tháng, đóng đủ BHXH).\n` +
-      `3️⃣ Khu vực Vĩnh Long - KCN Bình Minh (SW SOC): Full-time BPO Xoay ca định mức 9.280.000đ/tháng (Lương CB 6tr + Hỗ trợ ăn 780k + KPI đến 2.5tr, chưa tính tăng ca/PC đêm) | Part-time: 125k - 300k/ca.\n` +
-      `4️⃣ Khu vực Đồng Tháp & Cần Thơ (Thốt Nốt): ✅ ĐÃ TUYỂN ĐỦ CHỈ TIÊU đợt này.\n\n` +
+      `1️⃣ Khu vực Sóc Trăng (🔥 S-BPO Chính thức): 10.500.000 - 12.500.000đ/tháng (Định mức 10.400.000đ: Lương CB 5.31tr + PC nhà ở/xăng 1.31tr + PC cơm 780k + KPI 2.5tr, đóng đủ BHXH).\n` +
+      `2️⃣ Khu vực Cần Thơ – Long Thới (🔥 Full-time BPO Xoay ca): Định mức 9.280.000đ/tháng (Lương CB 6tr + Tiền ăn 780k + KPI đến 2.5tr + BHXH & Tháng 13, chưa tính tăng ca/PC đêm).\n` +
+      `3️⃣ Khu vực TP.HCM (🔥 Tuyển chính thức): 10.500.000 - 12.500.000đ/tháng (Định mức 10.400.000đ, đóng đủ BHXH).\n` +
+      `4️⃣ Khu vực Vĩnh Long (SW SOC): Full-time BPO Xoay ca định mức 9.280.000đ/tháng | Part-time: 125k - 300k/ca.\n\n` +
       `Bạn quan tâm ứng tuyển khu vực nào để HR gửi lịch phỏng vấn ạ?`
     );
   }
@@ -814,9 +816,9 @@ export async function generateSmartAutoReply(params: {
     return (
       `⏰ Thời gian các ca làm việc tại Kho SPX Express:\n` +
       `• Sóc Trăng (S-BPO): 08:00 - 17:00 | 10:00 - 19:00.\n` +
+      `• Cần Thơ – Long Thới (BPO Xoay ca, 26 công/tháng): Ca 1 (10:00-19:00) | Ca 2 (08:00-17:00) | Ca 3 (09:00-18:00).\n` +
       `• TP.HCM (Xoay 5 ca, tối thiểu 23 công/tháng, nghỉ xoay tuần): Ca 1 (05:00-14:00) | Ca 2 & 3 (11:00-20:00 & 12:00-21:00) | Ca 4 & 5 (14:00-23:00 & 15:00-24:00).\n` +
-      `• Vĩnh Long (SW SOC - KCN Bình Minh): Full-time BPO xoay ca theo yêu cầu công ty (Ca 1: 06:00-15:00 / Ca 2: 13:00-22:00 / Ca 3: 22:00-06:00) | Part-time linh hoạt 4h - 5h.\n` +
-      `• Đồng Tháp & Cần Thơ (Thốt Nốt): Đã tuyển đủ chỉ tiêu.\n\n` +
+      `• Vĩnh Long (SW SOC - KCN Bình Minh): Full-time BPO xoay ca (06:00-15:00 / 13:00-22:00 / 22:00-06:00) | Part-time linh hoạt 4h - 5h.\n\n` +
       `Nhà tuyển dụng AGARI đã nhận được tin nhắn và sẽ hỗ trợ tư vấn ca làm việc phù hợp cho bạn ngay!`
     );
   }
@@ -831,10 +833,10 @@ export async function generateSmartAutoReply(params: {
     return (
       `📍 Địa điểm Tiếp nhận & Phỏng vấn chính của AGARI:\n` +
       `• Sóc Trăng (S-BPO): 06 Nam Kỳ Khởi Nghĩa, Phường Sóc Trăng, Thành phố Cần Thơ, Sóc Trăng.\n` +
+      `• Cần Thơ – Long Thới (BPO Xoay ca): Quốc Lộ 91, Khu Vực Tân Lợi 1, Phường Thới Long, Thành phố Cần Thơ, Cần Thơ.\n` +
       `• TP.HCM - Quận Bình Tân: 754/8 Tân Kỳ Tân Quý, P. Bình Hưng Hòa B, Q. Bình Tân.\n` +
       `• TP.HCM - Quận Tân Phú: 549/32 Tân Kỳ Tân Quý, P. Bình Hưng Hòa B, Q. Bình Tân (cùng 19 Hub SPX khắp các quận/huyện TP.HCM).\n` +
-      `• Vĩnh Long: SW SOC - Lô 01, kho số A01, KCN Bình Minh, Xã Mỹ Hòa, Vĩnh Long (Full-time BPO Xoay ca & Part-time).\n` +
-      `• Đồng Tháp & Cần Thơ: Đã tuyển đủ chỉ tiêu đợt này.\n\n` +
+      `• Vĩnh Long: SW SOC - Lô 01, kho số A01, KCN Bình Minh, Xã Mỹ Hòa, Vĩnh Long.\n\n` +
       `Bạn muốn đăng ký làm tại Kho nào, vui lòng cho HR biết: Khu vực mong muốn, Giới tính (Nam/Nữ) và Năm sinh nhé!`
     );
   }

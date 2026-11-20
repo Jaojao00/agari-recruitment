@@ -81,6 +81,10 @@ const jobOptions = {
     title: "Nhân viên kho SPX-Express (S-BPO) – Khu vực Sóc Trăng",
     schedule: "08:00 - 17:00 | 10:00 - 19:00",
   },
+  "long-thoi-can-tho": {
+    title: "Nhân viên kho SPX Full-time (BPO Xoay ca) – Long Thới, Cần Thơ",
+    schedule: "Xoay ca theo phân công (08:00-17:00 | 09:00-18:00 | 10:00-19:00)",
+  },
 } as const;
 
 const hcmLocations = [
@@ -253,6 +257,15 @@ export default function UngTuyenPage() {
             "06 Nam Kỳ Khởi Nghĩa, Phường Sóc Trăng, Thành phố Cần Thơ, Sóc Trăng.",
           );
           form.setValue("workSchedule", "08:00 - 17:00");
+        } else if (validJob === "long-thoi-can-tho") {
+          form.setValue(
+            "preferredLocation",
+            "Quốc Lộ 91, Khu Vực Tân Lợi 1, Phường Thới Long, Thành phố Cần Thơ, Cần Thơ",
+          );
+          form.setValue(
+            "workSchedule",
+            "Xoay ca theo yêu cầu & phân công công ty (08:00-17:00 | 09:00-18:00 | 10:00-19:00)",
+          );
         } else {
           form.setValue("workSchedule", "");
         }
@@ -627,6 +640,14 @@ export default function UngTuyenPage() {
                                   <span className="whitespace-normal break-words">{loc}</span>
                                 </SelectItem>
                               ))
+                            ) : jobId === "long-thoi-can-tho" ? (
+                              [
+                                "Quốc Lộ 91, Khu Vực Tân Lợi 1, Phường Thới Long, Thành phố Cần Thơ, Cần Thơ",
+                              ].map((loc) => (
+                                <SelectItem key={loc} value={loc} className="whitespace-normal py-2">
+                                  <span className="whitespace-normal break-words">{loc}</span>
+                                </SelectItem>
+                              ))
                             ) : jobId === "lap-vo-dong-thap" ? (
                               [
                                 "71-DTP Cao Lanh 03 Hub: 444 Phạm Hữu Lầu, Phường Cao Lãnh (Phường 6), Tỉnh Đồng Tháp",
@@ -660,7 +681,7 @@ export default function UngTuyenPage() {
                   )}
                 />
 
-                {jobId === "spx-fulltime" || jobId === "agari-part-time" || jobId === "lap-vo-dong-thap" || jobId === "thot-not-can-tho" || jobId === "soc-trang" || isHcmJob(jobId) ? (
+                {jobId === "spx-fulltime" || jobId === "agari-part-time" || jobId === "lap-vo-dong-thap" || jobId === "thot-not-can-tho" || jobId === "soc-trang" || jobId === "long-thoi-can-tho" || isHcmJob(jobId) ? (
                   <FormField
                     control={form.control}
                     name="workSchedule"
@@ -716,6 +737,21 @@ export default function UngTuyenPage() {
                                 </SelectItem>
                                 <SelectItem value="Linh hoạt cả 2 ca (08:00 - 17:00 / 10:00 - 19:00)">
                                   Linh hoạt cả 2 ca (08:00 - 17:00 / 10:00 - 19:00)
+                                </SelectItem>
+                              </>
+                            ) : jobId === "long-thoi-can-tho" ? (
+                              <>
+                                <SelectItem value="Xoay ca theo yêu cầu & phân công công ty (08:00-17:00 | 09:00-18:00 | 10:00-19:00)">
+                                  Xoay ca theo yêu cầu & phân công công ty (08:00-17:00 | 09:00-18:00 | 10:00-19:00)
+                                </SelectItem>
+                                <SelectItem value="Ca 1: 10:00 - 19:00">
+                                  Ca 1 • 10:00 - 19:00
+                                </SelectItem>
+                                <SelectItem value="Ca 2: 08:00 - 17:00">
+                                  Ca 2 • 08:00 - 17:00
+                                </SelectItem>
+                                <SelectItem value="Ca 3: 09:00 - 18:00">
+                                  Ca 3 • 09:00 - 18:00
                                 </SelectItem>
                               </>
                             ) : jobId === "spx-fulltime" ? (

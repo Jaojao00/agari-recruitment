@@ -112,7 +112,7 @@ async function getJobSheetName(jobId?: string): Promise<string> {
     if (sheet) return sheet.title;
   }
 
-  if (jobId === "spx-fulltime") {
+  if (jobId === "spx-fulltime" || jobId === "long-thoi-can-tho") {
     const titles = await getSheetTitles();
     const sheet = titles.find((s) => s.gid === 1291225589);
     if (sheet) return sheet.title;

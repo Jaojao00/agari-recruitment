@@ -94,6 +94,16 @@ const QUICK_APPLY_JOBS: Array<{
     badge: "Sóc Trăng • S-BPO Chính thức",
   },
   {
+    jobId: "long-thoi-can-tho",
+    title: "Nhân viên kho SPX Full-time (BPO Xoay ca) – Long Thới, Cần Thơ",
+    salary: "9.280.000 VNĐ/tháng (Định mức)",
+    location:
+      "Quốc Lộ 91, Khu Vực Tân Lợi 1, Phường Thới Long, Thành phố Cần Thơ, Cần Thơ",
+    schedule:
+      "Xoay ca theo yêu cầu & phân công công ty (08:00-17:00 | 09:00-18:00 | 10:00-19:00)",
+    badge: "Cần Thơ • Long Thới (BPO Xoay ca)",
+  },
+  {
     jobId: "spx-fulltime",
     title: "Nhân viên kho SPX Full-time (BPO Xoay ca)",
     salary: "9.280.000 VNĐ/tháng (Định mức)",
