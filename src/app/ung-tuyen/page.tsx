@@ -52,8 +52,11 @@ const jobOptions = {
     schedule: "Đăng ký lịch làm việc linh hoạt theo tuần",
   },
   "lap-vo-dong-thap": {
-    title: "Nhân sự kho phân loại - Cao Lãnh 03, Đồng Tháp",
-    schedule: "Ca ngày: 08:00 - 17:00 (250.000 VNĐ / Ca)",
+    title: "Nhân sự kho phân loại - Cao Lãnh 03, Đồng Tháp - [ĐÃ TUYỂN ĐỦ]",
+    schedule: "Đã tuyển đủ chỉ tiêu đợt này",
+    isPaused: true,
+    pauseNotice:
+      "Khu vực Đồng Tháp (Cao Lãnh 03) hiện đã tuyển đủ chỉ tiêu cho đợt tuyển dụng này.",
   },
   "thot-not-can-tho": {
     title: "Nhân viên kho Full-time (BPO) - Thốt Nốt - [ĐÃ TUYỂN ĐỦ]",

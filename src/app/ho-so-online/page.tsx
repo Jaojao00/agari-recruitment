@@ -49,7 +49,15 @@ interface SubmittedApplication {
   adminNote?: string;
 }
 
-const QUICK_APPLY_JOBS = [
+const QUICK_APPLY_JOBS: Array<{
+  jobId: string;
+  title: string;
+  salary: string;
+  location: string;
+  schedule: string;
+  badge: string;
+  isPaused?: boolean;
+}> = [
   {
     jobId: "hcm-binh-tan",
     title: "Nhân viên chính thức Kho SPX - Quận Bình Tân (TP.HCM)",
@@ -83,24 +91,6 @@ const QUICK_APPLY_JOBS = [
     location: "SW SOC - KCN BÌNH MINH VINH LONG",
     schedule: "Xoay ca theo yêu cầu công ty",
     badge: "Vĩnh Long • BPO Xoay ca",
-  },
-  {
-    jobId: "thot-not-can-tho",
-    title: "Nhân viên kho Full-time (BPO) - Thốt Nốt, Cần Thơ",
-    salary: "250.000 VNĐ/ngày + Thưởng 750.000đ/tháng",
-    location:
-      "78-CTO Co Do 02 Hub: Ấp Tân Lợi 1, Xã Thuận Hưng, Huyện Thốt Nốt, Cần Thơ.",
-    schedule: "09:00 - 18:00 (Giờ hành chính)",
-    badge: "Cần Thơ • Đã tuyển đủ",
-    isPaused: true,
-  },
-  {
-    jobId: "lap-vo-dong-thap",
-    title: "Nhân viên kho phân loại - Cao Lãnh 03, Đồng Tháp",
-    salary: "250.000 VNĐ / Ca",
-    location: "71-DTP Cao Lanh 03 Hub (444 Phạm Hữu Lầu)",
-    schedule: "08:00 - 17:00 (250.000 VNĐ / Ca)",
-    badge: "Đồng Tháp • Tuyển Nam < 38 tuổi",
   },
 ];
 

@@ -31,8 +31,8 @@ export default function DongThapPage() {
               <span className="inline-block rounded-full bg-yellow-400 px-4 py-1.5 text-xs font-bold uppercase tracking-wider text-red-900">
                 Lương tuần uy tín • Nhận việc ngay
               </span>
-              <span className="inline-block rounded-full bg-emerald-400 border border-emerald-500 px-4 py-1.5 text-xs font-black uppercase tracking-wider text-emerald-950">
-                🔥 ĐANG TUYỂN GẤP - CAO LÃNH 03
+              <span className="inline-block rounded-full bg-emerald-300 border border-emerald-400 px-4 py-1.5 text-xs font-black uppercase tracking-wider text-emerald-950">
+                ✅ ĐÃ TUYỂN ĐỦ SỐ LƯỢNG
               </span>
             </div>
             <h1 className="mb-4 text-4xl font-black leading-tight tracking-tight md:text-5xl lg:text-6xl">
@@ -41,7 +41,7 @@ export default function DongThapPage() {
               <span className="text-yellow-400"> CAO LÃNH, ĐỒNG THÁP</span>
             </h1>
             <p className="max-w-2xl text-lg font-medium text-red-50 md:text-xl">
-              🚨 Tuyển gấp nhân sự kho phân loại tại 71-DTP Cao Lãnh 03 Hub! Công việc ổn định, thu nhập 250k/ca (08:00 - 17:00), nhận lương đều đặn vào Thứ 6 hàng tuần.
+              ✅ Khu vực Cao Lãnh 03 (Đồng Tháp) hiện đã tuyển đủ chỉ tiêu cho đợt tuyển dụng này và tạm ngưng nhận hồ sơ mới.
             </p>
           </div>
           <div className="absolute -right-20 -top-20 h-64 w-64 rounded-full border-[32px] border-white/10 blur-md"></div>
@@ -244,14 +244,14 @@ export default function DongThapPage() {
         <div className="mx-auto flex max-w-6xl items-center justify-between gap-4 px-1 md:px-6">
           <div className="hidden text-sm md:block">
             <span className="font-bold text-slate-900">Nhân sự kho phân loại (Cao Lãnh 03)</span>
-            <span className="ml-2 text-red-600 font-bold">250.000 VNĐ / Ca (08:00 – 17:00)</span>
+            <span className="ml-2 text-emerald-700 font-semibold">[Đã tuyển đủ số lượng]</span>
           </div>
           <Link
-            href="/ung-tuyen?job=lap-vo-dong-thap"
+            href="/"
             className="ml-auto w-full md:w-auto"
           >
             <Button className="h-12 w-full bg-[#d90012] px-8 font-bold text-white hover:bg-red-800 md:w-auto">
-              ỨNG TUYỂN NGAY (ĐI LÀM NGAY)
+              XEM CÁC VỊ TRÍ ĐANG TUYỂN KHÁC
             </Button>
           </Link>
         </div>
