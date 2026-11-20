@@ -40,7 +40,18 @@ function ApplicationsContent() {
   const [revealedCccd, setRevealedCccd] = useState<Record<string, boolean>>({});
   const [updatingStatus, setUpdatingStatus] = useState<string | null>(null);
 
+  const useTabbedView = Boolean(
+    jobIdFilter &&
+      (jobIdFilter.includes("lap-vo-dong-thap") ||
+        jobIdFilter.includes("thot-not-can-tho") ||
+        jobIdFilter.includes("hcm-") ||
+        jobIdFilter.includes("warehouse-rotating-shift") ||
+        jobIdFilter.includes("spx-fulltime") ||
+        jobIdFilter.includes("agari-part-time")),
+  );
+
   const fetchApplications = useCallback(async () => {
+    if (useTabbedView) return;
     setLoading(true);
     try {
       const query = new URLSearchParams();
@@ -62,7 +73,7 @@ function ApplicationsContent() {
     } finally {
       setLoading(false);
     }
-  }, [debouncedSearch, statusFilter, page, jobIdFilter]);
+  }, [debouncedSearch, statusFilter, page, jobIdFilter, useTabbedView]);
 
   useEffect(() => {
     const timer = window.setTimeout(() => {
@@ -142,12 +153,8 @@ function ApplicationsContent() {
     }
   };
 
-  if (
-    jobIdFilter?.includes("lap-vo-dong-thap") ||
-    jobIdFilter?.includes("thot-not-can-tho") ||
-    jobIdFilter?.includes("hcm-")
-  ) {
-    return <MeKongApplications jobIdFilter={jobIdFilter} />;
+  if (useTabbedView && jobIdFilter) {
+    return <MeKongApplications key={jobIdFilter} jobIdFilter={jobIdFilter} />;
   }
 
   return (
