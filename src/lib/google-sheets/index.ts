@@ -127,7 +127,8 @@ async function getJobSheetName(jobId?: string): Promise<string> {
   if (
     jobId === "hcm-fulltime" ||
     jobId === "hcm-binh-tan" ||
-    jobId === "hcm-tan-phu"
+    jobId === "hcm-tan-phu" ||
+    jobId === "tech-link-quan-7"
   ) {
     return await getOrCreateHcmSheetName();
   }

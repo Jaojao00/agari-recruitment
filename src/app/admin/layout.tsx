@@ -68,8 +68,14 @@ function AdminSidebar({
       isSub: true,
     },
     {
+      name: "Mục Tech Link (Q.7)",
+      path: "/admin/applications?jobId=tech-link-quan-7",
+      icon: <Users size={20} />,
+      isSub: true,
+    },
+    {
       name: "Mục KV TP.HCM",
-      path: "/admin/applications?jobId=hcm-fulltime,hcm-binh-tan,hcm-tan-phu",
+      path: "/admin/applications?jobId=hcm-fulltime,hcm-binh-tan,hcm-tan-phu,tech-link-quan-7",
       icon: <Users size={20} />,
       isSub: true,
     },

@@ -59,6 +59,15 @@ const QUICK_APPLY_JOBS: Array<{
   isPaused?: boolean;
 }> = [
   {
+    jobId: "tech-link-quan-7",
+    title: "Nhân viên Sản xuất / Kho TECH LINK – KCX Tân Thuận, Quận 7",
+    salary: "300.000 – 500.000 VNĐ / Ca (Lương tuần Thứ 6)",
+    location:
+      "Công ty Tech Link: Số 05B-07A Đường Số 15, KCX Tân Thuận, Quận 7, TP.HCM",
+    schedule: "Ca 12 tiếng Ngày (08:00 - 20:00) • 435.000 VNĐ/Ca",
+    badge: "🔥 Dự án mới • Q.7 TP.HCM • Bao cơm",
+  },
+  {
     jobId: "hcm-binh-tan",
     title: "Nhân viên chính thức Kho SPX - Quận Bình Tân (TP.HCM)",
     salary: "10.500.000 - 12.500.000 VNĐ/tháng",

@@ -45,6 +45,7 @@ function ApplicationsContent() {
       (jobIdFilter.includes("lap-vo-dong-thap") ||
         jobIdFilter.includes("thot-not-can-tho") ||
         jobIdFilter.includes("hcm-") ||
+        jobIdFilter.includes("tech-link-quan-7") ||
         jobIdFilter.includes("warehouse-rotating-shift") ||
         jobIdFilter.includes("soc-trang") ||
         jobIdFilter.includes("long-thoi-can-tho") ||

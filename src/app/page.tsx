@@ -46,7 +46,7 @@ export default function HomePage() {
               Vị trí khác
             </Link>
           </nav>
-          <Link href="/ung-tuyen">
+          <Link href="/ung-tuyen?job=tech-link-quan-7">
             <Button
               variant="secondary"
               className="bg-white text-red-700 hover:bg-gray-100 font-bold"
@@ -57,49 +57,55 @@ export default function HomePage() {
         </div>
       </header>
 
-      {/* HERO SECTION */}
+      {/* HERO SECTION - DỰ ÁN MỚI AGARI × TECH-LINK */}
       <section
-        className="relative min-h-[650px] overflow-hidden bg-red-900 bg-cover bg-center bg-no-repeat text-white md:min-h-[720px]"
-        style={{ backgroundImage: "url('/mid-autumn-bg.webp')" }}
+        className="relative min-h-[650px] overflow-hidden bg-slate-950 bg-cover bg-center bg-no-repeat text-white md:min-h-[720px]"
+        style={{ backgroundImage: "url('/tech-link-factory.jpg')" }}
       >
-        <div className="absolute inset-0 bg-black/20"></div>
+        <div className="absolute inset-0 bg-gradient-to-b from-red-950/88 via-red-900/75 to-slate-950/88"></div>
         <div className="container mx-auto px-4 py-16 md:py-24 relative z-10 text-center flex flex-col items-center">
-          <h1 className="text-4xl md:text-6xl font-extrabold uppercase tracking-tight mb-4 drop-shadow-md">
-            Tuyển Dụng{" "}
-            <span className="text-yellow-300 block md:inline mt-2 md:mt-0">
-              Nhân Viên Kho
+          <div className="mb-5 inline-flex flex-wrap items-center justify-center gap-2 rounded-full bg-yellow-400/95 px-4 py-1.5 text-xs md:text-sm font-black uppercase tracking-wider text-red-950 shadow-lg">
+            <span>🔥 DỰ ÁN MỚI • AGARI × TECH-LINK</span>
+            <span className="hidden sm:inline">•</span>
+            <span>KCX TÂN THUẬN, QUẬN 7, TP.HCM</span>
+          </div>
+
+          <h1 className="text-3xl sm:text-4xl md:text-6xl font-extrabold uppercase tracking-tight mb-4 drop-shadow-md leading-tight">
+            Tuyển Gấp{" "}
+            <span className="text-yellow-300 block md:inline mt-1 md:mt-0">
+              Nhân Viên Sản Xuất / Kho
             </span>{" "}
-            Cố Định ( BPO )
+            TECH LINK
           </h1>
-          <p className="text-xl md:text-2xl font-medium mb-8 text-red-50">
-            Đãi ngộ tốt - Thu nhập hấp dẫn - Môi trường ổn định
+          <p className="text-lg md:text-2xl font-medium mb-8 text-red-50 max-w-3xl">
+            Bao cơm theo ca • Nhận lương tuần uy tín vào Thứ 6 • Nghỉ 1h30p/ca • Đi làm ngay
           </p>
 
-          <div className="bg-white text-red-700 rounded-full px-6 py-3 md:px-8 md:py-4 mb-10 shadow-lg border-4 border-yellow-300 transform -rotate-1">
+          <div className="bg-white text-red-700 rounded-full px-6 py-3 md:px-10 md:py-4 mb-10 shadow-xl border-4 border-yellow-300 transform -rotate-1">
             <p className="text-2xl md:text-4xl font-black">
-              8.400.000 - 11.300.000{" "}
+              300.000 – 500.000{" "}
               <span className="text-lg md:text-2xl text-gray-600">
-                VNĐ / THÁNG
+                VNĐ / CA
               </span>
             </p>
           </div>
 
           <div className="flex flex-col sm:flex-row gap-4 w-full sm:w-auto px-4">
-            <Link href="/ung-tuyen" className="w-full sm:w-auto">
+            <Link href="/ung-tuyen?job=tech-link-quan-7" className="w-full sm:w-auto">
               <Button
                 size="lg"
-                className="w-full bg-yellow-400 hover:bg-yellow-500 text-red-800 font-bold text-lg h-14 px-8 rounded-full shadow-xl transition-transform hover:scale-105"
+                className="w-full bg-yellow-400 hover:bg-yellow-500 text-red-900 font-black text-lg h-14 px-8 rounded-full shadow-xl transition-transform hover:scale-105"
               >
-                ỨNG TUYỂN NGAY
+                ỨNG TUYỂN TECH LINK NGAY
               </Button>
             </Link>
             <Link href="#chi-tiet" className="w-full sm:w-auto">
               <Button
                 size="lg"
                 variant="outline"
-                className="w-full bg-transparent border-white text-white hover:bg-white/10 hover:text-white font-semibold text-lg h-14 px-8 rounded-full transition"
+                className="w-full bg-black/25 border-white text-white hover:bg-white/15 hover:text-white font-semibold text-lg h-14 px-8 rounded-full transition"
               >
-                XEM CHI TIẾT
+                XEM CHI TIẾT DỰ ÁN
               </Button>
             </Link>
           </div>
@@ -127,6 +133,74 @@ export default function HomePage() {
 
           <div className="grid gap-4 grid-cols-1">
           <LiveRecruitmentStatsSection />
+            {/* Card DỰ ÁN MỚI: TECH LINK - KCX TÂN THUẬN, QUẬN 7 */}
+            <article className="overflow-hidden rounded-2xl border-2 border-red-500 bg-gradient-to-r from-red-50/40 via-white to-amber-50/40 shadow-md transition hover:-translate-y-0.5 hover:shadow-xl">
+              <div className="grid md:grid-cols-[200px_1fr] md:items-stretch">
+                <div
+                  className="relative flex min-h-36 md:min-h-full items-center justify-center bg-slate-900 bg-cover bg-center p-6 text-center text-white"
+                  style={{ backgroundImage: "url('/tech-link-factory.jpg')" }}
+                >
+                  <div className="absolute inset-0 bg-red-900/70" />
+                  <div className="relative z-10">
+                    <p className="text-2xl font-black italic tracking-tight">TECH-LINK</p>
+                    <p className="mt-1.5 text-[11px] font-bold uppercase tracking-[0.2em] text-yellow-300">
+                      KCX Tân Thuận · Q.7
+                    </p>
+                    <div className="mx-auto mt-3 h-1 w-12 bg-yellow-400" />
+                  </div>
+                </div>
+                <div className="p-6 md:p-7 flex flex-col md:flex-row md:items-center gap-6 justify-between">
+                  <div className="space-y-4">
+                    <div>
+                      <div className="flex items-center gap-2 flex-wrap">
+                        <p className="text-xs font-bold uppercase tracking-[0.16em] text-red-700">
+                          Dự án mới · Sản xuất / Kho · Quận 7, TP.HCM
+                        </p>
+                        <span className="rounded-full bg-red-600 px-2.5 py-0.5 text-[11px] font-black uppercase text-white animate-pulse">
+                          🔥 TUYỂN GẤP - BAO CƠM - LƯƠNG TUẦN THỨ 6
+                        </span>
+                      </div>
+                      <h3 className="mt-1 text-xl font-bold text-gray-900">
+                        Nhân viên Sản xuất / Kho TECH LINK (KCX Tân Thuận, Quận 7)
+                      </h3>
+                      <p className="mt-1 text-xs font-semibold text-emerald-700">
+                        ⚡ Ca 8h: 300k–350k | Ca 12h: 435k–500k • Bao cơm theo ca • Nghỉ 1h30p/ca • Đi làm ngay
+                      </p>
+                      <p className="mt-1 text-sm text-gray-500">
+                        Số 05B-07A Đường Số 15, Khu Chế Xuất Tân Thuận, Quận 7, TP.HCM
+                      </p>
+                    </div>
+                    <div className="flex flex-wrap gap-2 text-sm">
+                      <span className="rounded-md bg-red-100 px-3 py-1.5 font-bold text-red-800">
+                        300k – 500k VNĐ/Ca
+                      </span>
+                      <span className="rounded-md bg-emerald-100 px-3 py-1.5 font-semibold text-emerald-800">
+                        Bao cơm theo ca
+                      </span>
+                      <span className="rounded-md bg-yellow-100 px-3 py-1.5 font-semibold text-yellow-900">
+                        Lương tuần Thứ 6
+                      </span>
+                      <span className="rounded-md bg-gray-100 px-3 py-1.5 text-gray-700">
+                        Chỉ cần CCCD photo
+                      </span>
+                    </div>
+                  </div>
+                  <div className="mt-4 md:mt-0 md:shrink-0 md:border-l md:border-red-100 md:pl-6 flex flex-col sm:flex-row md:flex-col lg:flex-row gap-3 items-center">
+                    <Link href="/viec-lam/tech-link-quan-7" className="w-full">
+                      <Button variant="outline" className="w-full border-gray-300 font-bold text-gray-700 hover:bg-gray-50 md:min-w-[130px]">
+                        XEM CHI TIẾT
+                      </Button>
+                    </Link>
+                    <Link href="/ung-tuyen?job=tech-link-quan-7" className="w-full">
+                      <Button className="w-full bg-red-700 font-bold text-white hover:bg-red-800 md:min-w-[130px]">
+                        ỨNG TUYỂN
+                      </Button>
+                    </Link>
+                  </div>
+                </div>
+              </div>
+            </article>
+
             {/* Card HCM 1: Quận Bình Tân, TP.HCM */}
             <article className="overflow-hidden rounded-2xl border border-gray-200 bg-white shadow-sm transition hover:-translate-y-0.5 hover:shadow-lg">
               <div className="grid md:grid-cols-[200px_1fr] md:items-stretch">
@@ -473,77 +547,84 @@ export default function HomePage() {
       </section>
 
       <main className="container mx-auto px-4 py-12 flex-1" id="chi-tiet">
-        {/* LƯƠNG & THƯỞNG SECTION */}
+        {/* LƯƠNG & THƯỞNG SECTION - DỰ ÁN MỚI TECH LINK */}
         <section id="luong" className="mb-16">
           <div className="text-center mb-10">
+            <span className="inline-block rounded-full bg-red-100 px-4 py-1 text-xs font-extrabold uppercase tracking-wider text-red-700 mb-3">
+              Dự án trọng điểm • AGARI × TECH-LINK (KCX Tân Thuận, Q.7)
+            </span>
             <h2 className="text-3xl font-bold text-gray-900 uppercase">
-              Thông tin thu nhập
+              Mức lương hấp dẫn theo ca (Lương tuần Thứ 6)
             </h2>
             <div className="w-24 h-1 bg-red-600 mx-auto mt-4"></div>
           </div>
 
           <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
-            <Card className="border-t-4 border-t-red-600 shadow-sm hover:shadow-md transition">
+            <Card className="border-t-4 border-t-amber-500 shadow-sm hover:shadow-md transition">
               <CardHeader className="pb-2">
-                <CardTitle className="text-sm text-gray-500 uppercase font-semibold">
-                  Lương cơ bản
+                <CardTitle className="text-sm text-gray-600 uppercase font-bold">
+                  ☀️ Ca 8 tiếng Ngày
                 </CardTitle>
               </CardHeader>
               <CardContent>
-                <div className="text-3xl font-bold text-gray-900">
-                  6.000.000
-                  <span className="text-sm font-normal text-gray-500 ml-1">
-                    VNĐ
+                <div className="text-3xl font-black text-gray-900">
+                  300.000
+                  <span className="text-sm font-semibold text-gray-500 ml-1">
+                    VNĐ / Ca
                   </span>
                 </div>
+                <p className="text-xs text-gray-500 mt-1">Bao cơm theo ca • Nghỉ 1h30p</p>
+              </CardContent>
+            </Card>
+
+            <Card className="border-t-4 border-t-indigo-500 shadow-sm hover:shadow-md transition">
+              <CardHeader className="pb-2">
+                <CardTitle className="text-sm text-gray-600 uppercase font-bold">
+                  🌙 Ca 8 tiếng Đêm
+                </CardTitle>
+              </CardHeader>
+              <CardContent>
+                <div className="text-3xl font-black text-gray-900">
+                  350.000
+                  <span className="text-sm font-semibold text-gray-500 ml-1">
+                    VNĐ / Ca
+                  </span>
+                </div>
+                <p className="text-xs text-gray-500 mt-1">Bao cơm theo ca • Nghỉ 1h30p</p>
               </CardContent>
             </Card>
 
             <Card className="border-t-4 border-t-orange-500 shadow-sm hover:shadow-md transition">
               <CardHeader className="pb-2">
-                <CardTitle className="text-sm text-gray-500 uppercase font-semibold">
-                  Phụ cấp nơi ở
+                <CardTitle className="text-sm text-gray-600 uppercase font-bold">
+                  ☀️ Ca 12 tiếng Ngày (08:00–20:00)
                 </CardTitle>
               </CardHeader>
               <CardContent>
-                <div className="text-3xl font-bold text-gray-900">
-                  1.500.000
-                  <span className="text-sm font-normal text-gray-500 ml-1">
-                    VNĐ
+                <div className="text-3xl font-black text-gray-900">
+                  435.000
+                  <span className="text-sm font-semibold text-gray-500 ml-1">
+                    VNĐ / Ca
                   </span>
                 </div>
-              </CardContent>
-            </Card>
-
-            <Card className="border-t-4 border-t-yellow-500 shadow-sm hover:shadow-md transition">
-              <CardHeader className="pb-2">
-                <CardTitle className="text-sm text-gray-500 uppercase font-semibold">
-                  Phụ cấp ăn uống
-                </CardTitle>
-              </CardHeader>
-              <CardContent>
-                <div className="text-3xl font-bold text-gray-900">
-                  900.000
-                  <span className="text-sm font-normal text-gray-500 ml-1">
-                    VNĐ
-                  </span>
-                </div>
+                <p className="text-xs text-gray-500 mt-1">Bao cơm theo ca • Nghỉ 1h30p</p>
               </CardContent>
             </Card>
 
             <Card className="border-t-4 border-t-red-700 bg-red-50 shadow-sm hover:shadow-md transition">
               <CardHeader className="pb-2">
                 <CardTitle className="text-sm text-red-700 uppercase font-black">
-                  Tổng lương cố định
+                  🌙 Ca 12 tiếng Đêm (20:00–08:00)
                 </CardTitle>
               </CardHeader>
               <CardContent>
-                <div className="text-3xl font-bold text-red-700">
-                  8.400.000
-                  <span className="text-sm font-normal text-red-600 ml-1">
-                    VNĐ
+                <div className="text-3xl font-black text-red-700">
+                  500.000
+                  <span className="text-sm font-semibold text-red-600 ml-1">
+                    VNĐ / Ca
                   </span>
                 </div>
+                <p className="text-xs text-red-700/80 mt-1 font-medium">Thu nhập cao nhất • Lương tuần Thứ 6</p>
               </CardContent>
             </Card>
           </div>
@@ -555,10 +636,10 @@ export default function HomePage() {
               </div>
               <div>
                 <h4 className="font-bold text-gray-900 mb-1">
-                  Thưởng tháng đầu
+                  Nhận lương tuần Thứ 6
                 </h4>
                 <p className="text-gray-600 text-sm">
-                  500.000 VNĐ nếu đủ 26 công.
+                  Thanh toán lương đều đặn, đúng hẹn vào Thứ 6 hàng tuần.
                 </p>
               </div>
             </div>
@@ -569,10 +650,10 @@ export default function HomePage() {
               </div>
               <div>
                 <h4 className="font-bold text-gray-900 mb-1">
-                  Thưởng hiệu suất
+                  Bao cơm theo ca làm việc
                 </h4>
                 <p className="text-gray-600 text-sm">
-                  Lên đến 1.500.000 VNĐ/tháng.
+                  Hỗ trợ bữa ăn đầy đủ tại công ty giúp tiết kiệm chi phí sinh hoạt.
                 </p>
               </div>
             </div>
@@ -582,149 +663,156 @@ export default function HomePage() {
                 <Clock size={24} />
               </div>
               <div>
-                <h4 className="font-bold text-gray-900 mb-1">Tăng ca</h4>
+                <h4 className="font-bold text-gray-900 mb-1">Nghỉ 1 tiếng 30 phút / ca</h4>
                 <p className="text-gray-600 text-sm">
-                  Trung bình khoảng 919.000 VNĐ, tùy thời gian thực tế.
+                  Thời gian nghỉ ngơi thoải mái, chia làm 2 lần nghỉ trong mỗi ca.
                 </p>
               </div>
             </div>
           </div>
         </section>
 
-        <div className="grid lg:grid-cols-2 gap-12 mb-16">
-          {/* QUYỀN LỢI SECTION */}
-          <section id="quyen-loi">
-            <h2 className="text-2xl font-bold text-gray-900 uppercase mb-6 flex items-center gap-2">
-              <ShieldCheck className="text-red-600" />
-              Quyền lợi được hưởng
-            </h2>
-            <div className="bg-white rounded-xl p-8 shadow-sm border border-gray-100">
-              <ul className="space-y-4">
-                {[
-                  "Hợp đồng lao động đầy đủ, chế độ BPO cố định.",
-                  "Tham gia đầy đủ BHXH, BHYT.",
-                  "12 ngày phép năm.",
-                  "Thưởng các ngày Lễ/Tết trong năm.",
-                  "Lương tháng 13.",
-                  "Cơ hội tăng thu nhập và thăng tiến.",
-                  "Môi trường làm việc ổn định, chuyên nghiệp.",
-                ].map((item, i) => (
-                  <li key={i} className="flex items-start gap-3">
-                    <CheckCircle2
-                      className="text-green-500 shrink-0 mt-0.5"
-                      size={20}
-                    />
-                    <span className="text-gray-700 font-medium">{item}</span>
-                  </li>
-                ))}
-              </ul>
-            </div>
-          </section>
-
-          {/* YÊU CẦU SECTION */}
-          <section id="yeu-cau">
-            <h2 className="text-2xl font-bold text-gray-900 uppercase mb-6 flex items-center gap-2">
-              <CheckCircle2 className="text-red-600" />
-              Yêu cầu công việc
-            </h2>
-            <div className="bg-white rounded-xl p-8 shadow-sm border border-gray-100">
-              <div className="space-y-3">
-                {[
-                  "Nam từ 18 đến 35 tuổi.",
-                  "Trình độ Học vấn 9/12.",
-                  "Có thể Xoay Ca được và sẵn sàng tăng ca khi cần.",
-                  "Biết sử dụng điện thoại/Laptop/PDA để quét mã, xử lý đơn hàng.",
-                  "Xoay ca được theo lịch công ty sắp xếp.",
-                ].map((item, i) => (
-                  <div key={i} className="flex items-start gap-3">
-                    <div className="w-2 h-2 bg-red-500 rounded-full mt-2 shrink-0"></div>
-                    <span className="text-gray-700">{item}</span>
-                  </div>
-                ))}
+        <div className="grid lg:grid-cols-12 gap-8 mb-16 items-start">
+          {/* CỘT TRÁI: QUYỀN LỢI + YÊU CẦU & NỘI QUY + MÔ TẢ CÔNG VIỆC */}
+          <div className="lg:col-span-7 space-y-8">
+            <section id="quyen-loi">
+              <h2 className="text-2xl font-bold text-gray-900 uppercase mb-4 flex items-center gap-2">
+                <ShieldCheck className="text-red-600" />
+                Chế độ đãi ngộ & Mô tả công việc
+              </h2>
+              <div className="bg-white rounded-xl p-6 md:p-8 shadow-sm border border-gray-100 space-y-4">
+                <ul className="space-y-3.5">
+                  {[
+                    "Làm việc tại kho linh kiện ô tô, nhựa gia dụng: đóng gói, đổ khuôn, kiểm tra sản phẩm...",
+                    "Không yêu cầu kinh nghiệm, vào làm sẽ được hướng dẫn cụ thể từ A–Z.",
+                    "BAO CƠM theo ca làm việc, nghỉ tổng cộng 1 tiếng 30 phút/ca (chia làm 2 lần nghỉ).",
+                    "Thanh toán lương tuần uy tín, đều đặn vào Thứ 6 hàng tuần.",
+                    "Hồ sơ đơn giản: Chỉ cần CCCD photo (chi phí photo được công ty hoàn trả vào kỳ lương).",
+                  ].map((item, i) => (
+                    <li key={i} className="flex items-start gap-3">
+                      <CheckCircle2
+                        className="text-green-500 shrink-0 mt-0.5"
+                        size={20}
+                      />
+                      <span className="text-gray-700 font-medium">{item}</span>
+                    </li>
+                  ))}
+                </ul>
               </div>
+            </section>
 
-              <div className="mt-6 pt-6 border-t border-gray-100">
-                <h4 className="font-semibold text-gray-900 mb-3">
-                  🕐 Thời gian làm việc – Xoay ca mỗi tuần:
-                </h4>
-                <div className="flex flex-wrap gap-2">
-                  <Badge variant="outline" className="text-sm py-1">
-                    Ca 1: 06:00 – 15:00
-                  </Badge>
-                  <Badge variant="outline" className="text-sm py-1">
-                    Ca 2: 13:00 – 22:00
-                  </Badge>
-                  <Badge variant="outline" className="text-sm py-1">
-                    Ca 3: 22:00 – 06:00
-                  </Badge>
+            <section id="yeu-cau">
+              <h2 className="text-2xl font-bold text-gray-900 uppercase mb-4 flex items-center gap-2">
+                <CheckCircle2 className="text-red-600" />
+                Yêu cầu & Nội quy làm việc
+              </h2>
+              <div className="bg-white rounded-xl p-6 md:p-8 shadow-sm border border-gray-100">
+                <div className="space-y-3.5">
+                  {[
+                    "Sức khỏe & Tác phong: Biết đọc, biết viết, không cận thị, chịu được môi trường nóng, đứng làm việc và đáp ứng được việc xoay ca.",
+                    "Trang phục & Kỷ luật: Mặc quần dài khi đi làm; không hút thuốc trong công ty; không mang điện thoại vào khu vực làm việc.",
+                    "Hồ sơ đi làm: Chỉ cần CCCD photo (Chi phí photo sẽ được công ty hoàn trả lại vào kỳ lương).",
+                    "Điều kiện nhận lương: Có tài khoản VNeID mức 2 và SMS chính chủ.",
+                  ].map((item, i) => (
+                    <div key={i} className="flex items-start gap-3">
+                      <div className="w-2 h-2 bg-red-600 rounded-full mt-2 shrink-0"></div>
+                      <span className="text-gray-700">{item}</span>
+                    </div>
+                  ))}
                 </div>
-                <p className="text-sm text-gray-500 mt-2 italic">
-                  * Xoay ca mỗi tuần theo lịch công ty sắp xếp.
-                </p>
+
+                <div className="mt-6 pt-6 border-t border-gray-100">
+                  <h4 className="font-semibold text-gray-900 mb-3">
+                    🕐 Khung ca làm việc tại Tech Link (Xoay ca):
+                  </h4>
+                  <div className="flex flex-wrap gap-2">
+                    <Badge variant="outline" className="text-sm py-1 border-amber-300 bg-amber-50 text-amber-900">
+                      Ca 8h Ngày: 300k
+                    </Badge>
+                    <Badge variant="outline" className="text-sm py-1 border-indigo-300 bg-indigo-50 text-indigo-900">
+                      Ca 8h Đêm: 350k
+                    </Badge>
+                    <Badge variant="outline" className="text-sm py-1 border-orange-300 bg-orange-50 text-orange-900">
+                      Ca 12h Ngày (08:00–20:00): 435k
+                    </Badge>
+                    <Badge variant="outline" className="text-sm py-1 border-red-300 bg-red-50 text-red-900">
+                      Ca 12h Đêm (20:00–08:00): 500k
+                    </Badge>
+                  </div>
+                </div>
+              </div>
+            </section>
+          </div>
+
+          {/* CỘT PHẢI: POSTER CHÍNH THỨC AGARI × TECH-LINK */}
+          <div className="lg:col-span-5">
+            <div className="bg-white rounded-2xl overflow-hidden shadow-md border-2 border-red-100">
+              <img
+                src="/tech-link-poster.jpg"
+                alt="Poster tuyển gấp Nhân viên Sản xuất / Kho Tech Link - KCX Tân Thuận Quận 7"
+                className="w-full h-auto object-cover"
+              />
+              <div className="p-4 bg-red-50 flex flex-col sm:flex-row items-center justify-between gap-3">
+                <span className="text-xs font-bold text-red-900">
+                  📞 Zalo hỗ trợ đi làm ngay: 0586.482.344 (Gặp Tài)
+                </span>
+                <Link href="/ung-tuyen?job=tech-link-quan-7">
+                  <Button size="sm" className="bg-red-700 hover:bg-red-800 text-white font-bold">
+                    Đăng ký ngay →
+                  </Button>
+                </Link>
               </div>
             </div>
-          </section>
+          </div>
         </div>
 
-        {/* MÔ TẢ CÔNG VIỆC SECTION */}
-        <section className="mb-16">
-          <div className="text-center mb-10">
-            <h2 className="text-3xl font-bold text-gray-900 uppercase">
-              🧰 Mô tả công việc
-            </h2>
-            <div className="w-24 h-1 bg-red-600 mx-auto mt-4"></div>
-          </div>
-          <div className="bg-white rounded-xl p-8 shadow-sm border border-gray-100">
-            <ul className="space-y-4">
-              {[
-                "Phân loại, sắp xếp hàng hóa trong kho.",
-                "Tiếp nhận, kiểm tra, đóng gói đơn hàng.",
-                "Kéo hàng, đổ bao, xử lý hàng hóa.",
-                "Lên xuống hàng.",
-                "Được đào tạo vào máy ASM để xử lý hàng hóa, scan hàng theo công việc được phân công.",
-              ].map((item, i) => (
-                <li key={i} className="flex items-start gap-3">
-                  <CheckCircle2
-                    className="text-red-500 shrink-0 mt-0.5"
-                    size={20}
-                  />
-                  <span className="text-gray-700 font-medium">{item}</span>
-                </li>
-              ))}
-            </ul>
-          </div>
-        </section>
-
-        {/* ĐỊA ĐIỂM SECTION */}
+        {/* ĐỊA ĐIỂM SECTION - TECH LINK KCX TÂN THUẬN, QUẬN 7 */}
         <section className="bg-white rounded-2xl overflow-hidden shadow-sm border border-gray-100 mb-16 flex flex-col md:flex-row">
           <div className="p-8 md:p-12 md:w-1/2 flex flex-col justify-center bg-gray-900 text-white">
             <h2 className="text-2xl font-bold uppercase mb-4 flex items-center gap-2">
               <MapPin className="text-red-500" />
-              Địa điểm làm việc
+              Địa điểm làm việc (Tech Link)
             </h2>
-            <p className="text-lg text-gray-300 leading-relaxed">
-              Lô 01, kho số A01,
-              <br />
-              KCN Bình Minh,
-              <br />
-              Ấp Mỹ Lợi, Xã Mỹ Hoà,
-              <br />
-              Tỉnh Vĩnh Long.
+            <p className="text-lg font-bold text-yellow-300 mb-2">
+              Công ty Tech Link (TECH-LINK SILICONES VN)
             </p>
+            <p className="text-base text-gray-300 leading-relaxed">
+              Số 05B-07A Đường Số 15,
+              <br />
+              Khu Chế Xuất Tân Thuận,
+              <br />
+              Quận 7, TP. Hồ Chí Minh.
+            </p>
+            <div className="mt-6 flex flex-wrap gap-3">
+              <a
+                href="https://maps.app.goo.gl/ZnSUhrRePnwTKrEH8?g_st=ic"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-flex items-center gap-2 bg-red-600 hover:bg-red-700 text-white text-sm font-bold px-4 py-2.5 rounded-full transition"
+              >
+                <MapPin size={15} />
+                Mở Google Maps chỉ đường
+              </a>
+              <Link href="/ung-tuyen?job=tech-link-quan-7">
+                <Button className="bg-yellow-400 hover:bg-yellow-500 text-red-950 font-black rounded-full px-5">
+                  Ứng tuyển ngay
+                </Button>
+              </Link>
+            </div>
           </div>
-          <div className="md:w-1/2 h-72 md:h-auto relative min-h-[300px]">
+          <div className="md:w-1/2 h-72 md:h-auto relative min-h-[320px]">
             <iframe
-              src="https://maps.google.com/maps?q=L%C3%B4+01+kho+A01+KCN+B%C3%ACnh+Minh+V%C4%A9nh+Long&output=embed&z=15"
+              src="https://maps.google.com/maps?q=Tech+Link+Silicones+Khu+Che+Xuat+Tan+Thuan+Quan+7&output=embed&z=16"
               width="100%"
               height="100%"
-              style={{ border: 0, minHeight: "300px" }}
+              style={{ border: 0, minHeight: "320px" }}
               allowFullScreen
               loading="lazy"
               referrerPolicy="no-referrer-when-downgrade"
               className="absolute inset-0 w-full h-full"
             />
             <a
-              href="https://maps.app.goo.gl/xsjgyDtWg45hPfzD7"
+              href="https://maps.app.goo.gl/ZnSUhrRePnwTKrEH8?g_st=ic"
               target="_blank"
               rel="noopener noreferrer"
               className="absolute bottom-3 right-3 bg-white text-gray-800 text-xs font-semibold px-3 py-2 rounded-full shadow-md hover:bg-gray-100 transition flex items-center gap-1 z-10"
@@ -738,12 +826,12 @@ export default function HomePage() {
 
       {/* STICKY BOTTOM CTA FOR MOBILE */}
       <div className="fixed bottom-0 left-0 w-full bg-white p-4 shadow-[0_-10px_20px_-10px_rgba(0,0,0,0.1)] md:hidden z-50">
-        <Link href="/ung-tuyen">
+        <Link href="/ung-tuyen?job=tech-link-quan-7">
           <Button
             size="lg"
             className="w-full bg-red-700 hover:bg-red-800 text-white font-bold text-lg h-14 rounded-full"
           >
-            ỨNG TUYỂN NGAY
+            ỨNG TUYỂN TECH LINK NGAY
           </Button>
         </Link>
       </div>

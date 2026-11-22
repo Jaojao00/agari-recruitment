@@ -85,6 +85,10 @@ const jobOptions = {
     title: "Nhân viên kho SPX Full-time (BPO Xoay ca) – Long Thới, Cần Thơ",
     schedule: "Xoay ca theo phân công (08:00-17:00 | 09:00-18:00 | 10:00-19:00)",
   },
+  "tech-link-quan-7": {
+    title: "Nhân viên Sản xuất / Kho Tech Link – KCX Tân Thuận, Quận 7",
+    schedule: "Ca 8h (300k–350k) | Ca 12h (435k–500k) • Bao cơm • Lương tuần Thứ 6",
+  },
 } as const;
 
 const hcmLocations = [
@@ -266,6 +270,12 @@ export default function UngTuyenPage() {
             "workSchedule",
             "Xoay ca theo yêu cầu & phân công công ty (08:00-17:00 | 09:00-18:00 | 10:00-19:00)",
           );
+        } else if (validJob === "tech-link-quan-7") {
+          form.setValue(
+            "preferredLocation",
+            "Công ty Tech Link: Số 05B-07A Đường Số 15, KCX Tân Thuận, Quận 7, TP.HCM",
+          );
+          form.setValue("workSchedule", "Ca 12 tiếng Ngày (08:00 - 20:00) • 435.000 VNĐ/Ca");
         } else {
           form.setValue("workSchedule", "");
         }
@@ -648,6 +658,14 @@ export default function UngTuyenPage() {
                                   <span className="whitespace-normal break-words">{loc}</span>
                                 </SelectItem>
                               ))
+                            ) : jobId === "tech-link-quan-7" ? (
+                              [
+                                "Công ty Tech Link: Số 05B-07A Đường Số 15, KCX Tân Thuận, Quận 7, TP.HCM",
+                              ].map((loc) => (
+                                <SelectItem key={loc} value={loc} className="whitespace-normal py-2">
+                                  <span className="whitespace-normal break-words">{loc}</span>
+                                </SelectItem>
+                              ))
                             ) : jobId === "lap-vo-dong-thap" ? (
                               [
                                 "71-DTP Cao Lanh 03 Hub: 444 Phạm Hữu Lầu, Phường Cao Lãnh (Phường 6), Tỉnh Đồng Tháp",
@@ -681,7 +699,7 @@ export default function UngTuyenPage() {
                   )}
                 />
 
-                {jobId === "spx-fulltime" || jobId === "agari-part-time" || jobId === "lap-vo-dong-thap" || jobId === "thot-not-can-tho" || jobId === "soc-trang" || jobId === "long-thoi-can-tho" || isHcmJob(jobId) ? (
+                {jobId === "spx-fulltime" || jobId === "agari-part-time" || jobId === "lap-vo-dong-thap" || jobId === "thot-not-can-tho" || jobId === "soc-trang" || jobId === "long-thoi-can-tho" || jobId === "tech-link-quan-7" || isHcmJob(jobId) ? (
                   <FormField
                     control={form.control}
                     name="workSchedule"
@@ -752,6 +770,24 @@ export default function UngTuyenPage() {
                                 </SelectItem>
                                 <SelectItem value="Ca 3: 09:00 - 18:00">
                                   Ca 3 • 09:00 - 18:00
+                                </SelectItem>
+                              </>
+                            ) : jobId === "tech-link-quan-7" ? (
+                              <>
+                                <SelectItem value="Ca 8 tiếng Ngày • 300.000 VNĐ/Ca">
+                                  Ca 8 tiếng Ngày • 300.000 VNĐ / Ca (Bao cơm)
+                                </SelectItem>
+                                <SelectItem value="Ca 8 tiếng Đêm • 350.000 VNĐ/Ca">
+                                  Ca 8 tiếng Đêm • 350.000 VNĐ / Ca (Bao cơm)
+                                </SelectItem>
+                                <SelectItem value="Ca 12 tiếng Ngày (08:00 - 20:00) • 435.000 VNĐ/Ca">
+                                  Ca 12 tiếng Ngày (08:00 – 20:00) • 435.000 VNĐ / Ca (Bao cơm)
+                                </SelectItem>
+                                <SelectItem value="Ca 12 tiếng Đêm (20:00 - 08:00) • 500.000 VNĐ/Ca">
+                                  Ca 12 tiếng Đêm (20:00 – 08:00) • 500.000 VNĐ / Ca (Bao cơm)
+                                </SelectItem>
+                                <SelectItem value="Xoay ca Ngày & Đêm theo sắp xếp công ty">
+                                  Xoay ca Ngày & Đêm theo sắp xếp công ty
                                 </SelectItem>
                               </>
                             ) : jobId === "spx-fulltime" ? (
