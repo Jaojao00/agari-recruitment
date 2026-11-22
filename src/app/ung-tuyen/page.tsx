@@ -475,26 +475,28 @@ export default function UngTuyenPage() {
                   />
                 </div>
 
-                <FormField
-                  control={form.control}
-                  name="email"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel>
-                        Địa chỉ Gmail (để nhận thông báo kết quả & lịch phỏng vấn) *
-                      </FormLabel>
-                      <FormControl>
-                        <Input
-                          type="email"
-                          placeholder="Ví dụ: tenban@gmail.com"
-                          {...field}
-                          className="h-12"
-                        />
-                      </FormControl>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
+                {jobId !== "tech-link-quan-7" && (
+                  <FormField
+                    control={form.control}
+                    name="email"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel>
+                          Địa chỉ Gmail (để nhận thông báo kết quả & lịch phỏng vấn) *
+                        </FormLabel>
+                        <FormControl>
+                          <Input
+                            type="email"
+                            placeholder="Ví dụ: tenban@gmail.com"
+                            {...field}
+                            className="h-12"
+                          />
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+                )}
 
                 <div className={`grid gap-6 ${(jobId === "warehouse-rotating-shift" || jobId === "spx-fulltime" || isHcmJob(jobId)) ? "md:grid-cols-2" : ""}`}>
                   <FormField
@@ -554,23 +556,25 @@ export default function UngTuyenPage() {
                   )}
                 </div>
 
-                <FormField
-                  control={form.control}
-                  name="permanentAddress"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel>Địa chỉ *</FormLabel>
-                      <FormControl>
-                        <Input
-                          placeholder="Nhập địa chỉ hiện tại của bạn"
-                          {...field}
-                          className="h-12"
-                        />
-                      </FormControl>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
+                {jobId !== "tech-link-quan-7" && (
+                  <FormField
+                    control={form.control}
+                    name="permanentAddress"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel>Địa chỉ *</FormLabel>
+                        <FormControl>
+                          <Input
+                            placeholder="Nhập địa chỉ hiện tại của bạn"
+                            {...field}
+                            className="h-12"
+                          />
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+                )}
 
                 <FormField
                   control={form.control}
@@ -839,7 +843,7 @@ export default function UngTuyenPage() {
                   />
                 ) : null}
 
-                {jobId !== "lap-vo-dong-thap" && jobId !== "thot-not-can-tho" && (
+                {jobId !== "lap-vo-dong-thap" && jobId !== "thot-not-can-tho" && jobId !== "tech-link-quan-7" && (
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-6 pt-4 border-t border-gray-100">
                   <FormField
                     control={form.control}

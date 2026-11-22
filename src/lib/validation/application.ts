@@ -1,80 +1,111 @@
 import * as z from "zod";
 
-export const applicationSchema = z.object({
-  fullName: z
-    .string()
-    .trim()
-    .min(2, { message: "Họ và tên phải có ít nhất 2 ký tự" }),
-  jobId: z.string().trim().optional(),
-  jobTitle: z.string().trim().optional(),
-  workSchedule: z.string().trim().optional(),
-  opsCode: z.string().trim().refine(val => !val || /^Ops\d+$/i.test(val), {
-    message: "Mã Ops phải bắt đầu bằng chữ 'Ops' viết liền với số (VD: Ops29509)",
-  }).optional(),
-  dateOfBirth: z
-    .string()
-    .trim()
-    .regex(/^\d{4}-\d{2}-\d{2}$/, {
-      message: "Vui lòng chọn ngày sinh hợp lệ",
-    })
-    .refine((val) => {
-      const birthDate = new Date(val);
-      const today = new Date();
-      let age = today.getFullYear() - birthDate.getFullYear();
-      const m = today.getMonth() - birthDate.getMonth();
-      if (m < 0 || (m === 0 && today.getDate() < birthDate.getDate())) {
-        age--;
+export const applicationSchema = z
+  .object({
+    fullName: z
+      .string()
+      .trim()
+      .min(2, { message: "Họ và tên phải có ít nhất 2 ký tự" }),
+    jobId: z.string().trim().optional(),
+    jobTitle: z.string().trim().optional(),
+    workSchedule: z.string().trim().optional(),
+    opsCode: z
+      .string()
+      .trim()
+      .refine((val) => !val || /^Ops\d+$/i.test(val), {
+        message:
+          "Mã Ops phải bắt đầu bằng chữ 'Ops' viết liền với số (VD: Ops29509)",
+      })
+      .optional(),
+    dateOfBirth: z
+      .string()
+      .trim()
+      .regex(/^\d{4}-\d{2}-\d{2}$/, {
+        message: "Vui lòng chọn ngày sinh hợp lệ",
+      })
+      .refine(
+        (val) => {
+          const birthDate = new Date(val);
+          const today = new Date();
+          let age = today.getFullYear() - birthDate.getFullYear();
+          const m = today.getMonth() - birthDate.getMonth();
+          if (m < 0 || (m === 0 && today.getDate() < birthDate.getDate())) {
+            age--;
+          }
+          return age >= 18;
+        },
+        {
+          message: "Xin lỗi, bạn phải đủ 18 tuổi để ứng tuyển.",
+        },
+      ),
+    cccd: z
+      .string()
+      .trim()
+      .regex(/^\d{12}$/, { message: "CCCD phải bao gồm đúng 12 chữ số" }),
+    phone: z
+      .string()
+      .trim()
+      .regex(/(84|0[3|5|7|8|9])+([0-9]{8})\b/, {
+        message: "Số điện thoại không hợp lệ",
+      }),
+    email: z.string().trim().optional(),
+    gender: z.enum(["Nam", "Nữ"] as [string, ...string[]], {
+      message: "Vui lòng chọn giới tính",
+    }),
+    permanentAddress: z.string().trim().optional(),
+    preferredLocation: z
+      .string()
+      .trim()
+      .min(1, { message: "Vui lòng chọn khu vực muốn ứng tuyển" }),
+    education: z
+      .enum(
+        ["9/12", "12/12", "Đã Tốt Nghiệp", "Khác", ""] as [string, ...string[]],
+        { message: "Vui lòng chọn trình độ học vấn" },
+      )
+      .optional(),
+    preferredShift: z
+      .enum(
+        [
+          "Tôi Đã Từng làm việc dưới 1 tháng",
+          "Tôi Đã Từng làm việc từ 1 tháng trở lên",
+          "Tôi chưa từng làm việc liên quan đến vị trí ứng tuyển",
+          "",
+        ] as [string, ...string[]],
+        { message: "Vui lòng chọn kinh nghiệm làm việc" },
+      )
+      .optional(),
+    availableStartDate: z
+      .string()
+      .trim()
+      .regex(/^\d{4}-\d{2}-\d{2}$/, {
+        message: "Vui lòng chọn ngày có thể nhận việc hợp lệ",
+      }),
+    note: z.string().trim().optional(),
+  })
+  .superRefine((data, ctx) => {
+    const isTechLink = data.jobId === "tech-link-quan-7";
+
+    if (!isTechLink) {
+      const email = (data.email || "").trim();
+      if (!email || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+        ctx.addIssue({
+          code: z.ZodIssueCode.custom,
+          path: ["email"],
+          message:
+            "Vui lòng nhập địa chỉ Gmail hợp lệ (VD: tenban@gmail.com)",
+        });
       }
-      return age >= 18;
-    }, {
-      message: "Xin lỗi, bạn phải đủ 18 tuổi để ứng tuyển.",
-    }),
-  cccd: z
-    .string()
-    .trim()
-    .regex(/^\d{12}$/, { message: "CCCD phải bao gồm đúng 12 chữ số" }),
-  phone: z
-    .string()
-    .trim()
-    .regex(/(84|0[3|5|7|8|9])+([0-9]{8})\b/, {
-      message: "Số điện thoại không hợp lệ",
-    }),
-  email: z
-    .string()
-    .trim()
-    .email({ message: "Vui lòng nhập địa chỉ Gmail hợp lệ (VD: tenban@gmail.com)" }),
-  gender: z.enum(["Nam", "Nữ"] as [string, ...string[]], {
-    message: "Vui lòng chọn giới tính",
-  }),
-  permanentAddress: z
-    .string()
-    .trim()
-    .min(5, { message: "Vui lòng nhập địa chỉ cụ thể" }),
-  preferredLocation: z
-    .string()
-    .trim()
-    .min(1, { message: "Vui lòng chọn khu vực muốn ứng tuyển" }),
-  education: z.enum(
-    ["9/12", "12/12", "Đã Tốt Nghiệp", "Khác", ""] as [string, ...string[]],
-    { message: "Vui lòng chọn trình độ học vấn" },
-  ).optional(),
-  preferredShift: z.enum(
-    [
-      "Tôi Đã Từng làm việc dưới 1 tháng",
-      "Tôi Đã Từng làm việc từ 1 tháng trở lên",
-      "Tôi chưa từng làm việc liên quan đến vị trí ứng tuyển",
-      ""
-    ] as [string, ...string[]],
-    { message: "Vui lòng chọn kinh nghiệm làm việc" },
-  ).optional(),
-  availableStartDate: z
-    .string()
-    .trim()
-    .regex(/^\d{4}-\d{2}-\d{2}$/, {
-      message: "Vui lòng chọn ngày có thể nhận việc hợp lệ",
-    }),
-  note: z.string().trim().optional(),
-});
+
+      const address = (data.permanentAddress || "").trim();
+      if (address.length < 5) {
+        ctx.addIssue({
+          code: z.ZodIssueCode.custom,
+          path: ["permanentAddress"],
+          message: "Vui lòng nhập địa chỉ cụ thể",
+        });
+      }
+    }
+  });
 
 export function normalizeApplicationPayload(raw: unknown) {
   const source =
