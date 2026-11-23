@@ -684,6 +684,47 @@ const STATUS_LABELS: Record<string, string> = {
   CANCELLED: "Đã hủy",
 };
 
+function normalizeVi(str: string): string {
+  return String(str || "")
+    .normalize("NFD")
+    .replace(/[\u0300-\u036f]/g, "")
+    .replace(/đ/g, "d")
+    .replace(/Đ/g, "D")
+    .toLowerCase()
+    .trim();
+}
+
+function buildAreaPickerPrompt(candidateName: string, topicHint?: string): string {
+  const intro = topicHint
+    ? `Chào ${candidateName}! Để gửi thông tin chính xác nhất về ${topicHint}, bạn vui lòng chọn hoặc nhắn tên 1 KHU VỰC bạn quan tâm nhé:`
+    : `Chào ${candidateName}! 👋 AGARI hiện đang mở tuyển tại 5 khu vực sau — bạn hãy nhắn tên 1 KHU VỰC bạn muốn ứng tuyển để trợ lý gửi thông tin chi tiết & chính xác nhất nhé:`;
+
+  return (
+    `${intro}\n\n` +
+    `1️⃣ Tech Link Q.7 (KCX Tân Thuận, TP.HCM)\n` +
+    `2️⃣ TP.HCM SPX (Q. Bình Tân, Q. Tân Phú & 19 Hub)\n` +
+    `3️⃣ Sóc Trăng (S-BPO Kho SPX)\n` +
+    `4️⃣ Cần Thơ (Long Thới / P. Thới Long)\n` +
+    `5️⃣ Vĩnh Long (SW SOC – KCN Bình Minh)\n\n` +
+    `👉 Bạn chỉ cần bấm nút khu vực bên dưới hoặc nhắn trực tiếp tên khu vực (VD: "Tech Link Q.7", "TP.HCM SPX", "Sóc Trăng", "Cần Thơ", "Vĩnh Long") kèm Giới tính & Năm sinh để HR hỗ trợ ngay!`
+  );
+}
+
+function buildAgeFeedback(normText: string, maxAge = 35): string {
+  const yearMatch = normText.match(/\b(19[5-9]\d|20[0-2]\d)\b/);
+  if (!yearMatch) return "";
+  const birthYear = parseInt(yearMatch[1], 10);
+  const currentYear = new Date().getFullYear();
+  const age = currentYear - birthYear;
+  if (age < 18) {
+    return `\n⚠️ Lưu ý độ tuổi: Bạn sinh năm ${birthYear} (${age} tuổi) — hiện hệ thống chỉ tiếp nhận ứng viên từ đủ 18 tuổi trở lên ạ.\n`;
+  }
+  if (age > maxAge) {
+    return `\n⚠️ Lưu ý độ tuổi: Bạn sinh năm ${birthYear} (${age} tuổi) — vị trí này ưu tiên độ tuổi từ 18 – ${maxAge} tuổi. HR sẽ kiểm tra thêm và phản hồi trực tiếp cho bạn nhé!\n`;
+  }
+  return `\n✅ Độ tuổi của bạn (sinh năm ${birthYear} – ${age} tuổi) hoàn toàn phù hợp yêu cầu tuyển dụng!\n`;
+}
+
 export async function generateSmartAutoReply(params: {
   roomId: string;
   candidateName: string;
@@ -691,14 +732,14 @@ export async function generateSmartAutoReply(params: {
   userText: string;
   isFirstCandidateMessage: boolean;
 }): Promise<string | null> {
-  const text = params.userText.toLowerCase();
+  const norm = normalizeVi(params.userText);
 
-  // Check if asking about application status
+  // 0. Kiểm tra trạng thái hồ sơ đã nộp
   if (
-    text.includes("trạng thái") ||
-    text.includes("kiểm tra hồ sơ") ||
-    text.includes("kết quả") ||
-    text.includes("mã hồ sơ")
+    norm.includes("trang thai") ||
+    norm.includes("kiem tra ho so") ||
+    norm.includes("ket qua") ||
+    norm.includes("ma ho so")
   ) {
     const { applications } = await lookupCandidateProfileAndApplications({
       phone: params.candidatePhone,
@@ -714,157 +755,213 @@ export async function generateSmartAutoReply(params: {
     }
   }
 
-  // 1. Phản hồi hoặc hỗ trợ lọc thông tin theo tiêu chí tuyển dụng (Khu vực, Giới tính, Năm sinh / Tuổi)
-  const asksLocation =
-    text.includes("khu vực") ||
-    text.includes("ở đâu") ||
-    text.includes("kho nào") ||
-    text.includes("hub nào") ||
-    text.includes("tỉnh nào");
-  const asksGender =
-    text.includes("nam hay nữ") ||
-    text.includes("tuyển nữ") ||
-    text.includes("tuyển nam") ||
-    text.includes("nữ làm được") ||
-    text.includes("giới tính");
-  const asksAge =
-    text.includes("bao nhiêu tuổi") ||
-    text.includes("sinh năm") ||
-    text.includes("độ tuổi") ||
-    text.includes("tuổi tác") ||
-    text.includes("giới hạn tuổi");
+  // 1. QUÉT TỪ KHÓA NHẬN DIỆN CHÍNH XÁC KHU VỰC ỨNG VIÊN CHỌN (ưu tiên cao nhất!)
+  const isTechLink =
+    norm.includes("tech link") ||
+    norm.includes("techlink") ||
+    norm.includes("tan thuan") ||
+    /\bq\.?\s*7\b/.test(norm) ||
+    norm.includes("quan 7") ||
+    norm.includes("linh kien");
 
-  if (asksLocation || asksGender || asksAge) {
-    let specificAnswer = "";
-    if (asksGender) {
-      specificAnswer += `\n⚠️ VỀ GIỚI TÍNH: Đối với vị trí tại Cao Lãnh 03 (Đồng Tháp), kho ƯU TIÊN TUYỂN NAM và TẠM THỜI NGƯNG NHẬN NỮ trong đợt này. (Tại khu vực TP.HCM vẫn tiếp nhận cả Nam & Nữ).\n`;
-    }
-    if (asksAge) {
-      specificAnswer += `\n⚠️ VỀ ĐỘ TUỔI / NĂM SINH: Kho tuyển ứng viên DƯỚI 38 TUỔI (từ 18 đến dưới 38 tuổi, sức khỏe tốt, có CCCD gốc và VNeID mức 2).\n`;
-    }
-    if (asksLocation) {
-      specificAnswer += `\n📍 CÁC KHU VỰC ĐANG MỞ TUYỂN CHÍNH:\n` +
-        `• 🔥 DỰ ÁN MỚI – TECH LINK (KCX Tân Thuận, Quận 7, TP.HCM): 300k–500k/ca, bao cơm, lương tuần Thứ 6, nghỉ 1h30p/ca.\n` +
-        `• Sóc Trăng (S-BPO): 06 Nam Kỳ Khởi Nghĩa, P. Sóc Trăng - Định mức 8.3tr/tháng (Dự kiến 8.3M - 10.5M, Ca 08:00-17:00 | 10:00-19:00).\n` +
-        `• Cần Thơ (Long Thới / P. Thới Long): Full-time BPO Xoay ca định mức 9.28tr/tháng (Ca 08:00-17:00 | 09:00-18:00 | 10:00-19:00).\n` +
-        `• TP.HCM (SPX): Kho SPX Quận Bình Tân & Quận Tân Phú (+19 Hub TP.HCM) - Thu nhập 10.5M - 12.5M/tháng.\n` +
-        `• Vĩnh Long: SW SOC Bình Minh (Full-time BPO Xoay ca định mức 9.28tr/tháng & Part-time).\n`;
-    }
+  const isSocTrang =
+    norm.includes("soc trang") || norm.includes("nam ky khoi nghia");
 
+  const isThotNot = norm.includes("thot not");
+  const isCanTho =
+    norm.includes("can tho") ||
+    norm.includes("long thoi") ||
+    norm.includes("thoi long") ||
+    norm.includes("ql91") ||
+    norm.includes("quoc lo 91");
+
+  const isVinhLong =
+    norm.includes("vinh long") ||
+    norm.includes("binh minh") ||
+    norm.includes("sw soc") ||
+    norm.includes("my hoa");
+
+  const isHcmSpx =
+    !isTechLink &&
+    (norm.includes("tp.hcm") ||
+      norm.includes("tphcm") ||
+      norm.includes("tp hcm") ||
+      norm.includes("sai gon") ||
+      norm.includes("ho chi minh") ||
+      norm.includes("binh tan") ||
+      norm.includes("tan phu") ||
+      /\bhcm\b/.test(norm));
+
+  const isDongThap =
+    norm.includes("dong thap") ||
+    norm.includes("cao lanh") ||
+    norm.includes("lap vo") ||
+    norm.includes("sa dec");
+
+  // 1a. TECH LINK Q.7
+  if (isTechLink) {
+    const ageNote = buildAgeFeedback(norm, 40);
     return (
-      `Xin chào ${params.candidateName}! Để hỗ trợ xếp lịch phỏng vấn và nhận việc nhanh nhất, bạn vui lòng cho HR biết:\n` +
-      `1️⃣ Bạn muốn ứng tuyển ở KHU VỰC nào? (Tech Link Q.7 / TP.HCM SPX / Sóc Trăng / Cần Thơ / Vĩnh Long)?\n` +
-      `2️⃣ Bạn là NAM hay NỮ?\n` +
-      `3️⃣ Bạn SINH NĂM MẤY?\n` +
-      specificAnswer +
-      `\nBạn hãy gửi 3 thông tin trên hoặc liên hệ Zalo: 0586.482.344 (Gặp Tài) để nhận lịch đi làm ngay nhé!`
+      `🔥 THÔNG TIN CHI TIẾT DỰ ÁN TECH LINK – KCX TÂN THUẬN, QUẬN 7 (ĐANG TUYỂN GẤP):\n` +
+      ageNote +
+      `\n💰 MỨC LƯƠNG THEO CA (Nhận lương tuần uy tín vào Thứ 6):\n` +
+      `• Ca 8 tiếng Ngày: 300.000 VNĐ / Ca\n` +
+      `• Ca 8 tiếng Đêm: 350.000 VNĐ / Ca\n` +
+      `• Ca 12 tiếng Ngày (08:00 – 20:00): 435.000 VNĐ / Ca\n` +
+      `• Ca 12 tiếng Đêm (20:00 – 08:00): 500.000 VNĐ / Ca\n` +
+      `🎁 Đãi ngộ: BAO CƠM theo ca • Nghỉ 1 tiếng 30 phút/ca (chia 2 lần).\n\n` +
+      `📦 Công việc: Kho linh kiện ô tô, nhựa gia dụng (đóng gói, đổ khuôn, kiểm tra sản phẩm — hướng dẫn từ A-Z).\n` +
+      `🪪 Yêu cầu & Hồ sơ: Biết đọc viết, không cận thị, mặc quần dài, không mang điện thoại vào xưởng. Chỉ cần CCCD photo (hoàn tiền photo vào kỳ lương) + VNeID mức 2 & SMS chính chủ.\n\n` +
+      `📍 Địa điểm: Công ty Tech Link – Số 05B-07A Đường Số 15, KCX Tân Thuận, Quận 7, TP.HCM.\n` +
+      `👉 Nộp hồ sơ nhanh: https://agari-recruitment.vercel.app/ung-tuyen?job=tech-link-quan-7\n` +
+      `📞 Zalo hỗ trợ đi làm ngay: 0586.482.344 (Gặp Tài)`
     );
   }
 
-  // Check if asking about recruitment status or pause/closed locations
-  if (
-    text.includes("còn tuyển") ||
-    text.includes("hết tuyển") ||
-    text.includes("ngưng tuyển") ||
-    text.includes("đủ người") ||
-    text.includes("tech link") ||
-    text.includes("tân thuận") ||
-    text.includes("quận 7") ||
-    text.includes("sóc trăng") ||
-    text.includes("long thới") ||
-    text.includes("thới long") ||
-    text.includes("vĩnh long còn tuyển") ||
-    text.includes("đồng tháp còn tuyển") ||
-    text.includes("cao lãnh còn tuyển") ||
-    text.includes("cần thơ còn tuyển") ||
-    text.includes("thốt nốt còn tuyển") ||
-    text.includes("bpo cố định còn tuyển")
-  ) {
+  // 1b. SÓC TRĂNG (S-BPO)
+  if (isSocTrang) {
+    const ageNote = buildAgeFeedback(norm, 35);
     return (
-      `📢 CẬP NHẬT TÌNH HÌNH TUYỂN DỤNG AGARI MỚI NHẤT:\n` +
-      `1️⃣ 🔥 DỰ ÁN MỚI – TECH LINK (KCX TÂN THUẬN, QUẬN 7, TP.HCM): Tuyển gấp Nhân viên Sản xuất / Kho linh kiện ô tô, nhựa gia dụng. Ca 8h Ngày 300k | Ca 8h Đêm 350k | Ca 12h Ngày 435k | Ca 12h Đêm 500k. Bao cơm theo ca, nghỉ 1h30p/ca, nhận lương tuần vào Thứ 6!\n` +
-      `2️⃣ Khu vực SÓC TRĂNG (S-BPO): 06 Nam Kỳ Khởi Nghĩa, P. Sóc Trăng. Định mức 8.300.000đ/tháng (Lương CB 5.31tr + Nhà ở/Xăng 1.31tr + Cơm 780k + KPI 900k), đóng đủ BHXH.\n` +
-      `3️⃣ Khu vực CẦN THƠ – LONG THỚI (BPO Xoay ca): Định mức 9.280.000đ/tháng, đóng đủ BHXH & Lương tháng 13.\n` +
-      `4️⃣ Khu vực TP.HCM (SPX): Quận Bình Tân & Quận Tân Phú + 19 Hub TP.HCM (10.5M - 12.5M/tháng).\n` +
-      `5️⃣ Khu vực Vĩnh Long (SW SOC Bình Minh): Full-time BPO Xoay ca (9.28tr/tháng) & Part-time (125k - 300k/ca).\n\n` +
-      `👉 Để đăng ký đi làm ngay, bạn vui lòng nhắn: Khu vực ứng tuyển, Giới tính (Nam/Nữ) và Năm sinh để HR hỗ trợ nhé!`
+      `🔥 THÔNG TIN CHI TIẾT KHO SPX-EXPRESS (S-BPO) – SÓC TRĂNG (ĐANG TUYỂN GẤP):\n` +
+      ageNote +
+      `\n💰 THU NHẬP & PHỤ CẤP (Định mức chưa tăng ca: 8.300.000đ/tháng | Thực tế dự kiến 8.3M – 10.5M/tháng):\n` +
+      `• Lương cơ bản: 5.310.000đ (Ký HĐLĐ chính thức, đóng BHXH đầy đủ)\n` +
+      `• Phụ cấp nhà ở & xăng xe: 1.310.000đ\n` +
+      `• Phụ cấp tiền cơm: 780.000đ (theo ngày công thực tế)\n` +
+      `• Phụ cấp KPI hiệu suất: 900.000đ\n\n` +
+      `⏰ Thời gian làm việc: 08:00 – 17:00 | 10:00 – 19:00.\n` +
+      `📍 Địa chỉ phỏng vấn & làm việc: 06 Nam Kỳ Khởi Nghĩa, Phường Sóc Trăng, Thành phố Cần Thơ, Sóc Trăng.\n` +
+      `🪪 Hồ sơ phỏng vấn: Mang theo CCCD gắn chip bản gốc.\n\n` +
+      `👉 Nộp hồ sơ nhanh: https://agari-recruitment.vercel.app/ung-tuyen?job=soc-trang\n` +
+      `📞 Zalo hỗ trợ nhận lịch PV: 0586.482.344 (Gặp Tài)`
     );
   }
 
-  // Check if asking about salary / income / benefits
-  if (
-    text.includes("mức lương") ||
-    text.includes("thu nhập") ||
-    text.includes("phụ cấp") ||
-    text.includes("lương bao nhiêu") ||
-    text.includes("lương tuần")
-  ) {
+  // 1c. CẦN THƠ (LONG THỚI / THỐT NỐT)
+  if (isCanTho || isThotNot) {
+    const ageNote = buildAgeFeedback(norm, 35);
+    const thotNotPrefix = isThotNot
+      ? `ℹ️ Lưu ý: Kho Thốt Nốt hiện đã tuyển đủ chỉ tiêu đợt này. Tuy nhiên AGARI đang mở tuyển tại kho **Long Thới (P. Thới Long), Cần Thơ** ngay gần đó:\n`
+      : `🔥 THÔNG TIN CHI TIẾT KHO SPX FULL-TIME (BPO XOAY CA) – LONG THỚI, CẦN THƠ:\n`;
     return (
-      `💰 Thông tin Mức lương & Đãi ngộ tại AGARI:\n` +
-      `1️⃣ 🔥 DỰ ÁN MỚI TECH LINK (KCX Tân Thuận, Q.7): Ca 8h Ngày 300k | Ca 8h Đêm 350k | Ca 12h Ngày (08:00-20:00) 435k | Ca 12h Đêm (20:00-08:00) 500k. Bao cơm theo ca, nhận lương tuần Thứ 6!\n` +
-      `2️⃣ Khu vực Sóc Trăng (S-BPO): Định mức 8.300.000đ/tháng (Lương CB 5.31tr + Nhà ở/Xăng 1.31tr + Cơm 780k + KPI 900k, chưa tính tăng ca) | TP.HCM (SPX Chính thức): 10.500.000 - 12.500.000đ/tháng (Định mức 10.4tr, đóng đủ BHXH).\n` +
-      `3️⃣ Khu vực Cần Thơ (Long Thới) & Vĩnh Long (SW SOC): Full-time BPO Xoay ca định mức 9.280.000đ/tháng (Lương CB 6tr + Ăn 780k + KPI đến 2.5tr) | Part-time Vĩnh Long: 125k - 300k/ca.\n\n` +
-      `Bạn quan tâm ứng tuyển khu vực nào để HR gửi lịch nhận việc ngay ạ?`
+      thotNotPrefix +
+      ageNote +
+      `\n💰 TỔNG ĐỊNH MỨC THU NHẬP: 9.280.000đ / THÁNG (chưa tính tăng ca & phụ cấp đêm):\n` +
+      `• Lương cơ bản: 6.000.000đ/tháng (Ký HĐLĐ, đóng đủ BHXH, BHYT + Lương tháng 13)\n` +
+      `• Hỗ trợ tiền ăn: 780.000đ/tháng\n` +
+      `• Thưởng hiệu suất (KPI): 0 – 2.500.000đ/tháng\n\n` +
+      `⏰ Thời gian làm việc: Xoay ca theo phân công công ty (Ca 1: 10:00-19:00 | Ca 2: 08:00-17:00 | Ca 3: 09:00-18:00) • 26 công/tháng, nghỉ 4 ngày.\n` +
+      `📍 Địa điểm: Quốc Lộ 91, Khu Vực Tân Lợi 1, Phường Thới Long, Thành phố Cần Thơ.\n` +
+      `🪪 Yêu cầu: Nam/Nữ 18 – 35 tuổi, bắt buộc có CCCD gốc & VNeID Mức 2 (không yêu cầu kinh nghiệm).\n\n` +
+      `👉 Nộp hồ sơ nhanh: https://agari-recruitment.vercel.app/ung-tuyen?job=long-thoi-can-tho\n` +
+      `📞 Zalo xếp lịch đi làm ngay: 0586.482.344 (Gặp Tài)`
     );
   }
 
-  // Check if asking about shifts / working hours
-  if (
-    text.includes("ca làm") ||
-    text.includes("thời gian") ||
-    text.includes("xoay ca") ||
-    text.includes("mấy giờ")
-  ) {
+  // 1d. VĨNH LONG (SW SOC BÌNH MINH)
+  if (isVinhLong) {
+    const ageNote = buildAgeFeedback(norm, 35);
     return (
-      `⏰ Thời gian các ca làm việc tại AGARI:\n` +
-      `• 🔥 Tech Link (KCX Tân Thuận, Q.7): Ca 8h Ngày (300k), Ca 8h Đêm (350k), Ca 12h Ngày 08:00–20:00 (435k), Ca 12h Đêm 20:00–08:00 (500k) — nghỉ 1h30p/ca, bao cơm.\n` +
-      `• Sóc Trăng (S-BPO): 08:00 - 17:00 | 10:00 - 19:00.\n` +
-      `• Cần Thơ – Long Thới (BPO Xoay ca): 08:00-17:00 | 09:00-18:00 | 10:00-19:00.\n` +
-      `• TP.HCM (SPX): Xoay 5 ca (05:00-14:00 | 11:00-20:00 | 12:00-21:00 | 14:00-23:00 | 15:00-24:00).\n` +
-      `• Vĩnh Long (SW SOC): Full-time xoay ca (06:00-15:00 / 13:00-22:00 / 22:00-06:00) | Part-time 4h-5h.\n\n` +
-      `Nhà tuyển dụng AGARI đã nhận được tin nhắn và sẽ hỗ trợ xếp lịch ca cho bạn ngay!`
+      `🔥 THÔNG TIN CHI TIẾT KHO SPX EXPRESS – SW SOC KCN BÌNH MINH, VĨNH LONG:\n` +
+      ageNote +
+      `\n1️⃣ FULL-TIME · BPO XOAY CA (Định mức 9.280.000đ/tháng – chưa tính tăng ca & PC đêm):\n` +
+      `• Lương cơ bản: 6.000.000đ | Hỗ trợ ăn: 780.000đ | Thưởng KPI: 0 – 2.500.000đ\n` +
+      `• Phụ cấp đêm 30% (8.654đ/h), tăng ca 150% – 390% (43.269đ – 112.500đ/h), đóng đủ BHXH + Lương tháng 13.\n` +
+      `• Xoay ca theo yêu cầu công ty (Ca 1: 06:00-15:00 | Ca 2: 13:00-22:00 | Ca 3: 22:00-06:00) • 26 công/tháng.\n` +
+      `👉 Nộp Full-time: https://agari-recruitment.vercel.app/ung-tuyen?job=spx-fulltime\n\n` +
+      `2️⃣ PART-TIME / THỜI VỤ LINH HOẠT (125k – 300k/ca):\n` +
+      `• Ca 1 (06:00-15:00): 250k | Ca 2 (13:00-22:00): 250k | Ca 3 (22:00-06:00): 300k | Ca 4 (18:00-22:00): 125k | Ca 5 (06:00-11:00): 155k.\n` +
+      `👉 Nộp Part-time: https://agari-recruitment.vercel.app/ung-tuyen?job=agari-part-time\n\n` +
+      `📍 Địa chỉ: Lô 01, kho số A01, KCN Bình Minh, Ấp Mỹ Lợi, Xã Mỹ Hòa, Vĩnh Long.\n` +
+      `🪪 Yêu cầu: Nam/Nữ 18 – 35 tuổi, có CCCD gốc & VNeID Mức 2.\n` +
+      `📞 Zalo hỗ trợ: 0586.482.344 (Gặp Tài)`
     );
   }
 
-  // Check if asking about interview location / address
-  if (
-    text.includes("địa chỉ") ||
-    text.includes("ở đâu") ||
-    text.includes("địa điểm phỏng vấn") ||
-    text.includes("kho nào")
-  ) {
+  // 1e. TP.HCM SPX (S-BPO)
+  if (isHcmSpx) {
+    const ageNote = buildAgeFeedback(norm, 35);
     return (
-      `📍 Địa điểm Làm việc & Tiếp nhận hồ sơ chính của AGARI:\n` +
-      `• 🔥 Tech Link (Dự án mới Q.7): Số 05B-07A Đường Số 15, KCX Tân Thuận, Quận 7, TP.HCM.\n` +
-      `• Sóc Trăng (S-BPO): 06 Nam Kỳ Khởi Nghĩa, Phường Sóc Trăng, TP. Cần Thơ, Sóc Trăng.\n` +
-      `• Cần Thơ – Long Thới: Quốc Lộ 91, Khu Vực Tân Lợi 1, Phường Thới Long, TP. Cần Thơ.\n` +
-      `• TP.HCM (SPX): 754/8 & 549/32 Tân Kỳ Tân Quý, P. Bình Hưng Hòa B, Q. Bình Tân (+19 Hub).\n` +
-      `• Vĩnh Long: SW SOC - Lô 01, kho số A01, KCN Bình Minh, Xã Mỹ Hòa, Vĩnh Long.\n\n` +
-      `Bạn muốn đăng ký làm tại Kho/Dự án nào, vui lòng cho HR biết: Khu vực mong muốn, Giới tính (Nam/Nữ) và Năm sinh nhé!`
+      `🔥 THÔNG TIN CHI TIẾT NHÂN VIÊN CHÍNH THỨC (S-BPO) KHO SPX – TP.HCM:\n` +
+      ageNote +
+      `\n💰 THU NHẬP DỰ KIẾN: 10.500.000 – 12.500.000đ / THÁNG (Định mức chưa tăng ca: 10.400.000đ):\n` +
+      `• Lương cơ bản: 5.310.000đ (Ký HĐLĐ chính thức, đóng BHXH đầy đủ)\n` +
+      `• Phụ cấp nhà ở & xăng xe: 1.310.000đ | Phụ cấp cơm: 780.000đ\n` +
+      `• Phụ cấp KPI hiệu suất: 2.500.000đ | Hỗ trợ 2 tháng thử việc: 500.000đ/tháng\n\n` +
+      `⏰ Chế độ xoay 5 ca (tối thiểu 23 công/tháng, nghỉ xoay tuần): Ca 1 (05:00-14:00) | Ca 2 & 3 (11:00-20:00 & 12:00-21:00) | Ca 4 & 5 (14:00-23:00 & 15:00-24:00).\n` +
+      `📍 Địa chỉ phỏng vấn chính:\n` +
+      `• Q. Bình Tân: 754/8 Tân Kỳ Tân Quý, P. Bình Hưng Hòa B, Q. Bình Tân\n` +
+      `• Q. Tân Phú: 549/32 Tân Kỳ Tân Quý, P. Bình Hưng Hòa B, Q. Bình Tân (+ 19 Hub SPX khắp TP.HCM)\n` +
+      `🪪 Hồ sơ phỏng vấn: Mang theo CCCD gắn chip bản gốc.\n\n` +
+      `👉 Xem 19 Hub & Nộp hồ sơ: https://agari-recruitment.vercel.app/viec-lam/tp-ho-chi-minh\n` +
+      `📞 Zalo hỗ trợ: 0586.482.344 (Gặp Tài)`
     );
   }
 
-  // Check if asking about documents / CCCD
+  // 1f. ĐỒNG THÁP (ĐÃ TUYỂN ĐỦ)
+  if (isDongThap) {
+    return (
+      `✅ Khu vực Đồng Tháp (Cao Lãnh / Lấp Vò / Sa Đéc) hiện đã tuyển đủ số lượng chỉ tiêu cho đợt này ạ.\n\n` +
+      buildAreaPickerPrompt(params.candidateName, "các khu vực đang mở tuyển gần bạn")
+    );
+  }
+
+  // 2. Hỏi chung về giấy tờ / CCCD
   if (
-    text.includes("giấy tờ") ||
-    text.includes("hồ sơ cần") ||
-    text.includes("cccd") ||
-    text.includes("mang theo gì")
+    norm.includes("giay to") ||
+    norm.includes("ho so can") ||
+    norm.includes("cccd") ||
+    norm.includes("mang theo gi")
   ) {
     return (
       `🪪 Hồ sơ khi đi phỏng vấn & nhận việc rất đơn giản:\n` +
-      `• Chỉ cần mang theo CCCD gắn chip bản gốc (và điện thoại có cài VNeID Mức 2).\n` +
-      `• Trang phục lịch sự, mang giày hoặc dép có quai hậu khi vào kho.\n` +
-      `• Các giấy tờ bổ sung sẽ được bộ phận Nhân sự AGARI hướng dẫn sau khi trúng tuyển!`
+      `• Kho SPX (TP.HCM, Sóc Trăng, Cần Thơ, Vĩnh Long): Mang theo CCCD gắn chip bản gốc và cài VNeID Mức 2.\n` +
+      `• Dự án Tech Link (KCX Tân Thuận, Q.7): Chỉ cần CCCD photo (hoàn tiền photo vào kỳ lương) + VNeID Mức 2 & SMS chính chủ.\n\n` +
+      `👉 Bạn muốn ứng tuyển khu vực nào (Tech Link Q.7 / TP.HCM SPX / Sóc Trăng / Cần Thơ / Vĩnh Long)? Nhắn tên khu vực để trợ lý gửi chi tiết nhé!`
     );
   }
 
-  // First message greeting if none of the specific keywords matched
+  // 3. Hỏi chung về mức lương / ca làm / địa chỉ / khu vực / còn tuyển nhưng CHƯA nêu tên khu vực cụ thể
+  if (
+    norm.includes("khu vuc") ||
+    norm.includes("dia chi") ||
+    norm.includes("o dau") ||
+    norm.includes("dia diem") ||
+    norm.includes("kho nao") ||
+    norm.includes("hub nao") ||
+    norm.includes("tinh nao") ||
+    norm.includes("con tuyen") ||
+    norm.includes("het tuyen") ||
+    norm.includes("ngung tuyen") ||
+    norm.includes("muc luong") ||
+    norm.includes("thu nhap") ||
+    norm.includes("phu cap") ||
+    norm.includes("luong bao nhieu") ||
+    norm.includes("luong tuan") ||
+    norm.includes("ca lam") ||
+    norm.includes("thoi gian") ||
+    norm.includes("xoay ca") ||
+    norm.includes("may gio") ||
+    norm.includes("nam hay nu") ||
+    norm.includes("gioi tinh") ||
+    norm.includes("sinh nam") ||
+    norm.includes("bao nhieu tuoi") ||
+    norm.includes("do tuoi")
+  ) {
+    let topicHint = "vị trí tuyển dụng";
+    if (norm.includes("dia chi") || norm.includes("dia diem") || norm.includes("o dau")) {
+      topicHint = "địa chỉ phỏng vấn & làm việc";
+    } else if (norm.includes("luong") || norm.includes("thu nhap") || norm.includes("phu cap")) {
+      topicHint = "mức lương & phụ cấp";
+    } else if (norm.includes("ca lam") || norm.includes("thoi gian") || norm.includes("xoay ca")) {
+      topicHint = "ca làm việc";
+    }
+    return buildAreaPickerPrompt(params.candidateName, topicHint);
+  }
+
+  // 4. Tin nhắn chào đầu tiên nếu chưa khớp từ khóa nào
   if (params.isFirstCandidateMessage) {
-    return (
-      `Xin chào ${params.candidateName}! 👋 Bộ phận Tuyển dụng AGARI đã nhận được tin nhắn của bạn.\n` +
-      `Trong lúc chờ HR phản hồi trực tiếp, bạn có thể bấm các nút câu hỏi nhanh bên dưới (Lương, Ca làm, Địa điểm, Kiểm tra hồ sơ) hoặc để lại khu vực muốn ứng tuyển nhé!`
-    );
+    return buildAreaPickerPrompt(params.candidateName);
   }
 
   return null;

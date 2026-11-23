@@ -59,10 +59,11 @@ interface ChatMessageItem {
 }
 
 const QUICK_QUESTIONS = [
-  { label: "💰 Mức lương & Phụ cấp", text: "Cho mình hỏi mức lương và phụ cấp các khu vực hiện tại?" },
-  { label: "⏰ Ca làm việc", text: "Cho mình hỏi thời gian các ca làm việc tại kho SPX Express?" },
-  { label: "📍 Địa chỉ phỏng vấn", text: "Cho mình xin địa chỉ phỏng vấn và làm việc tại các khu vực?" },
-  { label: "🪪 Giấy tờ cần mang", text: "Đi phỏng vấn cần mang theo giấy tờ hồ sơ gì ạ?" },
+  { label: "🔥 Tech Link Q.7", text: "Mình muốn ứng tuyển khu vực Tech Link Q.7" },
+  { label: "📍 TP.HCM SPX", text: "Mình muốn ứng tuyển khu vực TP.HCM SPX" },
+  { label: "📍 Sóc Trăng", text: "Mình muốn ứng tuyển khu vực Sóc Trăng" },
+  { label: "📍 Cần Thơ", text: "Mình muốn ứng tuyển khu vực Cần Thơ" },
+  { label: "📍 Vĩnh Long", text: "Mình muốn ứng tuyển khu vực Vĩnh Long" },
   { label: "📋 Kiểm tra hồ sơ", text: "Kiểm tra trạng thái hồ sơ ứng tuyển của tôi" },
 ];
 
