@@ -453,7 +453,7 @@ export default function HomePage() {
                     </div>
                     <div className="flex flex-wrap gap-2 text-sm">
                       <span className="rounded-md bg-red-50 px-3 py-1.5 font-semibold text-red-700">
-                        10.5M - 12.5M VNĐ/tháng
+                        8.3M - 10.5M VNĐ/tháng
                       </span>
                       <span className="rounded-md bg-gray-100 px-3 py-1.5 text-gray-700">
                         08:00 - 17:00 | 10:00 - 19:00
@@ -462,7 +462,7 @@ export default function HomePage() {
                         Đóng BHXH đầy đủ
                       </span>
                       <span className="rounded-md bg-yellow-100 px-3 py-1.5 font-semibold text-yellow-800">
-                        Định mức 10.4M/tháng
+                        Định mức 8.3M/tháng
                       </span>
                     </div>
                   </div>

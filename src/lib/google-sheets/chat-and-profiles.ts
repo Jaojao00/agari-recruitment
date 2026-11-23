@@ -745,7 +745,7 @@ export async function generateSmartAutoReply(params: {
     if (asksLocation) {
       specificAnswer += `\n📍 CÁC KHU VỰC ĐANG MỞ TUYỂN CHÍNH:\n` +
         `• 🔥 DỰ ÁN MỚI – TECH LINK (KCX Tân Thuận, Quận 7, TP.HCM): 300k–500k/ca, bao cơm, lương tuần Thứ 6, nghỉ 1h30p/ca.\n` +
-        `• Sóc Trăng (S-BPO): 06 Nam Kỳ Khởi Nghĩa, P. Sóc Trăng - Thu nhập 10.5M - 12.5M/tháng (Ca 08:00-17:00 | 10:00-19:00).\n` +
+        `• Sóc Trăng (S-BPO): 06 Nam Kỳ Khởi Nghĩa, P. Sóc Trăng - Định mức 8.3tr/tháng (Dự kiến 8.3M - 10.5M, Ca 08:00-17:00 | 10:00-19:00).\n` +
         `• Cần Thơ (Long Thới / P. Thới Long): Full-time BPO Xoay ca định mức 9.28tr/tháng (Ca 08:00-17:00 | 09:00-18:00 | 10:00-19:00).\n` +
         `• TP.HCM (SPX): Kho SPX Quận Bình Tân & Quận Tân Phú (+19 Hub TP.HCM) - Thu nhập 10.5M - 12.5M/tháng.\n` +
         `• Vĩnh Long: SW SOC Bình Minh (Full-time BPO Xoay ca định mức 9.28tr/tháng & Part-time).\n`;
@@ -783,7 +783,7 @@ export async function generateSmartAutoReply(params: {
     return (
       `📢 CẬP NHẬT TÌNH HÌNH TUYỂN DỤNG AGARI MỚI NHẤT:\n` +
       `1️⃣ 🔥 DỰ ÁN MỚI – TECH LINK (KCX TÂN THUẬN, QUẬN 7, TP.HCM): Tuyển gấp Nhân viên Sản xuất / Kho linh kiện ô tô, nhựa gia dụng. Ca 8h Ngày 300k | Ca 8h Đêm 350k | Ca 12h Ngày 435k | Ca 12h Đêm 500k. Bao cơm theo ca, nghỉ 1h30p/ca, nhận lương tuần vào Thứ 6!\n` +
-      `2️⃣ Khu vực SÓC TRĂNG (S-BPO): 06 Nam Kỳ Khởi Nghĩa, P. Sóc Trăng. Thu nhập 10.5M - 12.5M/tháng, đóng đủ BHXH.\n` +
+      `2️⃣ Khu vực SÓC TRĂNG (S-BPO): 06 Nam Kỳ Khởi Nghĩa, P. Sóc Trăng. Định mức 8.300.000đ/tháng (Lương CB 5.31tr + Nhà ở/Xăng 1.31tr + Cơm 780k + KPI 900k), đóng đủ BHXH.\n` +
       `3️⃣ Khu vực CẦN THƠ – LONG THỚI (BPO Xoay ca): Định mức 9.280.000đ/tháng, đóng đủ BHXH & Lương tháng 13.\n` +
       `4️⃣ Khu vực TP.HCM (SPX): Quận Bình Tân & Quận Tân Phú + 19 Hub TP.HCM (10.5M - 12.5M/tháng).\n` +
       `5️⃣ Khu vực Vĩnh Long (SW SOC Bình Minh): Full-time BPO Xoay ca (9.28tr/tháng) & Part-time (125k - 300k/ca).\n\n` +
@@ -802,7 +802,7 @@ export async function generateSmartAutoReply(params: {
     return (
       `💰 Thông tin Mức lương & Đãi ngộ tại AGARI:\n` +
       `1️⃣ 🔥 DỰ ÁN MỚI TECH LINK (KCX Tân Thuận, Q.7): Ca 8h Ngày 300k | Ca 8h Đêm 350k | Ca 12h Ngày (08:00-20:00) 435k | Ca 12h Đêm (20:00-08:00) 500k. Bao cơm theo ca, nhận lương tuần Thứ 6!\n` +
-      `2️⃣ Khu vực Sóc Trăng & TP.HCM (SPX Chính thức): 10.500.000 - 12.500.000đ/tháng (Định mức 10.4tr, đóng đủ BHXH).\n` +
+      `2️⃣ Khu vực Sóc Trăng (S-BPO): Định mức 8.300.000đ/tháng (Lương CB 5.31tr + Nhà ở/Xăng 1.31tr + Cơm 780k + KPI 900k, chưa tính tăng ca) | TP.HCM (SPX Chính thức): 10.500.000 - 12.500.000đ/tháng (Định mức 10.4tr, đóng đủ BHXH).\n` +
       `3️⃣ Khu vực Cần Thơ (Long Thới) & Vĩnh Long (SW SOC): Full-time BPO Xoay ca định mức 9.280.000đ/tháng (Lương CB 6tr + Ăn 780k + KPI đến 2.5tr) | Part-time Vĩnh Long: 125k - 300k/ca.\n\n` +
       `Bạn quan tâm ứng tuyển khu vực nào để HR gửi lịch nhận việc ngay ạ?`
     );

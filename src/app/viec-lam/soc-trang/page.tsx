@@ -56,7 +56,7 @@ export default function SocTrangPage() {
                 <span className="mt-2 block text-yellow-300">S-BPO · Sóc Trăng</span>
               </h1>
               <p className="mt-5 max-w-2xl text-base leading-7 text-white drop-shadow-[0_1px_2px_rgba(0,0,0,0.7)] md:text-lg">
-                Ký hợp đồng lao động chính thức, đóng BHXH đầy đủ, thu nhập dự kiến từ 10.500.000 – 12.500.000 VNĐ/tháng. Không yêu cầu kinh nghiệm, được hướng dẫn bài bản từ đầu.
+                Ký hợp đồng lao động chính thức, đóng BHXH đầy đủ, tổng định mức thu nhập 8.300.000đ/tháng (thu nhập thực tế dự kiến 8.300.000 – 10.500.000 VNĐ/tháng). Không yêu cầu kinh nghiệm, được hướng dẫn bài bản từ đầu.
               </p>
               <div className="mt-8 flex flex-wrap gap-3 text-sm font-semibold">
                 <span className="inline-flex items-center gap-2 rounded-full bg-black/35 px-4 py-2 shadow-sm">
@@ -76,9 +76,9 @@ export default function SocTrangPage() {
               Mức thu nhập dự kiến
             </p>
             <p className="mt-2 text-2xl font-black text-red-700">
-              10.5M - 12.5M
+              8.3M - 10.5M
             </p>
-            <p className="text-sm text-slate-500">VNĐ / tháng (Định mức 10.4M)</p>
+            <p className="text-sm text-slate-500">VNĐ / tháng (Định mức 8.3M)</p>
           </div>
           <div className="rounded-2xl border border-red-100 bg-white p-5 shadow-lg">
             <p className="text-xs font-bold uppercase tracking-wide text-slate-500">
@@ -109,13 +109,13 @@ export default function SocTrangPage() {
                       CHẾ ĐỘ THU NHẬP & PHỤ CẤP (S-BPO SÓC TRĂNG)
                     </h2>
                     <p className="text-xs font-bold text-red-900">
-                      Tổng thu nhập định mức chưa tăng ca: 10.400.000đ / tháng
+                      Tổng thu nhập định mức chưa tăng ca: 8.300.000đ / tháng
                     </p>
                   </div>
                 </div>
                 <div className="text-right">
                   <span className="rounded-lg bg-black px-3.5 py-1.5 text-sm md:text-base font-black text-yellow-300">
-                    10.5M - 12.5M VNĐ
+                    8.3M - 10.5M VNĐ
                   </span>
                 </div>
               </div>
@@ -157,7 +157,7 @@ export default function SocTrangPage() {
                     <p className="text-xs text-slate-500 italic">Đánh giá theo năng suất và hiệu quả công việc</p>
                   </div>
                   <span className="font-extrabold text-orange-600 text-lg whitespace-nowrap">
-                    2.500.000 VNĐ
+                    900.000 VNĐ
                   </span>
                 </div>
 
@@ -167,12 +167,12 @@ export default function SocTrangPage() {
                       Thu nhập dự kiến thực tế
                     </p>
                     <p className="text-xs text-slate-600">
-                      Tổng thu nhập định mức chưa tăng ca: 10.400.000đ/tháng
+                      Tổng thu nhập định mức chưa tăng ca: 8.300.000đ/tháng
                     </p>
                   </div>
                   <div className="text-right">
                     <p className="text-2xl md:text-3xl font-black text-red-700 whitespace-nowrap">
-                      10.500.000 - 12.500.000 <span className="text-sm font-bold text-slate-700">VNĐ</span>
+                      8.300.000 - 10.500.000 <span className="text-sm font-bold text-slate-700">VNĐ</span>
                     </p>
                   </div>
                 </div>
@@ -286,7 +286,7 @@ export default function SocTrangPage() {
               Nhân viên kho SPX-Express (S-BPO) – Sóc Trăng
             </span>
             <span className="ml-2 text-red-700 font-bold">
-              10.5M - 12.5M VNĐ/tháng • 08:00-17:00 | 10:00-19:00
+              8.3M - 10.5M VNĐ/tháng • 08:00-17:00 | 10:00-19:00
             </span>
           </div>
           <Link
