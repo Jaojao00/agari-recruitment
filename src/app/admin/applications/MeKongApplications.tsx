@@ -169,7 +169,7 @@ export default function MeKongApplications({ jobIdFilter = "lap-vo-dong-thap,tho
       INTERVIEW_SCHEDULED: { label: "Lịch phỏng vấn", color: "bg-orange-100 text-orange-800" },
       INTERVIEWED: { label: "Đã phỏng vấn", color: "bg-purple-100 text-purple-800" },
       PASSED: { label: "Đạt", color: "bg-emerald-100 text-emerald-800" },
-      FAILED: { label: "Không đạt", color: "bg-red-100 text-red-800" },
+      FAILED: { label: "Chưa phù hợp", color: "bg-red-100 text-red-800" },
       HIRED: { label: "Đã trúng tuyển", color: "bg-green-100 text-green-800" },
       WORKING: { label: "Đã nhận việc", color: "bg-teal-100 text-teal-800" },
       EXPIRED: { label: "Hết hạn", color: "bg-gray-100 text-gray-800" },
@@ -284,7 +284,7 @@ export default function MeKongApplications({ jobIdFilter = "lap-vo-dong-thap,tho
                           <SelectItem value="CONTACTED">Đã liên hệ</SelectItem>
                           <SelectItem value="INTERVIEW_SCHEDULED">Lịch phỏng vấn</SelectItem>
                           <SelectItem value="INTERVIEWED">Đã phỏng vấn</SelectItem>
-                          <SelectItem value="FAILED">Không đạt</SelectItem>
+                          <SelectItem value="FAILED">Chưa phù hợp</SelectItem>
                           <SelectItem value="PASSED">Đạt</SelectItem>
                           <SelectItem value="HIRED">Đã trúng tuyển</SelectItem>
                           <SelectItem value="WORKING">Đã nhận việc</SelectItem>

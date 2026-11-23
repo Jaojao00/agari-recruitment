@@ -21,7 +21,7 @@ const STATUS_LABELS: Record<string, string> = {
   INTERVIEW_SCHEDULED: "Lịch phỏng vấn",
   INTERVIEWED: "Đã phỏng vấn",
   PASSED: "Đạt",
-  FAILED: "Không đạt",
+  FAILED: "Chưa phù hợp",
   HIRED: "Đã trúng tuyển",
   WORKING: "Đã nhận việc",
   EXPIRED: "Hết hạn",

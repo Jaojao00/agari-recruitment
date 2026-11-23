@@ -101,7 +101,7 @@ function ApplicationsContent() {
         color: "bg-purple-100 text-purple-800",
       },
       PASSED: { label: "Đạt", color: "bg-emerald-100 text-emerald-800" },
-      FAILED: { label: "Không đạt", color: "bg-red-100 text-red-800" },
+      FAILED: { label: "Chưa phù hợp", color: "bg-red-100 text-red-800" },
       HIRED: { label: "Đã trúng tuyển", color: "bg-green-100 text-green-800" },
       WORKING: { label: "Đã nhận việc", color: "bg-teal-100 text-teal-800" },
       EXPIRED: { label: "Hết hạn", color: "bg-gray-100 text-gray-800" },
@@ -206,7 +206,7 @@ function ApplicationsContent() {
               </SelectItem>
               <SelectItem value="INTERVIEWED">Đã phỏng vấn</SelectItem>
               <SelectItem value="PASSED">Đạt</SelectItem>
-              <SelectItem value="FAILED">Không đạt</SelectItem>
+              <SelectItem value="FAILED">Chưa phù hợp</SelectItem>
               <SelectItem value="HIRED">Đã trúng tuyển</SelectItem>
               <SelectItem value="WORKING">Đã nhận việc</SelectItem>
               <SelectItem value="EXPIRED">Hết hạn</SelectItem>
