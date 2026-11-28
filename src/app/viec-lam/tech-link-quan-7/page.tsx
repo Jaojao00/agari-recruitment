@@ -71,7 +71,7 @@ export default function TechLinkQuan7Page() {
                   Dự án mới • AGARI × TECH-LINK
                 </span>
                 <span className="inline-flex rounded-full bg-emerald-400 border border-emerald-500 px-3 py-1 text-xs font-black uppercase text-emerald-950 shadow-md">
-                  🔥 TUYỂN GẤP - BAO CƠM - ĐI LÀM NGAY
+                  🔥 TUYỂN GẤP - BAO CƠM - CÓ PART-TIME THEO TUẦN
                 </span>
               </div>
               <h1 className="max-w-3xl text-3xl font-black uppercase leading-[1.08] tracking-tight drop-shadow-[0_2px_4px_rgba(0,0,0,0.65)] md:text-5xl">
@@ -81,7 +81,7 @@ export default function TechLinkQuan7Page() {
                 </span>
               </h1>
               <p className="mt-5 max-w-2xl text-base leading-7 text-red-50 drop-shadow-[0_1px_2px_rgba(0,0,0,0.7)] md:text-lg">
-                Bao cơm theo ca • Nhận lương tuần uy tín vào Thứ 6 hàng tuần • Nghỉ 1 tiếng 30 phút/ca • Không yêu cầu kinh nghiệm, được hướng dẫn từ A–Z.
+                Bao cơm theo ca • Nhận lương tuần uy tín vào Thứ 6 hàng tuần • Có nhận làm Part-time đăng ký lịch linh hoạt theo tuần • Nghỉ 1 tiếng 30 phút/ca • Công việc: Kho linh kiện ô tô, nhựa gia dụng, đóng gói, đổ khuôn,... được hướng dẫn cụ thể từ A–Z.
               </p>
               <div className="mt-8 flex flex-wrap gap-3 text-sm font-semibold">
                 <span className="inline-flex items-center gap-2 rounded-full bg-black/45 px-4 py-2 shadow-sm">
@@ -180,6 +180,10 @@ export default function TechLinkQuan7Page() {
                 </li>
                 <li className="flex gap-3">
                   <CheckCircle2 className="mt-1 shrink-0 text-green-600" size={18} />
+                  <span><strong>Có hỗ trợ làm Part-time / Thời vụ theo tuần</strong> (đăng ký lịch làm việc linh hoạt theo tuần phù hợp sinh viên & người làm thêm).</span>
+                </li>
+                <li className="flex gap-3">
+                  <CheckCircle2 className="mt-1 shrink-0 text-green-600" size={18} />
                   <span>Thời gian nghỉ ngơi thoải mái: Mỗi ca được nghỉ tổng cộng <strong>1 tiếng 30 phút</strong> (chia làm 2 lần nghỉ).</span>
                 </li>
                 <li className="flex gap-3">
@@ -209,7 +213,11 @@ export default function TechLinkQuan7Page() {
               <ul className="space-y-4 text-sm leading-6 text-slate-700">
                 <li className="flex gap-3">
                   <CheckCircle2 className="mt-1 shrink-0 text-red-600" size={18} />
-                  Làm việc tại kho linh kiện ô tô, nhựa gia dụng: đóng gói, đổ khuôn, kiểm tra sản phẩm...
+                  <span><strong>Công việc chính:</strong> Kho linh kiện ô tô, nhựa gia dụng, đóng gói, đổ khuôn, kiểm tra và sắp xếp sản phẩm...</span>
+                </li>
+                <li className="flex gap-3">
+                  <CheckCircle2 className="mt-1 shrink-0 text-red-600" size={18} />
+                  <span><strong>Hình thức linh hoạt:</strong> Có thể đăng ký làm <strong>Full-time hoặc Part-time theo tuần</strong> (chọn ca 8 tiếng hoặc ca 12 tiếng).</span>
                 </li>
                 <li className="flex gap-3 font-semibold text-red-700">
                   <CheckCircle2 className="mt-1 shrink-0 text-red-600" size={18} />

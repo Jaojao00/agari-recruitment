@@ -99,7 +99,7 @@ export default function HomePage() {
                 ỨNG TUYỂN TECH LINK NGAY
               </Button>
             </Link>
-            <Link href="#chi-tiet" className="w-full sm:w-auto">
+            <Link href="/viec-lam/tech-link-quan-7" className="w-full sm:w-auto">
               <Button
                 size="lg"
                 variant="outline"
@@ -164,7 +164,7 @@ export default function HomePage() {
                         Nhân viên Sản xuất / Kho TECH LINK (KCX Tân Thuận, Quận 7)
                       </h3>
                       <p className="mt-1 text-xs font-semibold text-emerald-700">
-                        ⚡ Ca 8h: 300k–350k | Ca 12h: 435k–500k • Bao cơm theo ca • Nghỉ 1h30p/ca • Đi làm ngay
+                        ⚡ Công việc: Kho linh kiện ô tô, nhựa gia dụng, đóng gói, đổ khuôn,... được hướng dẫn cụ thể • Có nhận Part-time đăng ký lịch theo tuần
                       </p>
                       <p className="mt-1 text-sm text-gray-500">
                         Số 05B-07A Đường Số 15, Khu Chế Xuất Tân Thuận, Quận 7, TP.HCM
@@ -180,8 +180,8 @@ export default function HomePage() {
                       <span className="rounded-md bg-yellow-100 px-3 py-1.5 font-semibold text-yellow-900">
                         Lương tuần Thứ 6
                       </span>
-                      <span className="rounded-md bg-gray-100 px-3 py-1.5 text-gray-700">
-                        Chỉ cần CCCD photo
+                      <span className="rounded-md bg-blue-100 px-3 py-1.5 font-semibold text-blue-800">
+                        Có nhận Part-time theo tuần
                       </span>
                     </div>
                   </div>
@@ -519,8 +519,8 @@ export default function HomePage() {
               <div className="bg-white rounded-xl p-6 md:p-8 shadow-sm border border-gray-100 space-y-4">
                 <ul className="space-y-3.5">
                   {[
-                    "Làm việc tại kho linh kiện ô tô, nhựa gia dụng: đóng gói, đổ khuôn, kiểm tra sản phẩm...",
-                    "Không yêu cầu kinh nghiệm, vào làm sẽ được hướng dẫn cụ thể từ A–Z.",
+                    "Công việc: Kho linh kiện ô tô, nhựa gia dụng, đóng gói, đổ khuôn, kiểm tra sản phẩm... được hướng dẫn cụ thể từ A–Z.",
+                    "Có thể đăng ký làm Full-time hoặc Part-time linh hoạt theo tuần (phù hợp sinh viên & người làm thêm).",
                     "BAO CƠM theo ca làm việc, nghỉ tổng cộng 1 tiếng 30 phút/ca (chia làm 2 lần nghỉ).",
                     "Thanh toán lương tuần uy tín, đều đặn vào Thứ 6 hàng tuần.",
                     "Hồ sơ đơn giản: Chỉ cần CCCD photo (chi phí photo được công ty hoàn trả vào kỳ lương).",

@@ -802,6 +802,9 @@ export default function UngTuyenPage() {
                                 <SelectItem value="Xoay ca Ngày & Đêm theo sắp xếp công ty">
                                   Xoay ca Ngày & Đêm theo sắp xếp công ty
                                 </SelectItem>
+                                <SelectItem value="Part-time / Thời vụ đăng ký lịch linh hoạt theo tuần">
+                                  Part-time / Thời vụ • Đăng ký lịch linh hoạt theo tuần
+                                </SelectItem>
                               </>
                             ) : jobId === "spx-fulltime" ? (
                               <>

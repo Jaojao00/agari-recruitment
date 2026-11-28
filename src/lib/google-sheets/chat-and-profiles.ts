@@ -808,8 +808,8 @@ export async function generateSmartAutoReply(params: {
       `• Ca 8 tiếng Đêm: 350.000 VNĐ / Ca\n` +
       `• Ca 12 tiếng Ngày (08:00 – 20:00): 435.000 VNĐ / Ca\n` +
       `• Ca 12 tiếng Đêm (20:00 – 08:00): 500.000 VNĐ / Ca\n` +
-      `🎁 Đãi ngộ: BAO CƠM theo ca • Nghỉ 1 tiếng 30 phút/ca (chia 2 lần).\n\n` +
-      `📦 Công việc: Kho linh kiện ô tô, nhựa gia dụng (đóng gói, đổ khuôn, kiểm tra sản phẩm — hướng dẫn từ A-Z).\n` +
+      `🎁 Đãi ngộ: BAO CƠM theo ca • Có nhận làm Part-time đăng ký lịch theo tuần • Nghỉ 1 tiếng 30 phút/ca (chia 2 lần).\n\n` +
+      `📦 Công việc: Kho linh kiện ô tô, nhựa gia dụng, đóng gói, đổ khuôn, kiểm tra sản phẩm... được hướng dẫn cụ thể từ A–Z.\n` +
       `🪪 Yêu cầu & Hồ sơ: Biết đọc viết, không cận thị, mặc quần dài, không mang điện thoại vào xưởng. Chỉ cần CCCD photo (hoàn tiền photo vào kỳ lương) + VNeID mức 2 & SMS chính chủ.\n\n` +
       `📍 Địa điểm: Công ty Tech Link – Số 05B-07A Đường Số 15, KCX Tân Thuận, Quận 7, TP.HCM.\n` +
       `👉 Nộp hồ sơ nhanh: https://agari-recruitment.vercel.app/ung-tuyen?job=tech-link-quan-7\n` +
