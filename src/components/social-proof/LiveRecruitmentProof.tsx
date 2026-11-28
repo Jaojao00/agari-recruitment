@@ -273,7 +273,7 @@ export function FloatingApplicantNotification() {
   const current = applicants[currentIndex] || FALLBACK_APPLICANTS[0];
 
   return (
-    <div className="fixed bottom-4 left-4 z-40 max-w-[310px] sm:max-w-xs bg-white/95 backdrop-blur-xs rounded-2xl shadow-xl border border-red-200 p-3.5 transition-all duration-300 animate-in fade-in slide-in-from-bottom-4">
+    <div className="hidden md:block fixed bottom-4 left-4 z-40 max-w-[310px] sm:max-w-xs bg-white/95 backdrop-blur-xs rounded-2xl shadow-xl border border-red-200 p-3.5 transition-all duration-300 animate-in fade-in slide-in-from-bottom-4">
       <button
         type="button"
         onClick={() => setDismissed(true)}

@@ -61,18 +61,30 @@ interface ChatMessageItem {
 const QUICK_QUESTIONS = [
   { label: "🔥 Tech Link Q.7", text: "Mình muốn ứng tuyển khu vực Tech Link Q.7" },
   { label: "📍 TP.HCM SPX", text: "Mình muốn ứng tuyển khu vực TP.HCM SPX" },
-  { label: "📍 Sóc Trăng", text: "Mình muốn ứng tuyển khu vực Sóc Trăng" },
-  { label: "📍 Cần Thơ", text: "Mình muốn ứng tuyển khu vực Cần Thơ" },
-  { label: "📍 Vĩnh Long", text: "Mình muốn ứng tuyển khu vực Vĩnh Long" },
+  { label: "📍 Vĩnh Long Part-time", text: "Mình muốn ứng tuyển khu vực Vĩnh Long" },
   { label: "📋 Kiểm tra hồ sơ", text: "Kiểm tra trạng thái hồ sơ ứng tuyển của tôi" },
+];
+
+const CHAT_PROVINCE_OPTIONS = [
+  "TP.HCM – Tech Link (KCX Tân Thuận, Q.7)",
+  "TP.HCM – Kho SPX (Bình Tân / Tân Phú / 19 Hub)",
+  "Vĩnh Long (Part-time KCN Bình Minh)",
+  "Cần Thơ",
+  "Sóc Trăng",
+  "Đồng Tháp",
+  "Khu vực khác",
 ];
 
 export default function CandidateChatWidget() {
   const pathname = usePathname();
   const [isOpen, setIsOpen] = useState(false);
+  const [isTucked, setIsTucked] = useState(false);
   const [candidate, setCandidate] = useState<StoredCandidateInfo | null>(null);
   const [tempName, setTempName] = useState("");
   const [tempPhone, setTempPhone] = useState("");
+  const [tempProvince, setTempProvince] = useState(CHAT_PROVINCE_OPTIONS[0]);
+  const [tempBirthYear, setTempBirthYear] = useState("");
+  const [tempGender, setTempGender] = useState<"Nam" | "Nữ">("Nam");
   const [startError, setStartError] = useState("");
 
   const [messages, setMessages] = useState<ChatMessageItem[]>([]);
@@ -227,10 +239,20 @@ export default function CandidateChatWidget() {
       ? "0" + cleanPhone.slice(2)
       : cleanPhone;
 
+    const cleanYear = tempBirthYear.replace(/\D/g, "");
+    const yearNum = parseInt(cleanYear, 10);
+    if (!cleanYear || cleanYear.length !== 4 || yearNum < 1960 || yearNum > new Date().getFullYear() - 15) {
+      setStartError("Vui lòng nhập năm sinh hợp lệ (VD: 2000).");
+      return;
+    }
+
     // Check if candidate already has an online profile or application in Google Sheets
     let mergedInfo: StoredCandidateInfo = {
       fullName: cleanName,
       phone: normalizedPhone,
+      preferredLocation: tempProvince,
+      dateOfBirth: `${cleanYear}-01-01`,
+      gender: tempGender,
     };
 
     try {
@@ -248,6 +270,8 @@ export default function CandidateChatWidget() {
             ...data.profile,
             fullName: cleanName || data.profile.fullName,
             phone: normalizedPhone,
+            preferredLocation: tempProvince || data.profile.preferredLocation,
+            gender: tempGender || data.profile.gender,
           };
         }
       }
@@ -258,6 +282,34 @@ export default function CandidateChatWidget() {
     localStorage.setItem(CANDIDATE_STORAGE_KEY, JSON.stringify(mergedInfo));
     setCandidate(mergedInfo);
     window.dispatchEvent(new Event("agari-profile-updated"));
+
+    // Tự động gửi tin nhắn giới thiệu 5 thông tin để Bot quét & gợi ý chính xác ngay lập tức
+    const autoIntro = `Xin chào HR, mình muốn ứng tuyển khu vực ${tempProvince}. Giới tính: ${tempGender}, sinh năm ${cleanYear}.`;
+    try {
+      setSending(true);
+      sendingRef.current = true;
+      const res = await fetch("/api/chat", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          candidateName: mergedInfo.fullName,
+          candidatePhone: mergedInfo.phone,
+          content: autoIntro,
+        }),
+      });
+      if (res.ok) {
+        const data = await res.json();
+        const added: ChatMessageItem[] = [];
+        if (data.message) added.push(data.message);
+        if (data.botReply) added.push(data.botReply);
+        setMessages((prev) => mergeMessageLists(prev, added, mergedInfo.phone));
+      }
+    } catch {
+      // ignore
+    } finally {
+      sendingRef.current = false;
+      setSending(false);
+    }
   };
 
   const handleSendMessage = async (textOverride?: string) => {
@@ -330,10 +382,18 @@ export default function CandidateChatWidget() {
   };
 
   return (
-    <div className="fixed bottom-4 right-4 z-50 flex flex-col items-end">
+    <div
+      className={`fixed z-50 flex flex-col items-end transition-all duration-200 ${
+        isOpen
+          ? "inset-x-2 bottom-2 sm:inset-auto sm:bottom-5 sm:right-5"
+          : isTucked
+            ? "bottom-24 right-0 md:bottom-5 md:right-5"
+            : "bottom-24 right-3 md:bottom-5 md:right-5"
+      }`}
+    >
       {/* Chat Window */}
       {isOpen && (
-        <div className="mb-3 w-[calc(100vw-2rem)] sm:w-[390px] h-[560px] max-h-[calc(100vh-6rem)] bg-white rounded-2xl shadow-2xl border border-red-100 flex flex-col overflow-hidden animate-in fade-in slide-in-from-bottom-4 duration-200">
+        <div className="mb-2 sm:mb-3 w-full sm:w-[390px] h-[82vh] sm:h-[580px] max-h-[calc(100vh-2rem)] bg-white rounded-2xl shadow-2xl border border-red-100 flex flex-col overflow-hidden animate-in fade-in slide-in-from-bottom-4 duration-200">
           {/* Header */}
           <div className="bg-gradient-to-r from-[#D90000] to-[#FF3B30] px-4 py-3.5 text-white flex items-center justify-between shrink-0">
             <div className="flex items-center gap-2.5">
@@ -412,10 +472,10 @@ export default function CandidateChatWidget() {
                   </div>
                 )}
 
-                <form onSubmit={handleStartChat} className="space-y-3">
+                <form onSubmit={handleStartChat} className="space-y-2.5">
                   <div>
                     <label className="block text-xs font-semibold text-gray-700 mb-1">
-                      Họ và tên của bạn *
+                      1. Họ và tên của bạn *
                     </label>
                     <input
                       type="text"
@@ -423,12 +483,12 @@ export default function CandidateChatWidget() {
                       value={tempName}
                       onChange={(e) => setTempName(e.target.value)}
                       placeholder="VD: Nguyễn Văn A"
-                      className="w-full h-10 px-3 rounded-lg border border-gray-300 text-sm focus:outline-none focus:ring-2 focus:ring-red-600"
+                      className="w-full h-9 px-3 rounded-lg border border-gray-300 text-sm focus:outline-none focus:ring-2 focus:ring-red-600"
                     />
                   </div>
                   <div>
                     <label className="block text-xs font-semibold text-gray-700 mb-1">
-                      Số điện thoại / Zalo *
+                      2. Số điện thoại / Zalo *
                     </label>
                     <input
                       type="tel"
@@ -436,15 +496,69 @@ export default function CandidateChatWidget() {
                       value={tempPhone}
                       onChange={(e) => setTempPhone(e.target.value)}
                       placeholder="VD: 0901234567"
-                      className="w-full h-10 px-3 rounded-lg border border-gray-300 text-sm focus:outline-none focus:ring-2 focus:ring-red-600"
+                      className="w-full h-9 px-3 rounded-lg border border-gray-300 text-sm focus:outline-none focus:ring-2 focus:ring-red-600"
                     />
+                  </div>
+                  <div>
+                    <label className="block text-xs font-semibold text-gray-700 mb-1">
+                      3. Tỉnh thành / Khu vực ứng tuyển *
+                    </label>
+                    <select
+                      value={tempProvince}
+                      onChange={(e) => setTempProvince(e.target.value)}
+                      className="w-full h-9 px-2.5 rounded-lg border border-gray-300 bg-white text-xs font-medium text-gray-800 focus:outline-none focus:ring-2 focus:ring-red-600"
+                    >
+                      {CHAT_PROVINCE_OPTIONS.map((prov) => (
+                        <option key={prov} value={prov}>
+                          {prov}
+                        </option>
+                      ))}
+                    </select>
+                  </div>
+                  <div className="grid grid-cols-2 gap-2.5">
+                    <div>
+                      <label className="block text-xs font-semibold text-gray-700 mb-1">
+                        4. Năm sinh *
+                      </label>
+                      <input
+                        type="number"
+                        required
+                        min={1960}
+                        max={2010}
+                        value={tempBirthYear}
+                        onChange={(e) => setTempBirthYear(e.target.value)}
+                        placeholder="VD: 2000"
+                        className="w-full h-9 px-3 rounded-lg border border-gray-300 text-sm focus:outline-none focus:ring-2 focus:ring-red-600"
+                      />
+                    </div>
+                    <div>
+                      <label className="block text-xs font-semibold text-gray-700 mb-1">
+                        5. Giới tính *
+                      </label>
+                      <div className="grid grid-cols-2 gap-1.5 h-9">
+                        {(["Nam", "Nữ"] as const).map((g) => (
+                          <button
+                            key={g}
+                            type="button"
+                            onClick={() => setTempGender(g)}
+                            className={`rounded-lg border text-xs font-bold transition ${
+                              tempGender === g
+                                ? "bg-red-600 border-red-600 text-white"
+                                : "bg-white border-gray-300 text-gray-700 hover:bg-gray-50"
+                            }`}
+                          >
+                            {g}
+                          </button>
+                        ))}
+                      </div>
+                    </div>
                   </div>
                   <button
                     type="submit"
-                    className="w-full h-11 rounded-xl bg-[#D90000] hover:bg-red-800 text-white font-bold text-sm shadow-md transition flex items-center justify-center gap-2"
+                    className="w-full h-10 mt-1 rounded-xl bg-[#D90000] hover:bg-red-800 text-white font-bold text-sm shadow-md transition flex items-center justify-center gap-2"
                   >
                     <MessageCircle size={17} />
-                    Bắt đầu Chat ngay
+                    Bắt đầu Chat & Nhận gợi ý ngay
                   </button>
                 </form>
               </div>
@@ -612,29 +726,79 @@ export default function CandidateChatWidget() {
         </div>
       )}
 
-      {/* Floating Toggle Button */}
-      <button
-        type="button"
-        onClick={() => setIsOpen((prev) => !prev)}
-        className="group relative flex items-center gap-2.5 rounded-full bg-gradient-to-r from-[#D90000] to-[#FF3B30] hover:from-red-700 hover:to-red-600 text-white px-4 py-3 shadow-xl shadow-red-900/30 border-2 border-yellow-300 transition-all duration-200 hover:scale-105"
-      >
-        <div className="relative">
-          <MessageCircle size={22} className="fill-white/20" />
-          {unreadCount > 0 && !isOpen && (
-            <span className="absolute -top-2 -right-2 min-w-5 h-5 px-1 rounded-full bg-yellow-400 text-red-950 font-black text-[11px] flex items-center justify-center shadow">
-              {unreadCount}
-            </span>
-          )}
-        </div>
-        <div className="text-left pr-1">
-          <div className="text-xs font-extrabold uppercase tracking-wide leading-none">
-            {isOpen ? "Đóng khung chat" : "Chat với Nhà tuyển dụng"}
+      {/* Floating Toggle Button — Mobile compact & tuckable, Desktop full pill */}
+      {!isOpen && (
+        <>
+          {/* Mobile: Compact circular button or slim tucked tab */}
+          <div className="flex md:hidden items-center gap-1">
+            {isTucked ? (
+              <button
+                type="button"
+                onClick={() => setIsTucked(false)}
+                title="Mở nút Chat"
+                className="flex items-center gap-1 rounded-l-full bg-[#D90000]/95 text-white pl-2.5 pr-2 py-2.5 shadow-lg border-y border-l border-yellow-300"
+              >
+                <MessageCircle size={18} />
+                {unreadCount > 0 && (
+                  <span className="min-w-4 h-4 px-1 rounded-full bg-yellow-400 text-red-950 font-black text-[10px] flex items-center justify-center">
+                    {unreadCount}
+                  </span>
+                )}
+              </button>
+            ) : (
+              <div className="relative flex items-center">
+                <button
+                  type="button"
+                  onClick={() => setIsTucked(true)}
+                  title="Thu gọn nút chat vào mép màn hình"
+                  className="absolute -top-2 -left-2 w-5 h-5 rounded-full bg-slate-800/85 text-white flex items-center justify-center shadow text-[10px] z-10"
+                >
+                  <X size={11} />
+                </button>
+                <button
+                  type="button"
+                  onClick={() => setIsOpen(true)}
+                  className="relative w-13 h-13 rounded-full bg-gradient-to-br from-[#D90000] to-[#FF3B30] text-white shadow-xl shadow-red-900/35 border-2 border-yellow-300 flex flex-col items-center justify-center"
+                >
+                  <MessageCircle size={21} className="fill-white/20" />
+                  <span className="text-[9px] font-black uppercase leading-none mt-0.5">
+                    Chat
+                  </span>
+                  {unreadCount > 0 && (
+                    <span className="absolute -top-1 -right-1 min-w-5 h-5 px-1 rounded-full bg-yellow-400 text-red-950 font-black text-[10px] flex items-center justify-center shadow">
+                      {unreadCount}
+                    </span>
+                  )}
+                </button>
+              </div>
+            )}
           </div>
-          <div className="text-[10px] text-yellow-200 font-medium leading-tight mt-0.5">
-            Hỏi đáp & Nhận lịch phỏng vấn ngay
-          </div>
-        </div>
-      </button>
+
+          {/* Desktop: Full pill button */}
+          <button
+            type="button"
+            onClick={() => setIsOpen(true)}
+            className="hidden md:flex group relative items-center gap-2.5 rounded-full bg-gradient-to-r from-[#D90000] to-[#FF3B30] hover:from-red-700 hover:to-red-600 text-white px-4 py-3 shadow-xl shadow-red-900/30 border-2 border-yellow-300 transition-all duration-200 hover:scale-105"
+          >
+            <div className="relative">
+              <MessageCircle size={22} className="fill-white/20" />
+              {unreadCount > 0 && (
+                <span className="absolute -top-2 -right-2 min-w-5 h-5 px-1 rounded-full bg-yellow-400 text-red-950 font-black text-[11px] flex items-center justify-center shadow">
+                  {unreadCount}
+                </span>
+              )}
+            </div>
+            <div className="text-left pr-1">
+              <div className="text-xs font-extrabold uppercase tracking-wide leading-none">
+                Chat với Nhà tuyển dụng
+              </div>
+              <div className="text-[10px] text-yellow-200 font-medium leading-tight mt-0.5">
+                Hỏi đáp & Nhận lịch phỏng vấn ngay
+              </div>
+            </div>
+          </button>
+        </>
+      )}
     </div>
   );
 }

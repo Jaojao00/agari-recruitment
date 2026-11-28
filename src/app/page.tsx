@@ -16,14 +16,14 @@ export default function HomePage() {
     <div className="min-h-screen bg-gray-50 flex flex-col font-sans">
       {/* HEADER */}
       <header className="bg-red-700 text-white sticky top-0 z-50 shadow-md">
-        <div className="container mx-auto px-4 py-4 flex justify-between items-center">
-          <div className="flex items-center gap-3">
-            <div className="text-2xl font-bold tracking-tight">AGARI</div>
+        <div className="container mx-auto px-3 sm:px-4 py-2.5 sm:py-3.5 flex justify-between items-center gap-2">
+          <div className="flex items-center gap-2 sm:gap-3 min-w-0">
+            <div className="text-lg sm:text-2xl font-black tracking-tight shrink-0">AGARI</div>
             <Link
               href="/ho-so-online"
-              className="inline-flex items-center gap-1 px-2.5 py-1 rounded-full bg-yellow-400 hover:bg-yellow-300 text-red-950 font-extrabold text-xs transition shadow-xs"
+              className="inline-flex items-center gap-1 px-2.5 py-1 rounded-full bg-yellow-400 hover:bg-yellow-300 text-red-950 font-extrabold text-[11px] sm:text-xs transition shadow-xs whitespace-nowrap"
             >
-              ⚡ Hồ sơ Online & Tra cứu
+              ⚡ Hồ sơ Online
             </Link>
           </div>
           <nav className="hidden md:flex gap-6 text-sm font-medium">
@@ -46,10 +46,10 @@ export default function HomePage() {
               Vị trí khác
             </Link>
           </nav>
-          <Link href="/ung-tuyen?job=tech-link-quan-7">
+          <Link href="/ung-tuyen?job=tech-link-quan-7" className="shrink-0">
             <Button
               variant="secondary"
-              className="bg-white text-red-700 hover:bg-gray-100 font-bold"
+              className="bg-white text-red-700 hover:bg-gray-100 font-bold text-xs sm:text-sm h-8 sm:h-10 px-3 sm:px-4 whitespace-nowrap"
             >
               Ứng tuyển ngay
             </Button>
@@ -59,42 +59,42 @@ export default function HomePage() {
 
       {/* HERO SECTION - DỰ ÁN MỚI AGARI × TECH-LINK */}
       <section
-        className="relative min-h-[650px] overflow-hidden bg-slate-950 bg-cover bg-center bg-no-repeat text-white md:min-h-[720px]"
+        className="relative min-h-[540px] sm:min-h-[650px] overflow-hidden bg-slate-950 bg-cover bg-center bg-no-repeat text-white md:min-h-[700px]"
         style={{ backgroundImage: "url('/tech-link-factory.jpg')" }}
       >
         <div className="absolute inset-0 bg-gradient-to-b from-red-950/88 via-red-900/75 to-slate-950/88"></div>
-        <div className="container mx-auto px-4 py-16 md:py-24 relative z-10 text-center flex flex-col items-center">
-          <div className="mb-5 inline-flex flex-wrap items-center justify-center gap-2 rounded-full bg-yellow-400/95 px-4 py-1.5 text-xs md:text-sm font-black uppercase tracking-wider text-red-950 shadow-lg">
+        <div className="container mx-auto px-4 py-10 sm:py-16 md:py-24 relative z-10 text-center flex flex-col items-center">
+          <div className="mb-4 inline-flex flex-wrap items-center justify-center gap-1.5 rounded-full bg-yellow-400/95 px-3.5 py-1 text-[11px] sm:text-xs md:text-sm font-black uppercase tracking-wide text-red-950 shadow-lg">
             <span>🔥 DỰ ÁN MỚI • AGARI × TECH-LINK</span>
             <span className="hidden sm:inline">•</span>
-            <span>KCX TÂN THUẬN, QUẬN 7, TP.HCM</span>
+            <span>KCX TÂN THUẬN, Q.7</span>
           </div>
 
-          <h1 className="text-3xl sm:text-4xl md:text-6xl font-extrabold uppercase tracking-tight mb-4 drop-shadow-md leading-tight">
+          <h1 className="text-2xl sm:text-4xl md:text-6xl font-extrabold uppercase tracking-tight mb-3 sm:mb-4 drop-shadow-md leading-tight">
             Tuyển Gấp{" "}
             <span className="text-yellow-300 block md:inline mt-1 md:mt-0">
               Nhân Viên Sản Xuất / Kho
             </span>{" "}
             TECH LINK
           </h1>
-          <p className="text-lg md:text-2xl font-medium mb-8 text-red-50 max-w-3xl">
+          <p className="text-sm sm:text-lg md:text-2xl font-medium mb-6 sm:mb-8 text-red-50 max-w-3xl leading-relaxed">
             Bao cơm theo ca • Nhận lương tuần uy tín vào Thứ 6 • Nghỉ 1h30p/ca • Đi làm ngay
           </p>
 
-          <div className="bg-white text-red-700 rounded-full px-6 py-3 md:px-10 md:py-4 mb-10 shadow-xl border-4 border-yellow-300 transform -rotate-1">
-            <p className="text-2xl md:text-4xl font-black">
+          <div className="bg-white text-red-700 rounded-full px-5 py-2.5 sm:px-8 sm:py-3.5 md:px-10 md:py-4 mb-7 sm:mb-10 shadow-xl border-4 border-yellow-300 transform -rotate-1 max-w-full">
+            <p className="text-xl sm:text-3xl md:text-4xl font-black whitespace-nowrap">
               300.000 – 500.000{" "}
-              <span className="text-lg md:text-2xl text-gray-600">
+              <span className="text-sm sm:text-xl md:text-2xl text-gray-600">
                 VNĐ / CA
               </span>
             </p>
           </div>
 
-          <div className="flex flex-col sm:flex-row gap-4 w-full sm:w-auto px-4">
+          <div className="flex flex-col sm:flex-row gap-3 sm:gap-4 w-full sm:w-auto px-2 sm:px-4">
             <Link href="/ung-tuyen?job=tech-link-quan-7" className="w-full sm:w-auto">
               <Button
                 size="lg"
-                className="w-full bg-yellow-400 hover:bg-yellow-500 text-red-900 font-black text-lg h-14 px-8 rounded-full shadow-xl transition-transform hover:scale-105"
+                className="w-full bg-yellow-400 hover:bg-yellow-500 text-red-900 font-black text-base sm:text-lg h-12 sm:h-14 px-6 sm:px-8 rounded-full shadow-xl transition-transform hover:scale-105"
               >
                 ỨNG TUYỂN TECH LINK NGAY
               </Button>
@@ -103,7 +103,7 @@ export default function HomePage() {
               <Button
                 size="lg"
                 variant="outline"
-                className="w-full bg-black/25 border-white text-white hover:bg-white/15 hover:text-white font-semibold text-lg h-14 px-8 rounded-full transition"
+                className="w-full bg-black/25 border-white text-white hover:bg-white/15 hover:text-white font-semibold text-base sm:text-lg h-12 sm:h-14 px-6 sm:px-8 rounded-full transition"
               >
                 XEM CHI TIẾT DỰ ÁN
               </Button>
@@ -315,164 +315,59 @@ export default function HomePage() {
               </div>
             </article>
 
-            {/* Card 2: Full-time (ĐANG TUYỂN DỤNG - BPO XOAY CA) */}
+            {/* Card 3: Part-time Vĩnh Long (Bổ sung đầy đủ thông tin) */}
             <article className="overflow-hidden rounded-2xl border border-gray-200 bg-white shadow-sm transition hover:-translate-y-0.5 hover:shadow-lg">
               <div className="grid md:grid-cols-[200px_1fr] md:items-stretch">
-                <div className="flex min-h-32 md:min-h-full items-center justify-center bg-[#d90012] p-6 text-center text-white">
+                <div className="flex min-h-28 md:min-h-full items-center justify-center bg-[#d90012] p-5 md:p-6 text-center text-white">
                   <div>
                     <p className="text-3xl font-black italic tracking-tight">SPX</p>
-                    <p className="mt-2 text-xs font-bold uppercase tracking-[0.2em] text-yellow-300">Express</p>
-                    <div className="mx-auto mt-4 h-1 w-12 bg-yellow-400" />
+                    <p className="mt-1.5 text-xs font-bold uppercase tracking-[0.2em] text-yellow-300">Express</p>
+                    <div className="mx-auto mt-3 h-1 w-12 bg-yellow-400" />
                   </div>
                 </div>
-                <div className="p-6 md:p-7 flex flex-col md:flex-row md:items-center gap-6 justify-between">
-                  <div className="space-y-4">
+                <div className="p-5 md:p-7 flex flex-col md:flex-row md:items-center gap-5 justify-between">
+                  <div className="space-y-3">
                     <div>
                       <div className="flex items-center gap-2 flex-wrap">
                         <p className="text-xs font-bold uppercase tracking-[0.16em] text-red-700">
-                          Full-time · BPO XOAY CA
+                          Part-time · Thời vụ linh hoạt · Vĩnh Long
                         </p>
-                        <span className="rounded-full bg-red-100 border border-red-300 px-2.5 py-0.5 text-[11px] font-black uppercase text-red-800 animate-pulse">
-                          🔥 Đang mở tuyển lại
+                        <span className="rounded-full bg-emerald-100 border border-emerald-300 px-2.5 py-0.5 text-[11px] font-black uppercase text-emerald-900">
+                          🔥 Đang mở tuyển • Lương tuần Thứ 6
                         </span>
                       </div>
-                      <h3 className="mt-1 text-xl font-bold text-gray-900">
-                        Nhân viên kho SPX (Vĩnh Long - SW SOC)
+                      <h3 className="mt-1 text-lg sm:text-xl font-bold text-gray-900">
+                        Lao động phổ thông / Nhân viên kho Part-time (SW SOC)
                       </h3>
                       <p className="mt-1 text-xs font-semibold text-emerald-700">
-                        ⚡ Chế độ mới SW SOC: Lương CB 6.000.000đ + Cơm 780.000đ + KPI đến 2.500.000đ • Xoay ca theo yêu cầu công ty
+                        ⚡ 5 khung ca linh hoạt (Ca 4h–5h: 125k–155k | Ca 8h–9h: 250k–300k) • Tự do đăng ký lịch tuần • Không cần kinh nghiệm
                       </p>
-                      <p className="mt-1 text-sm text-gray-500">
-                        Lô 01, kho số A01, KCN Bình Minh, Vĩnh Long
+                      <p className="mt-1 text-xs sm:text-sm text-gray-500">
+                        Lô 01, kho số A01, KCN Bình Minh, Ấp Mỹ Lợi, Xã Mỹ Hòa, Tỉnh Vĩnh Long
                       </p>
                     </div>
-                    <div className="flex flex-wrap gap-2 text-sm">
+                    <div className="flex flex-wrap gap-2 text-xs sm:text-sm">
                       <span className="rounded-md bg-red-50 px-3 py-1.5 font-semibold text-red-700">
-                        9.280.000 VNĐ/tháng (Định mức)
-                      </span>
-                      <span className="rounded-md bg-gray-100 px-3 py-1.5 text-gray-700">
-                        Lương CB 6.000.000đ
-                      </span>
-                      <span className="rounded-md bg-gray-100 px-3 py-1.5 text-gray-700">
-                        Xoay ca theo yêu cầu cty
-                      </span>
-                      <span className="rounded-md bg-yellow-100 px-3 py-1.5 font-semibold text-yellow-800">
-                        Tăng ca & PC đêm rõ ràng
-                      </span>
-                    </div>
-                  </div>
-                  <div className="mt-4 md:mt-0 md:shrink-0 md:border-l md:border-gray-100 md:pl-6 flex flex-col sm:flex-row md:flex-col lg:flex-row gap-3 items-center">
-                    <Link href="/viec-lam/spx-fulltime" className="w-full">
-                      <Button variant="outline" className="w-full border-gray-300 font-bold text-gray-700 hover:bg-gray-50 md:min-w-[130px]">
-                        XEM CHI TIẾT
-                      </Button>
-                    </Link>
-                    <Link href="/ung-tuyen?job=spx-fulltime" className="w-full">
-                      <Button className="w-full bg-red-700 font-bold text-white hover:bg-red-800 md:min-w-[130px]">
-                        ỨNG TUYỂN
-                      </Button>
-                    </Link>
-                  </div>
-                </div>
-              </div>
-            </article>
-
-            {/* Card 3: Part-time */}
-            <article className="overflow-hidden rounded-2xl border border-gray-200 bg-white shadow-sm transition hover:-translate-y-0.5 hover:shadow-lg">
-              <div className="grid md:grid-cols-[200px_1fr] md:items-stretch">
-                <div className="flex min-h-32 md:min-h-full items-center justify-center bg-[#d90012] p-6 text-center text-white">
-                  <div>
-                    <p className="text-3xl font-black italic tracking-tight">SPX</p>
-                    <p className="mt-2 text-xs font-bold uppercase tracking-[0.2em] text-yellow-300">Express</p>
-                    <div className="mx-auto mt-4 h-1 w-12 bg-yellow-400" />
-                  </div>
-                </div>
-                <div className="p-6 md:p-7 flex flex-col md:flex-row md:items-center gap-6 justify-between">
-                  <div className="space-y-4">
-                    <div>
-                      <p className="text-xs font-bold uppercase tracking-[0.16em] text-red-700">
-                        Part-time · Linh hoạt
-                      </p>
-                      <h3 className="mt-1 text-xl font-bold text-gray-900">
-                        Lao động phổ thông
-                      </h3>
-                      <p className="mt-1 text-sm text-gray-500">
-                        KCN Bình Minh, Vĩnh Long
-                      </p>
-                    </div>
-                    <div className="flex flex-wrap gap-2 text-sm">
-                      <span className="rounded-md bg-red-50 px-3 py-1.5 font-semibold text-red-700">
-                        125.000 - 280.000 VNĐ/ca
+                        125.000 – 300.000 VNĐ/ca
                       </span>
                       <span className="rounded-md bg-gray-100 px-3 py-1.5 text-gray-700">
                         Đăng ký lịch tuần
                       </span>
-                    </div>
-                  </div>
-                  <div className="mt-4 md:mt-0 md:shrink-0 md:border-l md:border-gray-100 md:pl-6 flex items-center">
-                    <Link href="/viec-lam/agari-part-time" className="w-full">
-                      <Button className="w-full bg-red-700 font-bold text-white hover:bg-red-800 md:min-w-[160px]">
-                        XEM CHI TIẾT
-                      </Button>
-                    </Link>
-                  </div>
-                </div>
-              </div>
-            </article>
-
-            {/* Card Sóc Trăng (S-BPO - ĐANG TUYỂN GẤP) */}
-            <article className="overflow-hidden rounded-2xl border border-gray-200 bg-white shadow-sm transition hover:-translate-y-0.5 hover:shadow-lg">
-              <div className="grid md:grid-cols-[200px_1fr] md:items-stretch">
-                <div className="flex min-h-32 md:min-h-full items-center justify-center bg-[#d90012] p-6 text-center text-white">
-                  <div>
-                    <p className="text-3xl font-black italic tracking-tight">SPX</p>
-                    <p className="mt-2 text-xs font-bold uppercase tracking-[0.2em] text-yellow-300">Express</p>
-                    <div className="mx-auto mt-4 h-1 w-12 bg-yellow-400" />
-                  </div>
-                </div>
-                <div className="p-6 md:p-7 flex flex-col md:flex-row md:items-center gap-6 justify-between">
-                  <div className="space-y-4">
-                    <div>
-                      <div className="flex items-center gap-2 flex-wrap">
-                        <p className="text-xs font-bold uppercase tracking-[0.16em] text-red-700">
-                          Nhân viên chính thức (S-BPO) · Khu vực Sóc Trăng
-                        </p>
-                        <span className="rounded-full bg-red-100 border border-red-300 px-2.5 py-0.5 text-[11px] font-black uppercase text-red-800 animate-pulse">
-                          🔥 Tuyển gấp - Đi làm ngay
-                        </span>
-                      </div>
-                      <h3 className="mt-1 text-xl font-bold text-gray-900">
-                        Nhân viên kho SPX-Express (S-BPO) – Sóc Trăng
-                      </h3>
-                      <p className="mt-1 text-xs font-semibold text-emerald-700">
-                        ⚡ Ký HĐLĐ chính thức, đóng BHXH đầy đủ • Ca 08:00 - 17:00 | 10:00 - 19:00
-                      </p>
-                      <p className="mt-1 text-sm text-gray-500">
-                        06 Nam Kỳ Khởi Nghĩa, Phường Sóc Trăng, Thành phố Cần Thơ, Sóc Trăng
-                      </p>
-                    </div>
-                    <div className="flex flex-wrap gap-2 text-sm">
-                      <span className="rounded-md bg-red-50 px-3 py-1.5 font-semibold text-red-700">
-                        8.3M - 10.5M VNĐ/tháng
-                      </span>
-                      <span className="rounded-md bg-gray-100 px-3 py-1.5 text-gray-700">
-                        08:00 - 17:00 | 10:00 - 19:00
-                      </span>
-                      <span className="rounded-md bg-gray-100 px-3 py-1.5 text-gray-700">
-                        Đóng BHXH đầy đủ
-                      </span>
                       <span className="rounded-md bg-yellow-100 px-3 py-1.5 font-semibold text-yellow-800">
-                        Định mức 8.3M/tháng
+                        Nhận lương Thứ 6
+                      </span>
+                      <span className="rounded-md bg-gray-100 px-3 py-1.5 text-gray-700">
+                        Hợp sinh viên & làm thêm
                       </span>
                     </div>
                   </div>
-                  <div className="mt-4 md:mt-0 md:shrink-0 md:border-l md:border-gray-100 md:pl-6 flex flex-col sm:flex-row md:flex-col lg:flex-row gap-3 items-center">
-                    <Link href="/viec-lam/soc-trang" className="w-full">
+                  <div className="mt-2 md:mt-0 md:shrink-0 md:border-l md:border-gray-100 md:pl-6 flex flex-col sm:flex-row md:flex-col lg:flex-row gap-2.5 items-center">
+                    <Link href="/viec-lam/agari-part-time" className="w-full">
                       <Button variant="outline" className="w-full border-gray-300 font-bold text-gray-700 hover:bg-gray-50 md:min-w-[130px]">
                         XEM CHI TIẾT
                       </Button>
                     </Link>
-                    <Link href="/ung-tuyen?job=soc-trang" className="w-full">
+                    <Link href="/ung-tuyen?job=agari-part-time" className="w-full">
                       <Button className="w-full bg-red-700 font-bold text-white hover:bg-red-800 md:min-w-[130px]">
                         ỨNG TUYỂN
                       </Button>
@@ -482,66 +377,7 @@ export default function HomePage() {
               </div>
             </article>
 
-            {/* Card Long Thới, Cần Thơ (Full-time BPO Xoay ca - ĐANG MỞ TUYỂN) */}
-            <article className="overflow-hidden rounded-2xl border border-gray-200 bg-white shadow-sm transition hover:-translate-y-0.5 hover:shadow-lg">
-              <div className="grid md:grid-cols-[200px_1fr] md:items-stretch">
-                <div className="flex min-h-32 md:min-h-full items-center justify-center bg-[#d90012] p-6 text-center text-white">
-                  <div>
-                    <p className="text-3xl font-black italic tracking-tight">SPX</p>
-                    <p className="mt-2 text-xs font-bold uppercase tracking-[0.2em] text-yellow-300">Express</p>
-                    <div className="mx-auto mt-4 h-1 w-12 bg-yellow-400" />
-                  </div>
-                </div>
-                <div className="p-6 md:p-7 flex flex-col md:flex-row md:items-center gap-6 justify-between">
-                  <div className="space-y-4">
-                    <div>
-                      <div className="flex items-center gap-2 flex-wrap">
-                        <p className="text-xs font-bold uppercase tracking-[0.16em] text-red-700">
-                          Full-time · BPO XOAY CA · Cần Thơ
-                        </p>
-                        <span className="rounded-full bg-red-100 border border-red-300 px-2.5 py-0.5 text-[11px] font-black uppercase text-red-800 animate-pulse">
-                          🔥 Mở tuyển lại - Đi làm ngay
-                        </span>
-                      </div>
-                      <h3 className="mt-1 text-xl font-bold text-gray-900">
-                        Nhân viên kho SPX Full-time (BPO Xoay ca) – Long Thới, Cần Thơ
-                      </h3>
-                      <p className="mt-1 text-xs font-semibold text-emerald-700">
-                        ⚡ Lương CB 6tr + Tiền ăn 780k + KPI đến 2.5tr + BHXH & Tháng 13 • 26 công/tháng
-                      </p>
-                      <p className="mt-1 text-sm text-gray-500">
-                        Quốc Lộ 91, Khu Vực Tân Lợi 1, Phường Thới Long, Thành phố Cần Thơ, Cần Thơ
-                      </p>
-                    </div>
-                    <div className="flex flex-wrap gap-2 text-sm">
-                      <span className="rounded-md bg-red-50 px-3 py-1.5 font-semibold text-red-700">
-                        9.280.000 VNĐ/tháng (Định mức)
-                      </span>
-                      <span className="rounded-md bg-gray-100 px-3 py-1.5 text-gray-700">
-                        08:00-17:00 | 09:00-18:00 | 10:00-19:00
-                      </span>
-                      <span className="rounded-md bg-gray-100 px-3 py-1.5 text-gray-700">
-                        BHXH + Lương tháng 13
-                      </span>
-                    </div>
-                  </div>
-                  <div className="mt-4 md:mt-0 md:shrink-0 md:border-l md:border-gray-100 md:pl-6 flex flex-col sm:flex-row md:flex-col lg:flex-row gap-3 items-center">
-                    <Link href="/viec-lam/long-thoi-can-tho" className="w-full">
-                      <Button variant="outline" className="w-full border-gray-300 font-bold text-gray-700 hover:bg-gray-50 md:min-w-[130px]">
-                        XEM CHI TIẾT
-                      </Button>
-                    </Link>
-                    <Link href="/ung-tuyen?job=long-thoi-can-tho" className="w-full">
-                      <Button className="w-full bg-red-700 font-bold text-white hover:bg-red-800 md:min-w-[130px]">
-                        ỨNG TUYỂN
-                      </Button>
-                    </Link>
-                  </div>
-                </div>
-              </div>
-            </article>
-
-            {/* Card 4 (Đồng Tháp - Cao Lãnh 03) & Card 5 (Thốt Nốt - Cần Thơ) đã ẩn do đã tuyển đủ số lượng */}
+            {/* Các vị trí tạm ngưng tuyển đã ẩn: Vĩnh Long Full-time BPO, Sóc Trăng S-BPO, Long Thới Cần Thơ, Đồng Tháp, Thốt Nốt */}
           </div>
         </div>
       </section>

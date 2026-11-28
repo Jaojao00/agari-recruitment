@@ -44,8 +44,11 @@ const jobOptions = {
     schedule: "Ca xoay theo lịch công ty",
   },
   "spx-fulltime": {
-    title: "Nhân viên kho SPX Full-time (BPO Xoay ca)",
-    schedule: "Xoay ca theo yêu cầu công ty (Ca 1 / Ca 2 / Ca 3)",
+    title: "Nhân viên kho SPX Full-time (BPO Xoay ca) - [TẠM NGƯNG TUYỂN]",
+    schedule: "Tạm ngưng nhận hồ sơ",
+    isPaused: true,
+    pauseNotice:
+      "Vị trí Full-time BPO Xoay ca tại kho SW SOC Vĩnh Long hiện đang tạm ngưng tuyển dụng. Vui lòng chọn vị trí Part-time Vĩnh Long, Tech Link Quận 7 hoặc SPX TP.HCM.",
   },
   "agari-part-time": {
     title: "Nhân viên kho part-time",
@@ -78,12 +81,18 @@ const jobOptions = {
     schedule: "Xoay ca (Luân chuyển giữa 5 ca làm việc chính)",
   },
   "soc-trang": {
-    title: "Nhân viên kho SPX-Express (S-BPO) – Khu vực Sóc Trăng",
-    schedule: "08:00 - 17:00 | 10:00 - 19:00",
+    title: "Nhân viên kho SPX-Express (S-BPO) – Khu vực Sóc Trăng - [TẠM NGƯNG TUYỂN]",
+    schedule: "Tạm ngưng nhận hồ sơ",
+    isPaused: true,
+    pauseNotice:
+      "Khu vực Sóc Trăng hiện đang tạm ngưng tuyển dụng. Vui lòng tham khảo các vị trí đang mở tuyển tại Tech Link Q.7, TP.HCM SPX hoặc Part-time Vĩnh Long.",
   },
   "long-thoi-can-tho": {
-    title: "Nhân viên kho SPX Full-time (BPO Xoay ca) – Long Thới, Cần Thơ",
-    schedule: "Xoay ca theo phân công (08:00-17:00 | 09:00-18:00 | 10:00-19:00)",
+    title: "Nhân viên kho SPX Full-time (BPO Xoay ca) – Long Thới, Cần Thơ - [TẠM NGƯNG TUYỂN]",
+    schedule: "Tạm ngưng nhận hồ sơ",
+    isPaused: true,
+    pauseNotice:
+      "Khu vực Long Thới, Cần Thơ hiện đang tạm ngưng tuyển dụng. Vui lòng tham khảo các vị trí đang mở tuyển tại Tech Link Q.7, TP.HCM SPX hoặc Part-time Vĩnh Long.",
   },
   "tech-link-quan-7": {
     title: "Nhân viên Sản xuất / Kho Tech Link – KCX Tân Thuận, Quận 7",

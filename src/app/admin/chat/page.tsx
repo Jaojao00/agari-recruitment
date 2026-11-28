@@ -124,6 +124,7 @@ const STATUS_OPTIONS = [
 export default function AdminChatPage() {
   const [threads, setThreads] = useState<ChatThreadSummary[]>([]);
   const [selectedRoomId, setSelectedRoomId] = useState<string>("");
+  const [mobilePanel, setMobilePanel] = useState<"list" | "chat" | "profile">("list");
   const [searchQuery, setSearchQuery] = useState("");
   const [filterTab, setFilterTab] = useState<"ALL" | "UNREAD">("ALL");
 
@@ -231,6 +232,7 @@ export default function AdminChatPage() {
 
   const handleSelectRoom = async (roomId: string) => {
     setSelectedRoomId(roomId);
+    setMobilePanel("chat");
     setShowInviteBox(false);
     setEditingProfile(false);
     // Mark room as read
@@ -411,9 +413,13 @@ export default function AdminChatPage() {
   };
 
   return (
-    <div className="h-[calc(100vh-7.5rem)] bg-white rounded-2xl shadow-xs border border-slate-200 overflow-hidden flex flex-col lg:flex-row">
+    <div className="h-[calc(100vh-8.5rem)] md:h-[calc(100vh-7.5rem)] bg-white rounded-2xl shadow-xs border border-slate-200 overflow-hidden flex flex-col lg:flex-row">
       {/* COLUMN 1: THREAD LIST */}
-      <div className="w-full lg:w-80 border-b lg:border-b-0 lg:border-r border-slate-200 flex flex-col shrink-0 bg-slate-50/50">
+      <div
+        className={`w-full lg:w-80 border-b lg:border-b-0 lg:border-r border-slate-200 flex-col shrink-0 bg-slate-50/50 h-full ${
+          mobilePanel === "list" ? "flex" : "hidden lg:flex"
+        }`}
+      >
         <div className="p-4 border-b border-slate-200 bg-white space-y-3">
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-2">
@@ -554,7 +560,11 @@ export default function AdminChatPage() {
       </div>
 
       {/* COLUMN 2: ACTIVE CHAT WINDOW */}
-      <div className="flex-1 flex flex-col min-w-0 bg-slate-50">
+      <div
+        className={`flex-1 flex-col min-w-0 bg-slate-50 h-full ${
+          mobilePanel === "chat" ? "flex" : "hidden lg:flex"
+        }`}
+      >
         {!selectedRoomId ? (
           <div className="flex-1 flex flex-col items-center justify-center text-slate-400 p-8">
             <MessageSquare size={42} className="mb-2 opacity-40" />
@@ -565,21 +575,28 @@ export default function AdminChatPage() {
         ) : (
           <>
             {/* Chat Header */}
-            <div className="px-5 py-3 bg-white border-b border-slate-200 flex flex-wrap items-center justify-between gap-3 shrink-0">
-              <div className="flex items-center gap-3">
-                <div className="w-10 h-10 rounded-full bg-[#D90000] text-white font-bold flex items-center justify-center">
+            <div className="px-3 sm:px-5 py-2.5 sm:py-3 bg-white border-b border-slate-200 flex flex-wrap items-center justify-between gap-2 sm:gap-3 shrink-0">
+              <div className="flex items-center gap-2 sm:gap-3 min-w-0">
+                <button
+                  type="button"
+                  onClick={() => setMobilePanel("list")}
+                  className="lg:hidden px-2 py-1 rounded-lg bg-slate-100 text-slate-700 text-xs font-bold shrink-0"
+                >
+                  ← DS
+                </button>
+                <div className="w-9 h-9 sm:w-10 sm:h-10 rounded-full bg-[#D90000] text-white font-bold flex items-center justify-center shrink-0">
                   {activeCandidateName.charAt(0).toUpperCase()}
                 </div>
-                <div>
-                  <div className="flex items-center gap-2">
-                    <h2 className="font-bold text-slate-900 text-sm">
+                <div className="min-w-0">
+                  <div className="flex items-center gap-1.5 flex-wrap">
+                    <h2 className="font-bold text-slate-900 text-xs sm:text-sm truncate">
                       {activeCandidateName}
                     </h2>
                     {activeApps[0] && getStatusBadge(activeApps[0].status)}
                   </div>
-                  <div className="flex items-center gap-3 text-xs text-slate-500 mt-0.5">
+                  <div className="flex items-center gap-2.5 text-[11px] sm:text-xs text-slate-500 mt-0.5">
                     <span className="inline-flex items-center gap-1 font-mono">
-                      <Phone size={12} /> {selectedRoomId}
+                      <Phone size={11} /> {selectedRoomId}
                     </span>
                     <a
                       href={`https://zalo.me/${selectedRoomId}`}
@@ -587,8 +604,15 @@ export default function AdminChatPage() {
                       rel="noreferrer"
                       className="text-blue-600 hover:underline font-medium inline-flex items-center gap-0.5"
                     >
-                      Mở Zalo <ExternalLink size={11} />
+                      Zalo <ExternalLink size={11} />
                     </a>
+                    <button
+                      type="button"
+                      onClick={() => setMobilePanel("profile")}
+                      className="lg:hidden text-red-700 font-bold underline"
+                    >
+                      Hồ sơ
+                    </button>
                   </div>
                 </div>
               </div>
@@ -835,9 +859,20 @@ export default function AdminChatPage() {
 
       {/* COLUMN 3: ATTACHED CANDIDATE ONLINE PROFILE & APPLICATIONS */}
       {selectedRoomId && (
-        <div className="w-full lg:w-96 border-t lg:border-t-0 lg:border-l border-slate-200 bg-white flex flex-col shrink-0 overflow-y-auto">
-          <div className="p-4 border-b border-slate-200 bg-slate-900 text-white flex items-center justify-between">
+        <div
+          className={`w-full lg:w-96 border-t lg:border-t-0 lg:border-l border-slate-200 bg-white flex-col shrink-0 overflow-y-auto h-full ${
+            mobilePanel === "profile" ? "flex" : "hidden lg:flex"
+          }`}
+        >
+          <div className="p-3.5 sm:p-4 border-b border-slate-200 bg-slate-900 text-white flex items-center justify-between">
             <div className="flex items-center gap-2">
+              <button
+                type="button"
+                onClick={() => setMobilePanel("chat")}
+                className="lg:hidden px-2 py-1 rounded bg-white/15 text-white text-xs font-bold"
+              >
+                ← Chat
+              </button>
               <UserCheck size={18} className="text-yellow-400" />
               <h3 className="font-bold text-xs uppercase tracking-wider">
                 Hồ sơ Ứng viên đính kèm

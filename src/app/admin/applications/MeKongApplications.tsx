@@ -187,7 +187,7 @@ export default function MeKongApplications({ jobIdFilter = "lap-vo-dong-thap,tho
     <>
       <div className="bg-white rounded-lg shadow-sm border border-gray-200 overflow-hidden min-h-[500px]">
         {/* Tabs */}
-        <div className="flex border-b border-gray-200 overflow-x-auto">
+        <div className="flex border-b border-gray-200 overflow-x-auto no-scrollbar">
           {tabs.map((tab, idx) => {
             const count = getFilteredData(idx).length;
             const isActive = activeTab === idx;
@@ -195,7 +195,7 @@ export default function MeKongApplications({ jobIdFilter = "lap-vo-dong-thap,tho
               <button
                 key={idx}
                 onClick={() => setActiveTab(idx)}
-                className={`px-6 py-4 text-sm font-semibold transition-colors whitespace-nowrap ${isActive ? "border-b-2 border-black text-black" : "text-gray-500 hover:text-gray-700"}`}
+                className={`px-3.5 sm:px-6 py-3 sm:py-4 text-xs sm:text-sm font-semibold transition-colors whitespace-nowrap ${isActive ? "border-b-2 border-[#D90000] text-[#D90000]" : "text-gray-500 hover:text-gray-700"}`}
               >
                 {tab.label} ({count})
               </button>
@@ -204,15 +204,109 @@ export default function MeKongApplications({ jobIdFilter = "lap-vo-dong-thap,tho
         </div>
 
         {/* Content */}
-        <div className="p-4 overflow-x-auto">
+        <div className="p-3 sm:p-4 overflow-x-auto">
           {loading ? (
             <div className="flex justify-center py-20"><Loader2 className="w-8 h-8 animate-spin text-gray-400" /></div>
           ) : getFilteredData(activeTab).length === 0 ? (
             <div className="flex flex-col items-center justify-center py-20 text-gray-400">
-              <p className="text-lg">Không có dữ liệu.</p>
+              <p className="text-base sm:text-lg">Không có dữ liệu.</p>
             </div>
           ) : (
-            <Table>
+            <>
+              {/* Mobile Card View (< md) */}
+              <div className="md:hidden space-y-3">
+                {getFilteredData(activeTab).map((app) => (
+                  <div
+                    key={app.id}
+                    className="rounded-xl border border-slate-200 bg-slate-50/60 p-3.5 space-y-2.5 shadow-xs"
+                  >
+                    <div className="flex items-start justify-between gap-2">
+                      <div className="min-w-0">
+                        <span className="font-mono text-xs font-bold text-red-700 block">
+                          {app.applicationId}
+                        </span>
+                        <h3 className="font-bold text-sm text-slate-900 truncate">
+                          {app.fullName}
+                        </h3>
+                        <p className="text-[11px] text-slate-500">
+                          {app.gender || "-"} • NS: {app.dateOfBirth || "-"} {app.opsCode ? `• ${app.opsCode}` : ""}
+                        </p>
+                      </div>
+                      <Link href={`/admin/applications/${encodeURIComponent(app.id || "")}`}>
+                        <Button variant="outline" size="sm" className="h-8 px-2.5 text-xs text-blue-700 border-blue-200 bg-white">
+                          <Eye size={14} className="mr-1" /> Chi tiết
+                        </Button>
+                      </Link>
+                    </div>
+
+                    <div className="text-xs text-slate-700 bg-white rounded-lg p-2.5 border border-slate-100 space-y-1">
+                      <p className="font-semibold text-slate-900">
+                        {(app.jobTitle === "Lao động phổ thông AGARI Part-time" ? "Nhân viên kho part-time" : app.jobTitle) || "Nhân viên kho - Ca xoay"}
+                      </p>
+                      {app.workSchedule && (
+                        <p className="text-[11px] text-slate-500">{app.workSchedule}</p>
+                      )}
+                      <div className="flex flex-wrap items-center gap-x-3 gap-y-1 pt-1 text-[11px]">
+                        <a href={`tel:${app.phone}`} className="font-mono font-bold text-blue-700 underline">
+                          📞 {app.phone}
+                        </a>
+                        <a
+                          href={`https://zalo.me/${app.phone}`}
+                          target="_blank"
+                          rel="noreferrer"
+                          className="font-semibold text-sky-600 underline"
+                        >
+                          Zalo
+                        </a>
+                        <button
+                          type="button"
+                          onClick={() =>
+                            setRevealedCccd((current) => ({
+                              ...current,
+                              [app.id || ""]: !current[app.id || ""],
+                            }))
+                          }
+                          className="inline-flex items-center gap-1 text-slate-600"
+                        >
+                          <span className="font-mono">
+                            CCCD: {revealedCccd[app.id || ""] ? app.cccd : maskCCCD(app.cccd)}
+                          </span>
+                          {revealedCccd[app.id || ""] ? <EyeOff size={12} /> : <Eye size={12} />}
+                        </button>
+                      </div>
+                    </div>
+
+                    <div className="flex items-center justify-between gap-2 pt-0.5">
+                      <span className="text-[11px] font-semibold text-slate-500">Trạng thái:</span>
+                      <Select
+                        value={app.status || "NEW"}
+                        onValueChange={(value) => updateStatus(app, value as ApplicationStatus)}
+                        disabled={updatingStatus === app.id}
+                      >
+                        <SelectTrigger className="h-8 w-[165px] bg-white text-xs">
+                          <SelectValue>{getStatusBadge(app.status || "NEW")}</SelectValue>
+                        </SelectTrigger>
+                        <SelectContent>
+                          <SelectItem value="NEW">Đang xử lý</SelectItem>
+                          <SelectItem value="CONTACTED">Đã liên hệ</SelectItem>
+                          <SelectItem value="INTERVIEW_SCHEDULED">Lịch phỏng vấn</SelectItem>
+                          <SelectItem value="INTERVIEWED">Đã phỏng vấn</SelectItem>
+                          <SelectItem value="FAILED">Chưa phù hợp</SelectItem>
+                          <SelectItem value="PASSED">Đạt</SelectItem>
+                          <SelectItem value="HIRED">Đã trúng tuyển</SelectItem>
+                          <SelectItem value="WORKING">Đã nhận việc</SelectItem>
+                          <SelectItem value="EXPIRED">Hết hạn</SelectItem>
+                          <SelectItem value="CANCELLED">Đã hủy</SelectItem>
+                        </SelectContent>
+                      </Select>
+                    </div>
+                  </div>
+                ))}
+              </div>
+
+              {/* Desktop Table View (>= md) */}
+              <div className="hidden md:block">
+                <Table>
               <TableHeader>
                 <TableRow>
                   <TableHead>Mã hồ sơ</TableHead>
@@ -304,6 +398,8 @@ export default function MeKongApplications({ jobIdFilter = "lap-vo-dong-thap,tho
                 ))}
               </TableBody>
             </Table>
+              </div>
+            </>
           )}
         </div>
       </div>

@@ -48,8 +48,8 @@ export default function LongThoiCanThoPage() {
                 <span className="inline-flex rounded-full bg-yellow-400 px-3 py-1 text-xs font-black uppercase tracking-[0.18em] text-red-900 shadow-md">
                   Full-time · BPO Xoay Ca
                 </span>
-                <span className="inline-flex rounded-full bg-emerald-400 border border-emerald-500 px-3 py-1 text-xs font-black uppercase text-emerald-950 shadow-md">
-                  🔥 ĐANG MỞ TUYỂN - ĐI LÀM NGAY
+                <span className="inline-flex rounded-full bg-amber-200 border border-amber-400 px-3 py-1 text-xs font-black uppercase text-amber-950 shadow-md">
+                  ⚠️ TẠM NGƯNG TUYỂN DỤNG
                 </span>
               </div>
               <h1 className="max-w-3xl text-4xl font-black uppercase leading-[1.05] tracking-tight drop-shadow-[0_2px_3px_rgba(0,0,0,0.65)] md:text-6xl">
@@ -286,11 +286,11 @@ export default function LongThoiCanThoPage() {
             </span>
           </div>
           <Link
-            href="/ung-tuyen?job=long-thoi-can-tho"
+            href="/"
             className="ml-auto w-full md:w-auto"
           >
             <Button className="h-12 w-full bg-[#d90012] px-8 font-bold text-white hover:bg-red-800 md:w-auto">
-              ỨNG TUYỂN NGAY
+              XEM VỊ TRÍ ĐANG TUYỂN KHÁC
             </Button>
           </Link>
         </div>

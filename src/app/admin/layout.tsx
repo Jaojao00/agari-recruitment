@@ -220,8 +220,8 @@ function AdminHeader({
   }, []);
 
   return (
-    <header className="h-16 bg-gradient-to-r from-[#D90000] to-[#FF3B30] text-white flex items-center px-4 md:px-8 justify-between shrink-0 shadow-md relative z-10 transition-all duration-300">
-      <div className="flex items-center gap-3 md:gap-6">
+    <header className="h-14 md:h-16 bg-gradient-to-r from-[#D90000] to-[#FF3B30] text-white flex items-center px-3 md:px-8 justify-between shrink-0 shadow-md relative z-10 transition-all duration-300">
+      <div className="flex items-center gap-2 md:gap-6">
         <Button
           variant="ghost"
           size="icon"
@@ -229,16 +229,16 @@ function AdminHeader({
           className="text-white hover:bg-white/20"
         >
           {isSidebarOpen ? (
-            <PanelLeftClose size={24} />
+            <PanelLeftClose size={22} />
           ) : (
-            <PanelLeftOpen size={24} />
+            <PanelLeftOpen size={22} />
           )}
         </Button>
-        <div className="hidden md:flex flex-col">
-          <div className="flex items-center gap-2">
-            <Users size={18} className="opacity-90" />
-            <h2 className="font-bold text-lg tracking-wide">
-              Hệ thống tuyển dụng AGARI
+        <div className="flex flex-col">
+          <div className="flex items-center gap-1.5 md:gap-2">
+            <Users size={16} className="opacity-90 hidden sm:block" />
+            <h2 className="font-bold text-sm sm:text-base md:text-lg tracking-wide truncate">
+              AGARI Admin
             </h2>
           </div>
         </div>
@@ -386,9 +386,64 @@ function AdminGuard({ children }: { children: React.ReactNode }) {
           toggleSidebar={() => setIsSidebarOpen(!isSidebarOpen)}
           unreadChatCount={unreadChatCount}
         />
-        <main className="flex-1 overflow-auto p-4 md:p-8">
+        <main className="flex-1 overflow-auto p-3 pb-20 md:p-8">
           <div className="w-full">{children}</div>
         </main>
+
+        {/* Mobile Bottom Navigation Bar */}
+        <nav className="md:hidden fixed bottom-0 inset-x-0 z-30 bg-white border-t border-slate-200 shadow-[0_-4px_12px_rgba(0,0,0,0.06)] grid grid-cols-5 h-15">
+          <Link
+            href="/admin"
+            className={`flex flex-col items-center justify-center gap-0.5 text-[10px] font-bold ${
+              pathname === "/admin" ? "text-[#D90000]" : "text-slate-500"
+            }`}
+          >
+            <LayoutDashboard size={19} />
+            <span>Tổng quan</span>
+          </Link>
+          <Link
+            href="/admin/chat"
+            className={`relative flex flex-col items-center justify-center gap-0.5 text-[10px] font-bold ${
+              pathname.startsWith("/admin/chat") ? "text-[#D90000]" : "text-slate-500"
+            }`}
+          >
+            <div className="relative">
+              <MessageSquare size={19} />
+              {unreadChatCount > 0 && (
+                <span className="absolute -top-1.5 -right-2.5 min-w-4 h-4 px-1 rounded-full bg-[#D90000] text-white text-[9px] font-black flex items-center justify-center">
+                  {unreadChatCount}
+                </span>
+              )}
+            </div>
+            <span>Chat</span>
+          </Link>
+          <Link
+            href="/admin/applications"
+            className={`flex flex-col items-center justify-center gap-0.5 text-[10px] font-bold ${
+              pathname.startsWith("/admin/applications") ? "text-[#D90000]" : "text-slate-500"
+            }`}
+          >
+            <Users size={19} />
+            <span>Hồ sơ</span>
+          </Link>
+          <Link
+            href="/admin/tracking"
+            className={`flex flex-col items-center justify-center gap-0.5 text-[10px] font-bold ${
+              pathname.startsWith("/admin/tracking") ? "text-[#D90000]" : "text-slate-500"
+            }`}
+          >
+            <UserCheck size={19} />
+            <span>Theo dõi</span>
+          </Link>
+          <button
+            type="button"
+            onClick={() => setIsSidebarOpen((prev) => !prev)}
+            className="flex flex-col items-center justify-center gap-0.5 text-[10px] font-bold text-slate-600"
+          >
+            <PanelLeftOpen size={19} />
+            <span>Menu</span>
+          </button>
+        </nav>
       </div>
     </div>
   );

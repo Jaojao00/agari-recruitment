@@ -696,17 +696,16 @@ function normalizeVi(str: string): string {
 
 function buildAreaPickerPrompt(candidateName: string, topicHint?: string): string {
   const intro = topicHint
-    ? `Chào ${candidateName}! Để gửi thông tin chính xác nhất về ${topicHint}, bạn vui lòng chọn hoặc nhắn tên 1 KHU VỰC bạn quan tâm nhé:`
-    : `Chào ${candidateName}! 👋 AGARI hiện đang mở tuyển tại 5 khu vực sau — bạn hãy nhắn tên 1 KHU VỰC bạn muốn ứng tuyển để trợ lý gửi thông tin chi tiết & chính xác nhất nhé:`;
+    ? `Chào ${candidateName}! Để gửi thông tin chính xác nhất về ${topicHint}, bạn vui lòng chọn 1 KHU VỰC đang mở tuyển bên dưới nhé:`
+    : `Chào ${candidateName}! 👋 AGARI hiện đang mở tuyển tại các khu vực sau — bạn hãy nhắn hoặc bấm chọn 1 KHU VỰC để nhận thông tin chi tiết nhất nhé:`;
 
   return (
     `${intro}\n\n` +
-    `1️⃣ Tech Link Q.7 (KCX Tân Thuận, TP.HCM)\n` +
-    `2️⃣ TP.HCM SPX (Q. Bình Tân, Q. Tân Phú & 19 Hub)\n` +
-    `3️⃣ Sóc Trăng (S-BPO Kho SPX)\n` +
-    `4️⃣ Cần Thơ (Long Thới / P. Thới Long)\n` +
-    `5️⃣ Vĩnh Long (SW SOC – KCN Bình Minh)\n\n` +
-    `👉 Bạn chỉ cần bấm nút khu vực bên dưới hoặc nhắn trực tiếp tên khu vực (VD: "Tech Link Q.7", "TP.HCM SPX", "Sóc Trăng", "Cần Thơ", "Vĩnh Long") kèm Giới tính & Năm sinh để HR hỗ trợ ngay!`
+    `1️⃣ Tech Link Q.7 (KCX Tân Thuận, TP.HCM – 300k–500k/ca, bao cơm, lương tuần Thứ 6)\n` +
+    `2️⃣ TP.HCM SPX (Q. Bình Tân, Q. Tân Phú & 19 Hub – 10.5M–12.5M/tháng)\n` +
+    `3️⃣ Vĩnh Long Part-time (SW SOC KCN Bình Minh – 125k–300k/ca, đăng ký lịch tuần)\n\n` +
+    `ℹ️ Lưu ý: Các khu vực Cần Thơ, Sóc Trăng, Đồng Tháp và Vĩnh Long Full-time hiện đang tạm ngưng tuyển (đã đủ chỉ tiêu).\n` +
+    `👉 Hãy bấm nút khu vực bên dưới hoặc nhắn tên khu vực bạn quan tâm nhé!`
   );
 }
 
@@ -818,62 +817,49 @@ export async function generateSmartAutoReply(params: {
     );
   }
 
-  // 1b. SÓC TRĂNG (S-BPO)
+  // 1b. SÓC TRĂNG (TẠM NGƯNG TUYỂN)
   if (isSocTrang) {
     const ageNote = buildAgeFeedback(norm, 35);
     return (
-      `🔥 THÔNG TIN CHI TIẾT KHO SPX-EXPRESS (S-BPO) – SÓC TRĂNG (ĐANG TUYỂN GẤP):\n` +
+      `⚠️ Chào ${params.candidateName}, khu vực **Sóc Trăng** hiện đã tuyển đủ chỉ tiêu và đang **tạm ngưng nhận hồ sơ mới**.\n` +
       ageNote +
-      `\n💰 THU NHẬP & PHỤ CẤP (Định mức chưa tăng ca: 8.300.000đ/tháng | Thực tế dự kiến 8.3M – 10.5M/tháng):\n` +
-      `• Lương cơ bản: 5.310.000đ (Ký HĐLĐ chính thức, đóng BHXH đầy đủ)\n` +
-      `• Phụ cấp nhà ở & xăng xe: 1.310.000đ\n` +
-      `• Phụ cấp tiền cơm: 780.000đ (theo ngày công thực tế)\n` +
-      `• Phụ cấp KPI hiệu suất: 900.000đ\n\n` +
-      `⏰ Thời gian làm việc: 08:00 – 17:00 | 10:00 – 19:00.\n` +
-      `📍 Địa chỉ phỏng vấn & làm việc: 06 Nam Kỳ Khởi Nghĩa, Phường Sóc Trăng, Thành phố Cần Thơ, Sóc Trăng.\n` +
-      `🪪 Hồ sơ phỏng vấn: Mang theo CCCD gắn chip bản gốc.\n\n` +
-      `👉 Nộp hồ sơ nhanh: https://agari-recruitment.vercel.app/ung-tuyen?job=soc-trang\n` +
-      `📞 Zalo hỗ trợ nhận lịch PV: 0586.482.344 (Gặp Tài)`
+      `\n🔥 Hiện AGARI đang tuyển gấp & đi làm ngay tại các khu vực sau:\n` +
+      `1️⃣ Tech Link Q.7 (KCX Tân Thuận, TP.HCM): 300k–500k/ca, bao cơm, lương tuần Thứ 6.\n` +
+      `2️⃣ TP.HCM SPX (Bình Tân, Tân Phú & 19 Hub): 10.5M – 12.5M/tháng, đóng đủ BHXH.\n` +
+      `3️⃣ Vĩnh Long Part-time (KCN Bình Minh): 125k – 300k/ca, đăng ký lịch tuần.\n\n` +
+      `👉 Bạn có muốn tìm hiểu khu vực nào trong 3 vị trí trên không? Hoặc nhắn Zalo HR: 0586.482.344 (Gặp Tài) để được lưu thông tin khi Sóc Trăng mở đợt mới nhé!`
     );
   }
 
-  // 1c. CẦN THƠ (LONG THỚI / THỐT NỐT)
+  // 1c. CẦN THƠ (TẠM NGƯNG TUYỂN)
   if (isCanTho || isThotNot) {
     const ageNote = buildAgeFeedback(norm, 35);
-    const thotNotPrefix = isThotNot
-      ? `ℹ️ Lưu ý: Kho Thốt Nốt hiện đã tuyển đủ chỉ tiêu đợt này. Tuy nhiên AGARI đang mở tuyển tại kho **Long Thới (P. Thới Long), Cần Thơ** ngay gần đó:\n`
-      : `🔥 THÔNG TIN CHI TIẾT KHO SPX FULL-TIME (BPO XOAY CA) – LONG THỚI, CẦN THƠ:\n`;
     return (
-      thotNotPrefix +
+      `⚠️ Chào ${params.candidateName}, khu vực **Cần Thơ (Long Thới & Thốt Nốt)** hiện đã tuyển đủ chỉ tiêu và đang **tạm ngưng nhận hồ sơ mới**.\n` +
       ageNote +
-      `\n💰 TỔNG ĐỊNH MỨC THU NHẬP: 9.280.000đ / THÁNG (chưa tính tăng ca & phụ cấp đêm):\n` +
-      `• Lương cơ bản: 6.000.000đ/tháng (Ký HĐLĐ, đóng đủ BHXH, BHYT + Lương tháng 13)\n` +
-      `• Hỗ trợ tiền ăn: 780.000đ/tháng\n` +
-      `• Thưởng hiệu suất (KPI): 0 – 2.500.000đ/tháng\n\n` +
-      `⏰ Thời gian làm việc: Xoay ca theo phân công công ty (Ca 1: 10:00-19:00 | Ca 2: 08:00-17:00 | Ca 3: 09:00-18:00) • 26 công/tháng, nghỉ 4 ngày.\n` +
-      `📍 Địa điểm: Quốc Lộ 91, Khu Vực Tân Lợi 1, Phường Thới Long, Thành phố Cần Thơ.\n` +
-      `🪪 Yêu cầu: Nam/Nữ 18 – 35 tuổi, bắt buộc có CCCD gốc & VNeID Mức 2 (không yêu cầu kinh nghiệm).\n\n` +
-      `👉 Nộp hồ sơ nhanh: https://agari-recruitment.vercel.app/ung-tuyen?job=long-thoi-can-tho\n` +
-      `📞 Zalo xếp lịch đi làm ngay: 0586.482.344 (Gặp Tài)`
+      `\n🔥 Nếu bạn ở gần khu vực **KCN Bình Minh, Vĩnh Long** (chỉ qua cầu Cần Thơ), AGARI đang mở tuyển **Part-time linh hoạt (125k – 300k/ca, trả lương Thứ 6 hàng tuần)**!\n` +
+      `👉 Đăng ký Part-time Vĩnh Long: https://agari-recruitment.vercel.app/ung-tuyen?job=agari-part-time\n` +
+      `🔥 Hoặc tham khảo các dự án đang tuyển gấp tại TP.HCM: **Tech Link Q.7 (300k–500k/ca, bao cơm)** & **SPX TP.HCM (10.5M–12.5M/tháng)**.\n` +
+      `📞 Zalo HR: 0586.482.344 (Gặp Tài)`
     );
   }
 
-  // 1d. VĨNH LONG (SW SOC BÌNH MINH)
+  // 1d. VĨNH LONG (PART-TIME ĐANG TUYỂN, FULL-TIME TẠM NGƯNG)
   if (isVinhLong) {
     const ageNote = buildAgeFeedback(norm, 35);
     return (
-      `🔥 THÔNG TIN CHI TIẾT KHO SPX EXPRESS – SW SOC KCN BÌNH MINH, VĨNH LONG:\n` +
+      `🔥 THÔNG TIN TUYỂN DỤNG TẠI KHO SPX – SW SOC KCN BÌNH MINH, VĨNH LONG:\n` +
       ageNote +
-      `\n1️⃣ FULL-TIME · BPO XOAY CA (Định mức 9.280.000đ/tháng – chưa tính tăng ca & PC đêm):\n` +
-      `• Lương cơ bản: 6.000.000đ | Hỗ trợ ăn: 780.000đ | Thưởng KPI: 0 – 2.500.000đ\n` +
-      `• Phụ cấp đêm 30% (8.654đ/h), tăng ca 150% – 390% (43.269đ – 112.500đ/h), đóng đủ BHXH + Lương tháng 13.\n` +
-      `• Xoay ca theo yêu cầu công ty (Ca 1: 06:00-15:00 | Ca 2: 13:00-22:00 | Ca 3: 22:00-06:00) • 26 công/tháng.\n` +
-      `👉 Nộp Full-time: https://agari-recruitment.vercel.app/ung-tuyen?job=spx-fulltime\n\n` +
-      `2️⃣ PART-TIME / THỜI VỤ LINH HOẠT (125k – 300k/ca):\n` +
-      `• Ca 1 (06:00-15:00): 250k | Ca 2 (13:00-22:00): 250k | Ca 3 (22:00-06:00): 300k | Ca 4 (18:00-22:00): 125k | Ca 5 (06:00-11:00): 155k.\n` +
-      `👉 Nộp Part-time: https://agari-recruitment.vercel.app/ung-tuyen?job=agari-part-time\n\n` +
+      `\n✅ ĐANG MỞ TUYỂN: PART-TIME / THỜI VỤ LINH HOẠT (125.000 – 300.000 VNĐ/ca • Trả lương Thứ 6 hàng tuần):\n` +
+      `• Ca 1 (06:00 – 15:00): 250.000đ/ca\n` +
+      `• Ca 2 (13:00 – 22:00): 250.000đ/ca\n` +
+      `• Ca 3 đêm (22:00 – 06:00): 300.000đ/ca\n` +
+      `• Ca 4 ngắn 4h (18:00 – 22:00): 125.000đ/ca\n` +
+      `• Ca 5 ngắn 5h (06:00 – 11:00): 155.000đ/ca\n` +
+      `⚠️ Lưu ý: Vị trí Full-time BPO tại Vĩnh Long hiện tạm ngưng tuyển do đã đủ chỉ tiêu.\n\n` +
       `📍 Địa chỉ: Lô 01, kho số A01, KCN Bình Minh, Ấp Mỹ Lợi, Xã Mỹ Hòa, Vĩnh Long.\n` +
-      `🪪 Yêu cầu: Nam/Nữ 18 – 35 tuổi, có CCCD gốc & VNeID Mức 2.\n` +
+      `🪪 Yêu cầu: Nam/Nữ 18 – 35 tuổi, có CCCD gốc & VNeID Mức 2 (không cần kinh nghiệm).\n` +
+      `👉 Nộp Part-time nhanh: https://agari-recruitment.vercel.app/ung-tuyen?job=agari-part-time\n` +
       `📞 Zalo hỗ trợ: 0586.482.344 (Gặp Tài)`
     );
   }
